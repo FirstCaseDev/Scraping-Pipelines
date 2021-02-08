@@ -60,13 +60,15 @@ for title in titles:
             driver.close()
     driver.switch_to_window(original_handle)
     articles.append({"text": text, "title": title_text, "url": url})
+    # todo add pymongo handler
 print("***first page titles: " + str(count) + "***")
-# print(articles)
+
 
 
 #****************************HANDLER FOR TABULATED ARTICLES****************************
 page_number = 2
-while(page_number<=3):
+while(page_number<=50):
+    time.sleep(10)
     url = "https://www.mondaq.com/1/India/?tab=morenews&pageNumber={0}&order=2".format(page_number) 
     print(url)
     driver.get(url)
@@ -74,10 +76,24 @@ while(page_number<=3):
     tabulated_titles_count = 0
     for title_tabulated in titles_tabulated:
         tabulated_titles_count = tabulated_titles_count + 1
-        
-        # todo : process links
+        title_text = title_tabulated.text
+        # a_tag = title_tabulated.find_element_by_tag_name("a")
+        original_handle = driver.window_handles[0]
+        url = title_tabulated.get_attribute("href")
+        text = get_article(url)
+        print(title_text)
+        print(len(text))
+        for handle in driver.window_handles:
+            if(handle!=original_handle):
+                driver.switch_to_window(handle)
+                driver.close()
+        driver.switch_to_window(original_handle)
+        articles.append({"text": text, "title": title_text, "url": url})
+        # todo add pymongo handler
     print("***" + str(page_number) + " table titles: " + str(count) + "***")
     page_number = page_number + 1
+
+
 
 #****************************SCRIPT END AND STATS LOGGING****************************
 driver.quit()
