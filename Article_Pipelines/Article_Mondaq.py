@@ -1,32 +1,70 @@
 from selenium import webdriver
 import time
+import pymongo
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
 from selenium.webdriver.chrome.options import Options
-
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
-
 PATH = "C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
-driver = webdriver.Chrome(PATH,chrome_options=options)
+# driver = webdriver.Chrome(PATH,chrome_options=options) #Headless
+driver = webdriver.Chrome(PATH) #Windowed
 driver.get("https://www.mondaq.com/1/India")
-#HANDLER FOR LANDING HOME PAGE
+
+def get_article(url):
+    script = "window.open('{0}', 'new_window')".format(url)
+    driver.execute_script(script)
+    driver.switch_to_window(driver.window_handles[-1])
+    print(driver.title)
+    # WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.CSS_SELECTOR,"#articlebody")))
+    content = driver.find_element_by_css_selector("#articlebody")
+    content_text = content.text
+    return content_text
+    # **************************************Handles pop up*******************************************
+    # WebDriverWait(driver,60).until(EC.visibility_of_element_located((By.CSS_SELECTOR,"#cd-user-modal")))
+    # popup_close = driver.find_element_by_css_selector("#cd-close-form-x")
+    # popup_close.click()
+
+
+#****************************LOGINS ON THE HOME PAGE****************************
+login = driver.find_element_by_css_selector(".topnav.cd-signin")
+login.click()
+email_input = driver.find_element_by_css_selector("#signin-email")
+email_input.send_keys("amansingh32@gmail.com")
+email_input = driver.find_element_by_css_selector("#signin-password")
+email_input.send_keys("admin123")
+submit_login = driver.find_element_by_css_selector("#submitLogin")
+submit_login.click()
+
+
+#****************************HANDLER FOR LANDING HOME PAGE****************************
+time.sleep(10)
 titles = driver.find_elements_by_css_selector("div.title")
 titles_list = []
+articles = []
 count = 0
 for title in titles:
-    titles_list.append(title.text)
-    a_tag = title.find_element_by_tag_name("a")
     count = count + 1
-    # print(a_tag.get_attribute("href"))
-    # todo : process links
+    title_text = title.text
+    a_tag = title.find_element_by_tag_name("a")
+    original_handle = driver.window_handles[0]
+    url = a_tag.get_attribute("href")
+    text = get_article(url)
+    for handle in driver.window_handles:
+        if(handle!=original_handle):
+            driver.switch_to_window(handle)
+            driver.close()
+    driver.switch_to_window(original_handle)
+    articles.append({"text": text, "title": title_text, "url": url})
 print("***first page titles: " + str(count) + "***")
+# print(articles)
 
-# #HANDLER FOR TABULATED ARTICLES
+
+#****************************HANDLER FOR TABULATED ARTICLES****************************
 page_number = 2
 while(page_number<=3):
     url = "https://www.mondaq.com/1/India/?tab=morenews&pageNumber={0}&order=2".format(page_number) 
@@ -35,12 +73,11 @@ while(page_number<=3):
     titles_tabulated = driver.find_elements_by_css_selector("td:nth-child(2) a")
     tabulated_titles_count = 0
     for title_tabulated in titles_tabulated:
-        titles_list.append(title_tabulated.text)
-        # todo : process links
         tabulated_titles_count = tabulated_titles_count + 1
+        
+        # todo : process links
     print("***" + str(page_number) + " table titles: " + str(count) + "***")
     page_number = page_number + 1
 
+#****************************SCRIPT END AND STATS LOGGING****************************
 driver.quit()
-print(titles_list)
-print("total tiles : " + str(len(titles_list)))
