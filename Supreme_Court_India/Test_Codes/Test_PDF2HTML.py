@@ -1,2 +1,0 @@
-import pdfminer.six
-
