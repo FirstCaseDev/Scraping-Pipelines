@@ -18,8 +18,8 @@ options.add_argument('--disable-gpu')
 options.add_argument("--window-size=1280,720")
 options.add_argument("--no-sandbox")
 PATH = "C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
-driver = webdriver.Chrome(PATH,chrome_options=options) #Headless
-# driver = webdriver.Chrome(PATH) #Windowed
+# driver = webdriver.Chrome(PATH,chrome_options=options) #Headless
+driver = webdriver.Chrome(PATH) #Windowed
 driver.get("https://blog.ipleaders.in/blog/")
 
 def article_get_text(url):
@@ -41,7 +41,7 @@ while(1):
             title = a_tag.get_attribute('title')
             url = a_tag.get_attribute('href')
             if(col.find({"url": url}).count()>0):
-                print("article already present : "+ str(title_text))
+                print("article already present : "+ str(title))
                 continue
             original_handle = driver.window_handles[0]
             text = article_get_text(url)
