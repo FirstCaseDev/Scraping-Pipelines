@@ -8,10 +8,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
 from selenium.webdriver.chrome.options import Options
+
 client = pymongo.MongoClient("mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority")
 db = client["article_data"]
 col = db["articles"]
-
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
@@ -96,7 +96,7 @@ while(page_number<=50):
         url = title_tabulated.get_attribute("href")
         if(col.find({"url": url}).count()>0):
             print("article already present : "+ str(title_text))
-        continue
+            continue
         text = article_get_text(url)
         print(title_text)
         # print(len(text))

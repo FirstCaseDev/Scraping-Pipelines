@@ -10,6 +10,44 @@ first_cap_regex = '([A-Z]\S*\s*('+list_stop_regex+'*\s*'+'([A-Z]|\d)\S*\s*)+)'
 law_regex_no_words = first_cap_regex+'(((,|of)\s+)?(\d)*\s*)*'
 case_re_indicators = ['v', 'v\.', 'vs', 'vs\.', 'Vs', 'Vs\.', 'versus', 'Versus']
 
+#****************************ARTICLE SPECIFIC FUNCTIONS****************************
+def article_get_acts_list(article_text):
+    section_regexp = get_section_regexp(section_re_indicators)
+    law_regexp = get_law_regexp(law_re_indicators)
+    law_dict = {}
+    try:
+        doc_nlp = nlp(article_text)
+        law_prev = ''
+        for sent in doc_nlp.sents:
+            txt_lower = sent.text.lower()
+            sent_laws = find_laws(law_dict, sent.text, law_regexp)
+            if re.search(section_regexp, sent.text, re.IGNORECASE):
+                law_prev = find_section_and_law(law_dict, sent.text, section_regexp, law_regexp, law_prev, sent_laws)
+            else:
+                if len(sent_laws) > 0:
+                    law_prev = sent_laws[-1][0]
+    except: 
+        print("oops parsing")
+    combine_laws(law_dict)
+    return repr_laws(law_dict)
+
+def article_get_cases_list(article_text):
+    case_regexp = get_case_regexp(case_re_indicators)
+    case_list = []
+    try:
+        doc_nlp = nlp(article_text)
+        for sent in doc_nlp.sents:
+            txt_lower = sent.text.lower()
+            if re.search(case_regexp, sent.text):
+                case_list.extend(find_case(sent.text, case_regexp))
+    except: 
+        print("oops parsing")
+    return case_list
+
+def article_get_length(article_text):
+    return(len(article_text)) 
+
+#****************************HELPER FUNCTIONS****************************
 
 def remove_stop(text):
     text = text.lower()
@@ -92,7 +130,7 @@ def repr_laws(law_dict):
 def get_case_regexp(case_indicators):
     re_case_str = '('+'|'.join(case_indicators)+')'
     case_regexp = '(\s+)'+re_case_str+'(\s+)'
-    print (case_regexp)
+    # print (case_regexp)
     return case_regexp
 
 def find_case(sent_text, case_regexp):
@@ -130,40 +168,3 @@ def find_first_set_cap_words(str_in):
         if len(m) > 0:
             return m[0][0]
     return None
-
-#****************************ARTICLE SPECIFIC FUNCTIONS****************************
-def article_get_acts_list(article_text):
-    section_regexp = get_section_regexp(section_re_indicators)
-    law_regexp = get_law_regexp(law_re_indicators)
-    law_dict = {}
-    try:
-        doc_nlp = nlp(article_text)
-        law_prev = ''
-        for sent in doc_nlp.sents:
-            txt_lower = sent.text.lower()
-            sent_laws = find_laws(law_dict, sent.text, law_regexp)
-            if re.search(section_regexp, sent.text, re.IGNORECASE):
-                law_prev = find_section_and_law(law_dict, sent.text, section_regexp, law_regexp, law_prev, sent_laws)
-            else:
-                if len(sent_laws) > 0:
-                    law_prev = sent_laws[-1][0]
-    except: 
-        print("oops parsing")
-    combine_laws(law_dict)
-    return repr_laws(law_dict)
-
-def article_get_cases_list(article_text):
-    case_regexp = get_case_regexp(case_re_indicators)
-    case_list = []
-    try:
-        doc_nlp = nlp(article_text)
-        for sent in doc_nlp.sents:
-            txt_lower = sent.text.lower()
-            if re.search(case_regexp, sent.text):
-                case_list.extend(find_case(sent.text, case_regexp))
-    except: 
-        print("oops parsing")
-    return case_list
-
-def article_get_length(article_text):
-    return(len(article_text)) 
