@@ -23,14 +23,14 @@ driver = webdriver.Chrome(PATH,chrome_options=options) #Uncomment for Headless
 def process_IndKanoon_url(url):
     case = CaseDoc()
     driver.get(url)
-    judgement = driver.find_element_by_css_selector(".judgments")
-    author = driver.find_element_by_css_selector(".doc_author").text
+    judgement_div = driver.find_element_by_css_selector(".judgments")
+    author = driver.find_element_by_css_selector(".doc_author").text.split(':')[-1].translate(str.maketrans('', '', string.punctuation)).strip()
     bench = driver.find_element_by_css_selector(".doc_bench").text.split(':')[-1].split(',') # process
     title = driver.find_element_by_css_selector(".doc_title").text
     source = driver.find_element_by_css_selector(".docsource_main").text
     query_terms_elements = driver.find_elements_by_css_selector(".item_toselect") 
-    p_tags = judgement.find_elements_by_tag_name("p")
-    bq_tags = judgement.find_elements_by_tag_name("blockquote")
+    p_tags = judgement_div.find_elements_by_tag_name("p")
+    bq_tags = judgement_div.find_elements_by_tag_name("blockquote")
     paragraphs = p_tags + bq_tags
     for query_terms_element in query_terms_elements:
         case.query_terms.append(query_terms_element.text)  
@@ -45,7 +45,7 @@ def process_IndKanoon_url(url):
     case.doc_author = author
     case.bench = bench
     case.source = source
-    case.judgement_text = judgement.text
+    case.judgement_text = judgement_div.text
     case.process_text()
     case.judgement_text_paragraphs = []
     for paragraph in paragraphs:
