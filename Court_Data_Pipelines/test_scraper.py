@@ -1,9 +1,678 @@
 from Common_Files.Case_handler import CaseDoc
 case = CaseDoc()
-case.judgement_text = '''1. AMENDMENTS IN GOODS AND SERVICE TAX1.1. Introduction:A King/Ruler is the one who creates and acquires wealth, protects and distributes it for common good - is the opening statement for Part B of the Budget Speech. The instant changes are replica of the same. The changes have assured a full stop to those who are motivated with fraud and guilty mind. Further, the changes have also assured reduced compliance cost and enhanced governance with a view to have first-hand interaction with assesse.1.2. Change in Scope of Supply:The term scope of supply1 has been expanded with retrospective effect from 01.07.2017 to include all activities or transactions between a person other than individual and its members or constituents for cash, deferred payments or other valuable consideration by undertaking suitable amendments.KSAA Comments:Supply of goods by an unincorporated association or body of persons to its member for cash, deferred payment or other valuable consideration were considered as supply2. The said entry did not include supply of services. The instant amendment has been brought to make all activities including supply of services under the ambit of GST. Recently, Supreme Court in case of Calcutta Club3, held that for any amount to be identified as "surplus" the identity of contributors contributing any amount and that of participants receiving such amount should be different which is not in the case of a society and hence the principles of mutuality hits them and accordingly there are no two separate persons in the transaction. With the said amendment, the legislature intends to tax the same with effect from 01.07.2017.1.3. Mandatory mapping of inwards in GSTR 2A:Presently, there are 4 criteria's for availing ITC. An additional criteria is being prescribed by way of an amendment4 to state that ITC of a particular invoice/debit note is available only when the same is furnished by the supplier in his statement of outward supply i.e. FORM GSTR-1 and it has been communicated to the recipient in the prescribed manner i.e. in FORM GSTR-2A.KSAA Comments:From 09.10.2019, a new rule5 was introduced which allowed ITC of only such invoices which are being uploaded by the supplier in his respective FORM GSTR-1 subject to certain conditions. Several writ petitions were filed to challenge the said rule on the concept that since the section allows ITC of such invoices, such rule so introduced is ultra vires. However, the instant provision so introduced negates the argument and strengthens the very root of the rule. Further, the applicability of the rule for the period prior to the implementation of the instant provision will always be subject to litigation.1.4. Defacing GST Audit:Any person having turnover exceeding Rs. 5 Crore is mandated to get his accounts audited and file the annual return6 (i.e. Form GSTR-9) along with reconciliation statement (i.e. Form GSTR-9C) certified by Chartered Accountant or Cost Accountant. The requirement for audit has been omitted and accordingly all the registered person would only be required to file annual return along with self-certified reconciliation statement7.KSAA Comments:The said change is a bold move. Going forward from notified date, the company would have to prepare annual return along with the reconciliation statement on their own. Accordingly, the burden of certifying the transaction executed by company from the perspective of GST would solely lie on the tax payer himself. Thus, a chartered accountant is absolved from the liability of certification. Accordingly, the tax payer would himself be liable for all the transactions executed and the risk of true & correct view would be of the tax payer.1.5. Interest on delayed payment of liabilityThe provision of interest has been retrospectively amended8 from 01.07.2017 so as to state that interest is calculated on unpaid net liability (Net Liability = Gross Liability (-) Input Tax Credit Utilized).KSAA CommentsThe said amendment9 was already introduced in the Finance Act, 2019 but its application was prospective10 in nature. Further, as per press release dated 26.08.2020, it was assured that there shall be no recovery of interest on delayed payment of tax through input tax credit for past period by the GST department. The present proviso addresses to the situation by making retrospective changes however it also categorically states that if any returns are filed after issuance of Show Cause Notice u/s 73 or 74 of the CGST Act, 2017 then interest has to be calculated on gross liability. Thus, all the cases will have to be analysed in light of this proposed amendment.Procedural Changes1.6. Assessments:Appropriate amendments11 have been proposed to make seizure and confiscation of goods and conveyances in transit a separate proceeding from recovery of tax.Appropriate amendments12 have been proposed to clarify that "self-assessed tax" shall include transactions declared as tax payable on any outward supplies in respective statements [i.e. FORM GSTR-1] but actually not paid [i.e. in FORM GSTR-3B].KSAA Comments:This proposed amendment is a big sigh of relief as it clarifies that no penalty is payable for any liability arising on account difference between FORM GSTR-1 vs. FORM GSTR-3B.1.7. Power to attach properties:Power to attach properties have been amended13 to state that the provisional attachment shall remain valid for the entire period starting from the initiation of any proceedings till the expiry of a period of one year from the date of order made. Further, the scope of attachment is expanded so as to state that the commissioner can provisionally attach property, including bank account, of not only of the taxable person but also of the person who retains benefits of the transaction and at whose instance the transaction is conducted.KSAA Comments:The proposed amendment plans to attach properties of even such persons who avails and/or utilizes ITC pertaining to fake invoices. The same draconian and can have huge effects if not executed under wise instructions.1.8. Filing of AppealsThe tax payer is required to pay 10% as pre-deposit of the disputed tax liability subject to maximum of Rs 25 cr before filing any appeal before the appellate authority. Appropriate amendments14 has been proposed wherein the taxpayer is required to pay 25% of the penalty as pre-deposit in cases where an appeal is filed for cases pertaining to detention or seizure of goods or conveyance.1.9. Proceedings with respect to detention, seizure and releaseAppropriate amendments15 have been proposed to delink the proceedings pertaining to detention, seizure and release of goods and conveyances in transit from proceedings relating to confiscation of goods or conveyances and levy of penalty.1.10. Power to collect informationAppropriate amendments16 have been made so as to empower the jurisdictional commissioner to call for information from any person relating to any matter dealt with in connection with the Act.1.11. Bar on disclosure of Information17No information shall be published without obtaining a previous written consent by the concerned officer or his authorized officer. This information shall cannot be used for the purpose of any proceedings under this Act without giving an opportunity to such person.1.12. Provisions relating to Zero Rated Supply:The term zero-rated supply18 has been amended to state that zero rated supply of goods or services or both means such supplies provided for authorised operations to a Special Economic Zone developer or a Special Economic Zone unit.The mechanism for claiming refund of zero-rated supplies of goods has been amended19 to state that refund claimed u/r 89 of the CGST Rules, 2017 is linked to the time limit prescribed under FEMA Act, 1999. In case of non-realization of export proceeds the said refund should be deposited alongwith applicable interest.The Government may notify such class of taxpayers who may make zero rated supply on payment of integrated tax and claim refund of tax.The Government may notify such goods or services which may be exported on payment of integrated tax and the supplier of such goods or services may claim refund of tax so paid.KSAA Comments:Supply provided by way of goods or services to SEZ would qualify as zero rated supplies provided that the same is being supplied towards authorised operations of SEZ which was not a pre-condition earlier. Accordingly, not all supplies provided to SEZ units would be considered as zero-rated supplies. Accordingly, all the circulars, notification and instructions issued in the past would be subject to verification in light of the concept of provision of supplies towards authorised operation.Further, it can be said that any supply provided to SEZ units which do not qualify as authorised operation would be subject to GST.The facility for refund of ITC by opting the option of exporting goods with payment of integrated tax towards zero-rated supply of goods or services would be restricted to a notified class of taxpayers and the same would not be applicable to all.In case of zero rated supply of goods or services or both under LUT or bond without payment of tax, the supplier will be mandated to recover the export proceeds from the foreign customers. In case of any non-recovery of sale proceeds in convertible foreign currency within time limit prescribed under FEMA Act, 1999 the tax payer will be required to deposit the refund with applicable interest within 30 days of the expiry of such time limit. The said provisions strengthen the very foundation20 of Rule 96B of the CGST Rules, 2017 which prescribes the same.2. AMENDMENTS IN CUSTOMS2.1. Rate Change:There is no change in the rate of basic customs duty. However, for some products the rate has been changed including the relaxations granted by way of exemption which is enumerated in subsequent paras as Annexure-1.2.2. Imposition of Agriculture 
-Infrastructure & Development Cess:Clause 115 of Finance Bill, 2021 has proposed Agriculture Infrastructure and Development Cess (AIDC) on import of specified goods. The amount so collected in the nature of cess shall be used to finance the improvement of agriculture infrastructure and other development expenditure. To ensure that imposition of cess does not lead to additional burden in most of these items on the consumer, the Basic Customs Duty has been lowered. The list of such items is enumerated in subsequent paras as Annexure-2.2.3. Introduction of Common Customs Electronic Portal:The CBIC board may notify21 a common portal to be termed as Common Customs Electronic Portal for facilitating registration, filing of bill of entry, shipping bills, other documents and forms prescribed under the act. Further, even order, summons, notices, etc. would be made available on the said common portal. At presently, majority of the functions specified are being done under ICE GATE Portal. The instant move will ensure effective sharing and use of information.2.4. Time limit of conditional exemption:Any conditional exemption issued in public interest will be valid22 till 31st March falling immediately two years after the date of such grant or variation. All existing conditional exemptions in force as on the date on which the Finance Bill 2021 receives the assent of the President unless having a prescribed end date, shall come to an end on 31st March, 2023 (if not specifically extended/ rescinded earlier) on reviewKSAA Comments:The instant provision would bring a new check on all the unilateral exemptions granted till date on BCD, IGST and the same would be subject to review periodically. Further, a company would have to plan its imports in the said manner. The same is a remarkable change which has been witnessed for the first time under Customs Act where all the exemptions granted so far till date are subject to review.2.5. Time limit for adjudication:A two year limit23 has been attached for concluding the proceedings from the date of initiation of audit, search, seizure or summons. Further, the Principal Commissioner of Customs on sufficient cause and for reasons recorded in writing may increase the said time limit by a further period of one year.Further, the said time limit of 1 year shall exclude the following -Period during which stay was granted by an orderPeriod seeking information from an overseas authority through a legal process2.6. Time limit for filing bill of entry:The time limit24 for filing bill of entry has been amended so as to mandate filing of bill of entry before the end of the day preceding the day (including holidays) of arrival of goods.2.7. Cases before Commissioner (appeals):The relevant provisions25 have been amended so as to empower the Commissioner (Appeals) to adjudicate applications made by a proper officer in relation to seizure of gold for the purpose of certifying the correctness of the seized gold, taking photographs and certifying the same and carrying out such other procedures as prescribed, before the disposal of the gold in a manner as may be determined by the Central Government.2.8. Confiscation of goods:To strengthen the economy and to discourage IGST refund frauds goods confiscation provisions have been amended26 so as to provide for the confiscation of any goods entered for exportation under claim of remission or refund of any duty or tax or levy, so as to make a wrongful claim which is in contravention of the Customs Act, 1962 or any other law for the time being in force..KSAA Comments:For ease of business, the Government introduced schemes of speedy refund against export of goods. Accordingly, ITC was refunded alongwith drawback by the Customs authorities in cases where goods were exported. The instant scheme was wrongly explored and many exporters claimed ITC refund of such invoices for which the duty was not deposited with the Central Government and as a consequence of which government suffered heavy losses. Accordingly, many measures were taken to recover such money and to curb it. Further, even certain instances were drawn whereby the drawback was being wrongly claimed. It seems that after due consultation the Government felt the need for introduction of the instant provision whereby an exporter would be discouraged to export goods and claim undue refund of IGST, drawback as the goods so exported will carry the risk of confiscation.2.9. Specific penalty:Any person who has obtained any invoice by fraud, collusion, willful misstatement or suppression of facts to utilize Input Tax Credit on the basis of such invoice for discharging any duty or tax on goods that are entered for exportation under claim of refund of any duty or tax would be liable for penalty not exceeding five times27 the refund claim.KSAA Comments:The government is very serious on the issue of refund on account of fake invoices and the same can be understood from the series of amendments wherein provisions have been amended to introduce rejection of refund, recovery of such refund granted, confiscation of goods and lastly penalty for claiming such refund which would be 5 times of the refund amount.2.10. Rectification of Documents:Rectification of documents can be done through the customs automated system on the basis of risk evaluation through appropriate selection criteria. Further, certain amendments28, as may be specified by the Board, may be done by the importer or exporter on the common portal.KSAA Comments:The instant provision has cleared major difficulty of such cases which qualify for amendment of bill of entry, shipping bill or bill of export already generated on Customs automated system i.e. ICEGATE Portal and the goods have been cleared for home consumption or shipped for export. The formal instructions regarding implementation of the same would be very much awaited for its correct application.2.11. Other Changes under Tariff including Anti-dumping duties:Customs Tariff (Identification, Assessment and Collection of Anti-dumping Duty on Dumped Articles and for Determination of Injury) Rules, 1995 provide for manner and procedure for investigation into dumping of goods that cause injury to domestic industry. Changes are being made in the Rules, to provide that with effect from 01.07.2021, to provide that final findings are to be issued by the designated authority, in review cases, at least three months prior to expiry of the ADD under review. The ADD Rules are also being amended to provide for provisional assessment in cases of anti-circumvention investigation. Certain other changes are being made for bringing clarity in the scope of these rules.Customs Tariff (Identification, Assessment and Collection of Countervailing Duty on Subsidized Articles and for Determination of Injury) Rules, 1995 provide for manner and procedure for causing investigation into the cases of imports of subsidized goods that cause injury to domestic industry. Changes are being made in the Rules to provide that with effect from 01.07.2021, the final findings are to be issued by the designated authority, in review cases, at least three months prior to expiry of the CVD under review. The CVD Rules are also being amended to provide for provisional assessment in cases of anti-circumvention investigation. Certain other changes are being made for bringing clarity in the scope of these rules.Customs Tariff (Identification and Assessment of Safeguard Duty) Rules, 1997 (Safeguard Duty being changed to Safeguard Measures) provide for manner and procedure for causing investigation into the cases of imports in increased quantity that cause injury to domestic industry. Changes in the rules are being proposed to elaborate in detailed manner the modalities of implementation of safeguard measure, along with technical modifications consequent to the changes made earlier in section 8B of the Customs Tariff Act vide Finance Act, 2020.Notification No. 12/2018-Customs, dated 02.02.2018 prescribing effective rates of 3% on certain items, including gold and silver, is being rescinded.Social Welfare Surcharge is also being rescinded on goods falling under heading 2515 11 and 2515 12.Social Welfare Surcharge is being exempted on the value of AIDC imposed on gold and silver. Accordingly, these items would attract SWS, at normal rate, only on value plus basic customs duty.Anti-Dumping duty is being temporarily revoked for the period commencing from 2.2.2021 till 30.09.2021, on imports of the following-Straight Length Bars and Rods of alloy-steel, originating in or exported from People's Republic of China, imposed vide notification No. 54/2018-Cus (ADD) dated 18.10.2018;High Speed Steel of Non-Cobalt Grade, originating in or exported from Brazil, People's Republic of China and Germany, imposed vide notification No. 38/2019-Cus (ADD) dated 25.09.2019;Flat rolled product of steel, plated or coated with alloy of Aluminium or Zinc, originating in or exported from People's Republic of China, Vietnam and Korea RP, imposed vide notification No. 16/2020-Cus (ADD) dated 23.06.2020.Countervailing duty is being temporarily revoked for the period commencing from 2.2.2021 till 30.09.2021, on imports of Certain Hot Rolled and Cold Rolled Stainless Steel Flat Products, originating in or exported from People's Republic of China, imposed vide notification No. 1/2017-Cus (CVD) dated 07.09.2017.Provisional Countervailing duty is being revoked on imports of Flat Products of Stainless Steel, originating in or exported from Indonesia, imposed vide notification No. 2/2020- Customs (CVD) dated 9.10.2020.In Sunset Review, anti-dumping duty on Cold-Rolled Flat Products of Stainless Steel of width 600 mm to 1250 mm and above 1250 mm of non bonafide usage originating in or exported from People's Republic of China, Korea RP, European Union, South Africa, Taiwan, Thailand and United States of America has been discontinued upon expiry of
- the anti-dumping duty hitherto leviable vide notifications no. 61/2015-Customs (ADD) dated 11th December, 2015 and 52/2017-Customs (ADD) dated 24th October, 2017.Click here to view Annex ...Footnotes1. Section 7(1) (aa) of the CGST Act, 2017 introduced vide clause 99 of Finance Bill, 20212.
-  Entry 7 of Schedule II to Section 7 of the CGST Act, 2017 which is deleted vide clause 113 of Finance Bill,20213. State of West Bengal vs Calcutta Club Limited 2019 (29) GSTL 545 [SC]4. Section 16(aa) of the CGST Act, 2017 introduced vide clause 100 of Finance Bill, 20215. Rule 36(4) of the CGST Rules, 2017 introduced vide notification 49/2019 dated 09.10.20196. Section 35(5) of the CGST Act, 2017 which is omitted vide clause 101 of Finance Bill, 20217. Section 44(1) of the CGST Act, 2017 amended vide clause 102 of Finance Bill, 20218.Proviso to Section 50 of the CGST Act, 2017 introduced vide clause 103 of Finance Bill, 20219. Old proviso to Section 50 of the CGST Act, 2017 introduced vide Finance Bill, 201910. Effective from 01.09.2020 vide Notification No 63/2020 (CT) dated 25.08.202011. Explanation 1 to Section 74 of the CGST Act, 2017 vide clause 104 of Finance Bill, 202112. Explanation to Section 75(12) of the CGST Act, 2017 vide clause 105 of Finance Bill, 202113. Section 83(1) of the CGST Act, 2017 vide clause 106 of Finance Bill, 202114. Section 107(6) of the CGST Act, 2017 amended vide clause 107 of the Finance Bill, 202115. Section 129 of the CGST Act, 2017 amended vide clause 108 of the Finance Bill, 202116. Section 151 of the CGST Act, 2017 amended vide clause 110 of the Finance Bill, 202117. Section 152 of the CGST Act, 2017 amended vide clause 111 of the Finance Bill, 202118. Section 16(1) of the IGST Act, 2017 amended vide clause 114 of the Finance Bill, 202119. Section 16(3) of the IGST Act, 2017 amended vide clause 114 of the Finance Bill, 202120. Notification 16/2020 -CT Dated 23.03.202021. Section 2(7B) & 154C of the Customs Act, 1962 introduced vide clause 80 & 91 of the Finance Bill, 202122. Section 25(4A) of the Customs Act, 1962 introduced vide clause 82 of the Finance Bill, 202123. Section 28BB of the Customs Act, 1962 introduced vide clause 83 of the Finance Bill, 202124. Section 46 of the Customs Act, 1962 amended vide clause 84 of the Finance Bill, 202125. Section 110(1D) & Section 139 of the Customs Act, 1962 amended vide clause 85 & 88 of the Finance Bill, 2012 respectively26. Section 113 of the Customs Act, 1962 amended vide clause 86 of the Finance Bill, 202127. Section 114AC of the Customs Act, 1962 amended vide clause 87 of the Finance Bill, 202128. Section 149 of the Customs Act, 1962 amended vide clause 89 of the Finance Bill, 2021The content of this article is intended to provide a general guide to the subject matter. Specialist advice should be sought about your specific circumstances.'''
+case.judgement_text = '''REPORTABLE  
+
+ 
+
+ 
+
+ 
+
+IN THE SUPREME COURT OF INDIA 
+CIVIL APPELLATE JURISDICTION 
+ 
+CIVIL APPEAL NO. 104 OF 2021 
+ 
+
+GAJANAN BABULAL BANSODE & ORS.    
+ 
+
+VERSUS 
+
+              … APPELLANTS 
+
+ 
+STATE OF MAHARASHTRA & ORS.                                     … RESPONDENTS 
+ 
+ 
+ 
+
+O R D E R 
+
+ 
+
+INDU MALHOTRA, J. 
+
+  
+
+1. 
+
+  The Government of Maharashtra issued a requisition on 02.06.2016 
+
+to the Maharashtra Public Service Commission (“MPSC”) to conduct the 
+
+Limited Departmental Competitive Examination(“LDCE”) for selection of 
+
+candidates to the post of Police Sub Inspector. 
+
+2. 
+
+  The  Home  Department,  Government  of  Maharashtra  vide 
+
+Government  Circular  dated  27.06.2016  notified  828  vacancies,  out  of 
+
+which  642  were  from  the  open  category,  and  186  were  from  various 
+
+reserved  categories, for promotion  to the post of Police  Sub-Inspector 
+
+through the LDCE– 2016.  
+
+3. 
+
+  The  selection  was  governed  by  the  provisions  of  the  Police  Sub-
+
+Inspector (Recruitment) Rules, 1995. The relevant Rules are extracted 
+
+hereunder: 
+
+ 
+
+1 
+
+ 
+
+“Rule 3 : Appointment to the post of Sub-Inspector of Police in the Police 
+Force in the State of Maharashtra shall be made either: 
+(a)by promotion of a suitable person on the basis of seniority subject to 
+fitness  from  amongst  the  persons  holding  the  posts  of  Havaldar  and 
+Assistant Police  Sub-Inspector  in  the  Police Force who have  completed 
+not less than five years continuous regular service or seven years broken 
+service  and  who  qualify  in  the  departmental  examination  held  by  the 
+Director  General  of  Police  in  accordance  with  the  rules  laid  down  in 
+paragraph 5 of the Government Resolution No. PSB. 0390/CR-408/POL-
+5-A, dated 5th July 1995, 1994 
+
+Or 
+(b) by selection of persons working in the Police Force on the basis of the 
+result  of  the  limited  departmental  examination  held  by  the  Maharashtra 
+Public Service Commission for appointment to the post of Sub-Inspector 
+of Police for admission to which a candidate shall- 
+      (i)  not be more than 35 years of age : 
+ 
+candidates of Backward Classes and- 
+‘Provided also that, the candidates who were eligible to appear for the 
+ 
+limited departmental examination after 1st January, 1991, but who were not 
+allowed to appear for the limited departmental examinations held in 1998 
+and  2002  on  account  of  the  age  limit,  shall  be  given  three  chances  to 
+appear for next consecutive examinations. 
+
+Provided  that,  relaxation  of  age  of  five  years  may  be  granted  to 
+
+(ii)   have completed a minimum regular service as Police Constable 
+
+with educational qualifications as mentioned below 
+
+Minimum Regular Service Educational Qualification  
+Degree in any faculty. 
+(1) 4 years  
+(2) 5 years        ..                       Passed the Higher Secondary School  
+
+..  
+
+ 
+
+(3) 6 years        ..                       Passed the Secondary School  
+
+Certificate examination  
+
+Certificate examination  
+
+(c) by nomination on the basis of the result of a competitive examination 
+held by the Commission in accordance with the rules made in this behalf 
+from time to time, and for admission to which a candidate shall :- 
+
+(i) not be less than nineteen years of age and not more than (twenty-
+
+ 
+eight years) of age on the date specified by the Commission 
+
+  Provided that the maximum age limit may be relaxed upto (thirty-one 
+years) in respect of candidates belonging to the Backward Classes: 
+
+  Provided that an ex-serviceman who has served continuously in the 
+Armed  Forces  for  a  period  of  not  less  than  5  years  may  be  allowed  to 
+deduct from his age, the period of 2 years over and above the length of 
+his continuous service in the Armed Forces upto the date of release from 
+service.  
+
+(ii)  Possess  a  degree  or  any  other  qualification  declared  by  the 
+
+ 
+Government to be equivalent thereto; 
+
+ 
+
+(iii) Possess the following  minimum physical measurements, namely : 
+
+(i)  Height            .. 
+                   
+(ii)  Chest            .. 
+
+For Male 
+
+1165  Centimetres minimum. 
+
+ Centimetres and above with 
+minimum expansion of 5 
+centimetres.  
+For Female  
+
+79 
+
+ 
+
+2 
+
+ 
+       Height          .. 
+
+1157      Centimetres. 
+
+ 
+
+ 
+
+Rule 4: Appointment to the post of Police Sub- Inspector by promotion, 
+selection on the basis of limited departmental examination and nomination 
+shall be made in the ratio of 25:25:50. 
+ 
+Rule 5: Notwithstanding anything contained in these rules, if in the opinion 
+of Government, the exigencies of service, ‘so requires, Government may 
+with prior consultation with MPSC make appointment to the post of Police 
+Sub-Inspector  in  relaxation  of  the  ratio  prescribed  for  appointment  by 
+promotion  selection on  the  basis  of limited  departmental examination or 
+nomination.” 
+ 
+
+ 
+
+4. 
+
+  The MPSC recommended the names of 828 candidates, out of which 
+
+642  were  from  the  open  category,  who  had  secured  253  marks  and 
+
+above; and 186 candidates were from the various reserved categories, 
+
+who had secured 230 marks and above, on the basis of the corrected 
+
+final result declared on 12.12.2017. 
+
+5. 
+
+  The  Home  Department,  Government  of  Maharashtra  vide  a 
+
+Government  Resolution  No.  Police  -1818/  File  355/Pol  5A  dated 
+
+22.04.2019  notified  that  the  Cabinet  had  taken  a  policy  decision  to 
+
+accommodate  636  additional  candidates  who  had  secured  more  than 
+
+230 marks in the LDCE – 2016 examination. 
+
+6. 
+
+  On 11.06.2019, the Directorate General of Police issued a direction 
+
+for  conducting  the  medical  test  and  other  formalities  to  send  the 
+
+additional  636  candidates  for  training  to  the  Maharashtra  Police 
+
+Academy, Nasik, as a part of the process of their appointment to the post 
+
+of Police Sub-Inspector. 
+
+7. 
+
+  The  Deputy  Secretary  of  the  MPSC  addressed  a  letter  dated 
+
+11.07.2019  to  the  Additional  Chief  Secretary  (Appeal  and  Security) 
+
+Government of Maharashtra wherein it was stated that as per Article 320 
+
+of the Constitution, the MPSC has the power to appoint candidates to 
+
+3 
+
+ 
+
+ 
+
+ 
+
+various  posts  in  the  State.  The  post  of  Police  Sub-Inspector  being  a 
+
+Class III post, was required to be filled up in accordance with The Police 
+
+Sub-Inspector (Recruitment) Rules, 1995. The list of 636 additional was 
+
+notified by the Government on its official website, had been done without 
+
+consulting  the  MPSC,  which  was  a  serious  irregularity,  and  would 
+
+hamper the functioning of the Commission.  
+
+8. 
+
+ 
+
+In the above background, various Original Applications were filed by 
+
+candidates to challenge the Policy decision contained in the G.R. dated 
+
+22.04.2019. In the present case O.A. No. 722 / 2019 was filed by a group 
+
+of  In-service  candidates  who  were  working  as  Police  Constables,  and 
+
+were aggrieved by the impugned G.R., since it would adversely affect 
+
+their promotional prospects.  
+
+  The Petitioners challenged the  G.R. dated 22.04.2019  inter alia on 
+
+the ground that the additional 636 candidates who were directed to be 
+
+accommodated to the post of Police Sub-Inspector, was contrary to the 
+
+Recruitment Rules, and would have the inevitable effect of distorting the 
+
+ratio for recruitment through the Limited Departmental Examination.  
+
+  Rule  4  of  the  Police  Sub-Inspector  (Recruitment)  Rules,  1995 
+
+provides a quota of 25% for promotion through the Local Departmental 
+
+Examination. The appointment of 636 additional candidates would have 
+
+the effect of distorting the quota of 25% prescribed by Rule 4, and curtail 
+
+the future promotion opportunities of candidates who had either failed in 
+
+the LDCE-2016, or who were not eligible on account of age, experience 
+
+and educational qualification. The denial of promotional avenues to the 
+
+ 
+
+4 
+
+ 
+
+Petitioners in the foreseeable future would be violative of Articles 14 and 
+
+16 of the Constitution of India. 
+
+ 
+
+ 
+
+The  Maharashtra  Administrative  Tribunal  vide  interim  Order 
+
+dated 18.10.2019 directed that Status Quo be maintained with respect 
+
+to  the  636  additional  candidates  whose  list  was  appended  to  the 
+
+Government  Resolution.  This  Order  was  passed  on  the  basis  of  an 
+
+earlier  Order  dated  01.08.2019  passed  by  the  Principal  Bench  of  the 
+
+Tribunal in O.A. No. 445 of 2019.  
+
+9. 
+
+   Respondents  No.  5  and  6  herein  filed  Misc.  Application  No.545  of 
+
+2019  to  vacate  the  interim  Order  of  status  quo  dated  18.10.2019, 
+
+wherein it was prayed that a direction be given to the State to proceed 
+
+with the implementation of G.R. dated 22.04.2019.  
+
+10. 
+
+   The  Maharashtra  Administrative  Tribunal  vide  Order  dated 
+
+30.11.2019 vacated the interim Order dated 18.10.2019 on the ground 
+
+that two of the Petitioners had appeared in the LDCE exam, but failed to 
+
+qualify  in  the  said  examination;  whilst  the  other  Petitioners  had  not 
+
+participated in the exam. It was also held that the Petitioners had failed 
+
+to  implead  the  636  additional  candidates  who  were  directed  to  be 
+
+appointed under the impugned G.R., and were necessary parties to be 
+
+impleaded in the O.A. Reliance was placed on the Order passed by the 
+
+Bombay High Court in W.P. No. 3555/2019 Nivrathi Venkatrao Gitte v. 
+
+State  of  Maharashtra,  wherein  the  same  G.R.  dated  22.04.2019  had 
+
+been  challenged.  The  High  Court  had  directed  that  the  process  of 
+
+selection  may  proceed,  but would be subject to  the results of the  Writ 
+
+Petition. 
+
+ 
+
+5 
+
+11. 
+
+  Aggrieved by the Order dated 30.11.2019, the  Original Applicants / 
+
+Petitioners herein filed W.P. No. 15045 of 2019 before the Bombay High 
+
+ 
+
+Court, Aurangabad Bench.  
+
+  The Bombay High Court rejected the Writ Petition, and the prayer to 
+
+maintain status quo with respect to the 636 additional candidates who 
+
+were  directed  to  be  appointed.  The  High  Court  declined  to  determine 
+
+whether  the  G.R.  dated  22.04.2019  had  been  issued  in  extraordinary 
+
+circumstances  as  provided  by  Rule  5,  since  the  O.A.  was  pending 
+
+adjudication  before  the  Tribunal.  The  High  Court  however  issued  a 
+
+direction to the State Government to send the additional 636 candidates 
+
+for the training of 9 months; and, requested the Tribunal to dispose of 
+
+the pending O.A. within  the same  period, so that prior to  the posting / 
+
+appointment orders being issued in favour of the additional candidates, 
+
+the O.A. would be decided. 
+
+12. 
+
+  We  have  heard  Mr.  Vinay  Navare,  Senior  Advocate  for  the 
+
+Appellants,  Mr.  Sachin  Patil,  Advocate-on-record  for  the  Respondent-
+
+State of Maharashtra, Mr. Ravindra Adsure for the Caveators, and Mr. 
+
+R. Basant, Senior Advocate and Mr. M. N. Rao, Senior Advocate for the 
+
+Intervenors. With the consent of parties, we are disposing of the Appeal 
+
+at the admission stage. 
+
+13. 
+
+  Article 320(3)(a) of the Constitution of India provides that the Union 
+
+Public  Service  Commission,  or  the  State  Public  Service  Commission 
+
+shall be  consulted on  all matters  relating to  methods of recruitment  to 
+
+civil services, and for civil posts.  
+
+ 
+
+6 
+
+ 
+
+ 
+
+In the present case, we find that the State of Maharashtra has issued 
+
+the impugned G.R. dated 22.04.2019, without any consultation or prior 
+
+approval by the MPSC, which is evident from the letter dated 11.07.2019 
+
+issued by the MPSC to the Government, expressing its disapproval of 
+
+the  decision  taken  by  the  Government  unilaterally  to  make  these 
+
+appointments without any consultation. 
+
+14. 
+
+  Rule  5  of  the  Police  Sub-Inspector  (Recruitment)  Rules,  1995 
+
+provides that notwithstanding anything contained in these rules, if in the 
+
+opinion of the Government, the exigencies of service require, the  ratio 
+
+prescribed  for  appointment  by  promotion,  on  the  basis  of  Limited 
+
+Departmental Examination or nomination, may be relaxed with the prior 
+
+consultation of the Commission.  
+
+  The Government would be required to establish before the Tribunal 
+
+as to whether there were any extra-ordinary circumstances which have 
+
+warranted the exercise of power under Rule 5, which may be resorted to 
+
+only in rare and exceptional circumstances.  
+
+15. 
+
+  The impugned G.R. seeks to fill up double the number of vacancies 
+
+which  were  notified  for  the  LCDE  –  2016  by  the  Circular  dated 
+
+27.06.2016. It is well-settled in service jurisprudence that  the authority 
+
+cannot fill up more than the notified number of vacancies advertised, as 
+
+the recruitment of candidates in excess of the notified vacancies, would 
+
+be violative of Articles 14 and 16 (1) of the Constitution of India. 
+
+16. 
+
+  The Tribunal has vacated the Order of status quo dated 18.10.2019, 
+
+on  the  ground  that  two  of  the  Applicants  had  participated  in  the 
+
+examination, but failed to qualify.  
+
+7 
+
+ 
+
+ 
+
+   This  could  not  be  a  justifiable  ground  to  vacate  the  interim  Order, 
+
+since  the  promotional  prospects  of  the  Petitioners  would  be  seriously 
+
+prejudiced,  since  a  block  of  636  additional  candidates  would  be 
+
+appointed as Police Sub-Inspectors over and above the Applicants. 
+
+17. 
+
+       The  other  ground  on  which  the  Tribunal  has  vacated  the  Interim 
+
+Order  is  stated  in  para  17  of  the  Order  that  the  Applicants  had  not 
+
+challenged the G.R. dated 22.4.2019.  
+
+   This  is  an  erroneous  observation  which  would  be  evident  from  the 
+
+prayers in the O.A. which are set out hereunder for ready reference: - 
+
+ 
+
+“(A)  Original  Application  may  kindly  be  allowed  by  directing  the 
+Respondents  to  undertake  recruitment  strictly  as  per  PSI  Recruitment 
+Rules, 1995, without any deviation therefrom 
+ 
+(B) The recruitment by promotion of as many as 636 candidates sought to 
+be made vide Govt. Resolution dated 22.4.2019, may kindly be quashed 
+and set aside, the same being contrary to Recruitment Rules as well as 
+binding precedent of the Hon’ble Apex Court. 
+  
+€ Pending hearing and final disposal of this Application, the Respondents 
+No.1  to  3  may  kindly  be  directed  not  to  take  any  further  action  in 
+furtherance of the impugned Govt. Resolution dated 22.4.2019. 
+ 
+(D) Pending hearing and final disposal of this Application, the Respondents 
+No.1 to may kindly be directed to maintain  status quo in respect of 636 
+candidates  sought  to  be  appointed  by  promotion,  under  the  Impugned 
+Govt. Resolution dated 22.4.2019. 
+ 
+€ Any other suitable and equitable relief to which applicants are entitled to 
+and this Hon’ble Tribunal deems appropriate, may kindly be granted in their 
+favour.” 
+
+(emphasis supplied) 
+
+In  view  thereof,  the  said  observation  cannot  be  a  ground  for 
+
+vacating  the  interim  order  of  stay  granted  vide  Order  dated 
+
+ 
+
+  
+
+18.10.2019. 
+
+18. 
+
+   The third ground on which the Tribunal has vacated the Interim Order 
+
+was  that  in  similar  O.As  challenging  the  same  G.R.  dated  22.4.2019, 
+
+ 
+
+8 
+
+ 
+
+including  O.A.  No.  455  of  2019  filed  before  the  Principal  Bench,  the 
+
+Applicants  in those cases  had withdrawn their respective cases,  since 
+
+they  were  desirous  of  pursuing  their  representations  with  the  State 
+
+Government.  
+
+  This could also not be a justifiable ground for vacating the Order of 
+
+status quo merely because other parties had chosen to withdraw their 
+
+O.A. for their own reasons. 
+
+19. 
+
+  We find that the High Court in the present Writ Petition has issued a 
+
+direction  to  the  State  to  send  the  additional  list  of  636  candidates  for 
+
+training  of  9  months  during  the  pendency  of  proceedings  before  the 
+
+Tribunal. 
+
+challenge.  
+
+   We  are  of  the  view  that  such  a  direction  ought  not  to  have  been 
+
+passed  in  the  Writ  Petition  filed  by  the  present  Petitioners,  who  are 
+
+aggrieved  by  the  impugned  Government  Resolution  No.  Police  -1818/ 
+
+File  355/Pol  5A  dated  22.04.2019,  which  is  the  subject  matter  of 
+
+20. 
+
+ 
+
+In  view  of  the  discussion  hereinabove,  we  allow  the  present  Civil 
+
+Appeal,  and  direct  that  Government  Resolution  No.  Police  -1818/  File 
+
+355/Pol 5A dated 22.4.2019 will remain stayed during the pendency of 
+
+proceedings before the Maharashtra Administrative Tribunal.   
+
+  We set aside the Order dated 30.11.2019 passed by the Maharashtra 
+
+Administrative Tribunal which vacated the interim Order 18.10.2019, and 
+
+the Order dated 06.03.2020 passed by the Bombay High Court in W.P. 
+
+No. 15045 / 2019. 
+
+ 
+
+9 
+
+21. 
+
+  We direct the Maharashtra Administrative Tribunal, Nagpur Bench to 
+
+ 
+
+decide the pending O.A. within a period of six months from the date of 
+
+receipt  of  this  Order.  The  Tribunal  will  ensure  that  the  additional  636 
+
+candidates  are  given  notice  of  the  pending  O.A.  through  the  State,  to 
+
+enable them to appear and participate in the proceedings. The Tribunal 
+
+is further directed to club all pending  Original Applications  challenging 
+
+the impugned Government Resolution No. Police -1818/ File 355/Pol 5A, 
+
+and pass a common Judgment in these cases.  
+
+There will be no order as to costs. 
+
+Pending applications, if any, are accordingly disposed of. 
+
+ 
+
+ 
+......................................................J.  
+(L. NAGESWARA RAO) 
+ 
+ 
+ 
+………………………………………J. 
+          (INDU MALHOTRA)  
+
+ 
+
+ 
+
+New Delhi, 
+February 5th, 2021  
+
+ 
+
+ 
+
+          ......................................................J. 
+(VINEET SARAN) 
+
+ 
+
+ 
+
+10 
+
+
+'''
 case.process_text()
+for paragraph in case.judgement_text_paragraphs:
+      print(paragraph)
+print(case.judgement_text)
 print("cases cited : " + str(case.cases_cited))
 print("provisions referred : " + str(case.provisions_referred))

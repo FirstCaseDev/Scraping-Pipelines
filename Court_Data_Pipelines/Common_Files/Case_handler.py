@@ -14,11 +14,11 @@ case_re_indicators = ['v', 'v\.', 'vs', 'vs\.', 'Vs', 'Vs\.', 'versus', 'Versus'
 #****************************CASE CLASS DEFINITION****************************
 class CaseDoc:
     def __init__(self):
-        self.title = ""
-        self.url = ""
-        self.source = ""
-        self.date = datetime.datetime.now()
-        self.doc_author = "" 
+        self.title = ""                     #self defined
+        self.url = ""                       #self defined
+        self.source = ""                    #self defined
+        self.date = datetime.datetime.now() #self defined
+        self.doc_author = ""                
         self.petitioner = ""
         self.respondent = ""
         self.bench = []
@@ -28,11 +28,14 @@ class CaseDoc:
         self.cases_citing = []
         self.judgement = ""
         self.judgement_text = ""
+        self.judgement_text_paragraphs = []
         self.provisions_referred = []
     
     def process_text(self):
         print("*********processing text*********") 
-        text = self.judgement_text.replace('\n', ' ').replace('\r','')
+        self.judgement_text_paragraphs = case_get_text_paragraphs(self.judgement_text)
+        text = self.judgement_text.replace('\n', ' ').replace('\r','').replace('','')
+        self.judgement_text = text
         self.cases_cited = case_get_cases_list(text)
         self.provisions_referred = case_get_acts_list(text)
         print("*********processed text*********") 
@@ -40,6 +43,30 @@ class CaseDoc:
 
 
 #****************************CASE SPECIFIC FUNCTIONS****************************
+def case_get_text_paragraphs(case_text):
+    paragraphs = re.split('(\n\n()?\d\d\. )|(\n\n()?\d\. )',case_text)
+    try:
+        paragraphs = [i.strip(' ') for i in paragraphs]
+    except:
+        print("oops paragraph stripping")
+    while('' in paragraphs):
+        paragraphs.remove('')
+    while(None in paragraphs):
+        paragraphs.remove(None)
+    count = 0
+    joined_paragraphs = []
+    while(count<=len(paragraphs)):
+        if count==len(paragraphs)-1:
+            joined_paragraphs.append(paragraphs[count])
+            # pass
+        else: 
+            try:
+                joined_paragraphs.append(paragraphs[count] + " " + paragraphs[count+1])
+            except:
+                pass
+        count = count + 2
+    return joined_paragraphs
+
 def case_get_acts_list(case_text):
     section_regexp = get_section_regexp(section_re_indicators)
     law_regexp = get_law_regexp(law_re_indicators)
