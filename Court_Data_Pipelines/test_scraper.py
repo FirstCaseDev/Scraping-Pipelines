@@ -671,7 +671,9 @@ February 5th, 2021
 
 '''
 case.process_text()
-print(len(case.judgement_text_paragraphs))
-print(len(case.judgement_text))
+
+print("judgement : "  + str(case.judgement))
+print("petitioner counsel : "  + str(case.petitioner_counsel))
+print("respondent counsel : "  + str(case.respondent_counsel))
 print("cases cited : " + str(case.cases_cited))
 print("provisions referred : " + str(case.provisions_referred))

@@ -34,8 +34,9 @@ class CaseDoc:
         self.judgement_text = ""            #self defined
         self.judgement_text_paragraphs = [] #function done
         self.provisions_referred = []       #function to be modified for datatype 
+        self.query_terms = []               #self defined
     
-    def process_text(self):
+    def process_text(self): #processes text and retrieves a set of case variables
         print("*********processing text*********") 
         self.judgement_text_paragraphs = case_get_text_paragraphs(self.judgement_text) #works well for pdfminer extraction
         text = self.judgement_text.replace('\n', '').replace('\r','').replace('','')
@@ -46,6 +47,24 @@ class CaseDoc:
         self.respondent_counsel = case_get_respondent_counsel(text)
         self.judgement = case_get_judgement(self.judgement_text_paragraphs[-3:]) # increase -3 if judgement is not extracted
         print("*********processed text*********") 
+
+    def print_case_attributes(self):
+        print("date : "  + str(self.date))
+        print("url : "  + str(self.url))
+        print("author : "  + str(self.doc_author))
+        print("bench : "  + str(self.bench))
+        print("title : "  + str(self.title))
+        print("petitioner : "  + str(self.petitioner))
+        print("respondent : "  + str(self.respondent))
+        print("source : "  + str(self.source))
+        print("query_terms : "  + str(self.query_terms))
+        print("judgement : "  + str(self.judgement))
+        print("petitioner counsel : "  + str(self.petitioner_counsel))
+        print("respondent counsel : "  + str(self.respondent_counsel))
+        print("cases cited : " + str(self.cases_cited))
+        print("provisions referred : " + str(self.provisions_referred))
+        print("judgement_text length : " + str(len(self.judgement_text)))
+        print("Number of paragraphs : " + str(len(self.judgement_text_paragraphs)))
 
 
 
