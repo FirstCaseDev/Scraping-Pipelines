@@ -16,11 +16,20 @@ options.add_argument('--disable-gpu')
 PATH = "C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
 driver = webdriver.Chrome(PATH,chrome_options=options) #Headless
 # driver = webdriver.Chrome(PATH) #Windowed
-driver.get("https://indiankanoon.org/doc/137461156/")
-case.judgement_text = driver.find_element_by_css_selector(".judgments").text
+driver.get("https://indiankanoon.org/doc/1732220/")
+judgement = driver.find_element_by_css_selector(".judgments")
+case.judgement_text = judgement.text
 case.process_text()
+p_tags = judgement.find_elements_by_tag_name("p")
+bq_tags = judgement.find_elements_by_tag_name("blockquote")
+paragraphs = p_tags + bq_tags
+case.judgement_text_paragraphs = []
+for paragraph in paragraphs:
+    case.judgement_text_paragraphs.append(paragraph.text)
 print(len(case.judgement_text_paragraphs))
-print(len(case.judgement_text))
+print("judgement : "  + str(case.judgement))
+print("petitioner counsel : "  + str(case.petitioner_counsel))
+print("respondent counsel : "  + str(case.respondent_counsel))
 print("cases cited : " + str(case.cases_cited))
 print("provisions referred : " + str(case.provisions_referred))
 

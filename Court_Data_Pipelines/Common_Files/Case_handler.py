@@ -3,13 +3,17 @@ import regex
 import spacy
 import datetime
 nlp = spacy.load('en_core_web_sm')
-law_re_indicators = ['Act', 'Statute', 'Rules', 'Regulations', 'Reference', 'Constitution', 'Circular', 'Notice', 'Notification']
+sal_re_indicators = ['Shri', 'Sh\.', 'Sh', 'Mr\.', 'Mr', 'Miss', 'Ms\.', 'Ms', 'Mrs\.', 'Ms', 'Dr\.', 'Dr']
 section_re_indicators = ['s\.', 'section', 'rule', 'article', 'chapter', 'clause', 'paragraph', 'explanation']
+law_re_indicators = ['Act', 'Statute', 'Rules', 'Regulations', 'Reference', 'Constitution', 'Circular', 'Notice', 'Notification']
+case_re_indicators = ['v', 'v\.', 'vs', 'vs\.', 'Vs', 'Vs\.', 'versus', 'Versus']
+counsel_petitioner_re_indicators = ['for(\s+)(the)?(\s+)((appellant(s?))|(petitioner(s?)))(\.?)']
+counsel_respondent_re_indicators = ['for(\s+)(the)?(\s+)respondent(s?)(\.?)']
 list_stop = ['of', 'for', 'the', 'and', 'under', '\.', ',', '\(', '\)', '\-']
 list_stop_regex = '('+'|'.join(list_stop)+')'
 first_cap_regex = '([A-Z]\S*\s*('+list_stop_regex+'*\s*'+'([A-Z]|\d)\S*\s*)+)'
 law_regex_no_words = first_cap_regex+'(((,|of)\s+)?(\d)*\s*)*'
-case_re_indicators = ['v', 'v\.', 'vs', 'vs\.', 'Vs', 'Vs\.', 'versus', 'Versus']
+
 
 #****************************CASE CLASS DEFINITION****************************
 class CaseDoc:
@@ -18,33 +22,90 @@ class CaseDoc:
         self.url = ""                       #self defined
         self.source = ""                    #self defined
         self.date = datetime.datetime.now() #self defined
-        self.doc_author = ""                
-        self.petitioner = ""
-        self.respondent = ""
-        self.bench = []
-        self.petitioner_counsel = []
-        self.respondent_counsel = []
-        self.cases_cited = []
-        self.cases_citing = []
-        self.judgement = ""
-        self.judgement_text = ""
-        self.judgement_text_paragraphs = []
-        self.provisions_referred = []
+        self.doc_author = ""                #self defined
+        self.petitioner = ""                #self defined
+        self.respondent = ""                #self defined
+        self.bench = []                     #self defined
+        self.petitioner_counsel = []        #function done
+        self.respondent_counsel = []        #function done
+        self.cases_cited = []               #function done
+        self.cases_citing = []              #self defined
+        self.judgement = ""                 #function done
+        self.judgement_text = ""            #self defined
+        self.judgement_text_paragraphs = [] #function done
+        self.provisions_referred = []       #function to be modified for datatype 
     
     def process_text(self):
         print("*********processing text*********") 
-        self.judgement_text_paragraphs = case_get_text_paragraphs(self.judgement_text)
-        text = self.judgement_text.replace('\n', ' ').replace('\r','').replace('','')
+        self.judgement_text_paragraphs = case_get_text_paragraphs(self.judgement_text) #works well for pdfminer extraction
+        text = self.judgement_text.replace('\n', '').replace('\r','').replace('','')
         self.judgement_text = text
         self.cases_cited = case_get_cases_list(text)
         self.provisions_referred = case_get_acts_list(text)
+        self.petitioner_counsel = case_get_petitioner_counsel(text)
+        self.respondent_counsel = case_get_respondent_counsel(text)
+        self.judgement = case_get_judgement(self.judgement_text_paragraphs[-3:]) # increase -3 if judgement is not extracted
         print("*********processed text*********") 
 
 
 
 #****************************CASE SPECIFIC FUNCTIONS****************************
-def case_get_bench(case_text):
-    pass
+def case_get_petitioner_counsel(case_text):
+    sal_regexp = get_salutation_regexp(sal_re_indicators)
+    counsel_petitioner_regexp = get_counsel_regexp(counsel_petitioner_re_indicators)
+    petitioner_counsel = set()
+    try:
+        doc_nlp = nlp(case_text)
+        for sent in doc_nlp.sents:
+            txt_lower = sent.text.lower()
+            start = 0
+            for m in re.finditer(counsel_petitioner_regexp, sent.text, re.IGNORECASE):
+                if m:
+                    petitioner_counsel |= find_counsel(sent.text, start, m.start())
+                    start = m.end()
+    except:
+        print ("oops parsing petitioner counsel")
+    petitioner_counsel = normalize_person_set(petitioner_counsel, sal_regexp)
+    return list(petitioner_counsel)
+
+def case_get_respondent_counsel(case_text):
+    sal_regexp = get_salutation_regexp(sal_re_indicators)
+    counsel_respondent_regexp = get_counsel_regexp(counsel_respondent_re_indicators)
+    respondent_counsel = set()
+    try:
+        doc_nlp = nlp(case_text)
+        for sent in doc_nlp.sents:
+            txt_lower = sent.text.lower()
+            start = 0
+            for m in re.finditer(counsel_respondent_regexp, sent.text, re.IGNORECASE):
+                if m:
+                    respondent_counsel |= find_counsel(sent.text, start, m.start())
+                    start = m.end()
+    except:
+        print ("oops parsing respondent counsel")
+    respondent_counsel = normalize_person_set(respondent_counsel, sal_regexp)
+    return list(respondent_counsel)
+
+def case_get_judgement(paragraphs):
+    for segment in paragraphs:
+            try:
+                segment = segment.strip().lower()
+            except:
+                segment = ''
+            # print(segment)
+            if 'allow' in segment:
+                judgement = 'allowed'
+                if 'partly' in segment:
+                    judgement = 'partly allowed'
+                break
+            elif 'dismiss' in segment:
+                judgement = 'dismissed'
+                if 'partly' in segment:
+                    judgement = 'partly dismissed'
+                break    
+            else:
+                judgement = 'tied / unclear'
+    return judgement
 
 def case_get_text_paragraphs(case_text):
     paragraphs = re.split('(\n\n()?\d\d\. )|(\n\n()?\d\. )',case_text)
@@ -107,17 +168,56 @@ def case_get_length(case_text):
     return(len(case_text)) 
 
 #****************************HELPER FUNCTIONS****************************
-def remove_stop(text):
-    text = text.lower()
-    text = re.sub(list_stop_regex, ' ', text)
-    text = re.sub(' +', ' ', text)
-    return text.strip()
+def find_assoc_law(text):
+    return re.match(law_regex_no_words, text)
+
+def find_first_set_cap_words(str_in):
+    m = re.findall(first_cap_regex, str_in)
+    if m:
+        if len(m) > 0:
+            return m[0][0]
+    return None
+
+def find_last_set_cap_words(str_in):
+    m = re.findall(first_cap_regex, str_in)
+    if m:
+        if len(m) > 0:
+            return m[-1][0]
+    return None
+
+def extend_dict(dict_a, dict_b):
+    for k in dict_b:
+        if k in dict_a:
+            dict_a[k].extend(dict_b[k])
+        else:
+            dict_a[k] = dict_b[k][:]
+
+def get_salutation_regexp(sal_re_indicators):
+    re_sal_str = '('+'|'.join(sal_re_indicators)+')'
+    salutation_regexp = re_sal_str+'(\s+)'
+    # print (salutation_regexp)
+    return salutation_regexp
 
 def get_section_regexp(section_indicators):
     re_section_str = '('+'|'.join(section_indicators)+')'
     section_regexp = '(((\s|,|\.)+)'+re_section_str+'(\s+)(\S+)(\s?))((of|in)\s+(the\s+)?)?'
     # print (section_regexp)
     return section_regexp
+
+def get_law_regexp(law_re_indicators):
+    return '('+'|'.join(law_re_indicators)+')'
+
+def get_case_regexp(case_indicators):
+    re_case_str = '('+'|'.join(case_indicators)+')'
+    case_regexp = '(\s+)'+re_case_str+'(\s+)'
+    # print (case_regexp)
+    return case_regexp
+
+def get_counsel_regexp(counsel_indicators):
+    re_counsel_str = '('+'|'.join(counsel_indicators)+')'
+    counsel_regexp = '(\s+)'+re_counsel_str
+    # print (counsel_regexp)
+    return counsel_regexp
 
 def find_laws(law_dict, sent_text, law_regexp):
     sent_laws = []
@@ -128,30 +228,7 @@ def find_laws(law_dict, sent_text, law_regexp):
                 law_dict[law] = []
             sent_laws.append((law, m.start(), m.end()))
     return sent_laws
-
-def get_law_regexp(law_re_indicators):
-    return '('+'|'.join(law_re_indicators)+')'
-
-def find_assoc_law(text):
-    return re.match(law_regex_no_words, text)
-
-def combine_laws(law_dict):
-    init_keys = list(law_dict.keys())
-    mapping = {}
-    for law in init_keys:
-        law_norm = remove_stop(law)
-        if law_norm in law_dict:
-            if mapping[law_norm][1] < len(law_dict[law]):
-                mapping[law_norm] = (law, len(law_dict[law]))
-            law_dict[law_norm].extend(law_dict[law])
-        else:
-            mapping[law_norm] = (law, len(law_dict[law]))
-            law_dict[law_norm] = law_dict[law][:]
-        del law_dict[law]
-    new_keys = list(law_dict.keys())
-    for law in new_keys:
-        law_dict[mapping[law][0]] = law_dict.pop(law)
-
+        
 def find_section_and_law(law_dict, sent_text, section_regexp, law_regexp, law_prev, sent_laws):
     curr_idx = -1
     if len(sent_laws) > 0:
@@ -176,21 +253,15 @@ def find_section_and_law(law_dict, sent_text, section_regexp, law_regexp, law_pr
             law_dict[law_prev].append(section_str)
     if len(sent_laws) > 0:
         law_prev = sent_laws[-1][0]
-    return law_prev    
+    return law_prev
 
-def repr_laws(law_dict):
-    str_laws_with_sections = ""
-    for law in law_dict:
-        str_laws_with_sections += law+':'
-        str_laws_with_sections += '|'.join(law_dict[law]) + ';'
-    return str_laws_with_sections[:-1]
-
-def get_case_regexp(case_indicators):
-    re_case_str = '('+'|'.join(case_indicators)+')'
-    case_regexp = '(\s+)'+re_case_str+'(\s+)'
-    # print (case_regexp)
-    return case_regexp
-
+def normalize_person_set(set_persons, sal_regexp):
+    new_set_persons = set()
+    for person in set_persons:
+        person = re.sub(sal_regexp, '', person)
+        new_set_persons.add(person)
+    return new_set_persons
+            
 def find_case(sent_text, case_regexp):
     list_cases = []
     last_case = ''
@@ -210,19 +281,83 @@ def find_case(sent_text, case_regexp):
         if first_case and mid and last_case:
             list_cases.append(first_case.strip()+mid+last_case.strip())
         else:
-            print (first_case, mid, last_case)
+            # print (first_case, mid, last_case)
+            pass
     return list_cases
+        
+def find_counsel(sent_text, start, end):
+    counsels = set()
+    sent_text_split = re.split(',\s?', sent_text[start:end])
+    if 'and' in sent_text_split[-1]:
+        sent_text_split[-1] = re.split('\s?and\s', sent_text_split[-1])
+    if '&' in sent_text_split[-1]:
+        sent_text_split[-1] = re.split('\s?&\s', sent_text_split[-1])
+    final_phrase_list = []
+    for sublist in sent_text_split:
+        if len(sublist) > 0:
+            if type(sublist) is list:
+                for item in sublist:
+                    if len(item) > 0:
+                        final_phrase_list.append(item)
+            else:
+                final_phrase_list.append(sublist)
+    for phrase in final_phrase_list:
+        phrase_doc = nlp(phrase)
+        if len(phrase_doc.ents) > 0:
+            last_ent = phrase_doc.ents[-1]
+            if last_ent.label_ == 'PERSON' and phrase.endswith(last_ent.text) and len(last_ent.text.split()) > 1:
+                counsels.add(last_ent.text)
+            else:
+                m = find_last_set_cap_words(phrase)
+                if m and len(m.split()) > 1:
+                    counsels.add(m)
+        else:
+            m = find_last_set_cap_words(phrase)
+            if m and len(m.split()) > 1:
+                counsels.add(m)
+    return counsels
 
-def find_last_set_cap_words(str_in):
-    m = re.findall(first_cap_regex, str_in)
-    if m:
-        if len(m) > 0:
-            return m[-1][0]
-    return None
+def remove_stop(text):
+    text = text.lower()
+    text = re.sub(list_stop_regex, ' ', text)
+    text = re.sub(' +', ' ', text)
+    return text.strip()
 
-def find_first_set_cap_words(str_in):
-    m = re.findall(first_cap_regex, str_in)
-    if m:
-        if len(m) > 0:
-            return m[0][0]
-    return None
+def combine_laws(law_dict):
+    init_keys = list(law_dict.keys())
+    mapping = {}
+    for law in init_keys:
+        law_norm = remove_stop(law)
+        if law_norm in law_dict:
+            if mapping[law_norm][1] < len(law_dict[law]):
+                mapping[law_norm] = (law, len(law_dict[law]))
+            law_dict[law_norm].extend(law_dict[law])
+        else:
+            mapping[law_norm] = (law, len(law_dict[law]))
+            law_dict[law_norm] = law_dict[law][:]
+        del law_dict[law]
+    new_keys = list(law_dict.keys())
+    for law in new_keys:
+        law_dict[mapping[law][0]] = law_dict.pop(law)
+        
+def repr_laws(law_dict):
+    str_laws_with_sections = ""
+    for law in law_dict:
+        str_laws_with_sections += law+':'
+        str_laws_with_sections += '|'.join(law_dict[law]) + ';'
+    return str_laws_with_sections[:-1]
+
+def handler(signum, frame):
+    print ("Forever is over!")
+    raise Exception()
+
+def find_petitioner(petitioner, txt):
+    if len(petitioner) == 0:
+        try:
+            
+            petitioner = re.search('((([A-Z](\S*)(\s?))|(and(\s?))|(&(\s?)))+)((\.)+)(\s?)(Appellant|APPELLANT)', txt).group(1)
+        except Exception as exc:
+            
+            print ("oops petitioner")
+            petitioner = ''
+    return petitioner
