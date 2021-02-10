@@ -10,8 +10,8 @@ options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 
-driver = webdriver.Chrome(PATH,chrome_options=options) #Headless
-#driver = webdriver.Chrome(PATH)
+#driver = webdriver.Chrome(PATH,chrome_options=options) #Headless
+driver = webdriver.Chrome(PATH)
 
 # WebDriverWait wait = new WebDriverWait(webDriver, timeoutInSeconds);
 # wait.until(ExpectedConditions.visibilityOfElementLocated(By.id<locator>));
@@ -30,7 +30,7 @@ search=driver.find_element_by_xpath("//*[@id='ansCaptcha']")
 search.click()
 search.send_keys(captha)
 start_date="03-02-2021"
-end_date="05-02-2021"
+end_date="04-02-2021"
 wait = WebDriverWait(driver,10)
 search = wait.until(EC.element_to_be_clickable((By.ID,'JBJfrom_date')))
 search = driver.find_element_by_xpath("//*[@id='JBJfrom_date']")
@@ -54,26 +54,44 @@ WebDriverWait(driver,10).until(EC.presence_of_all_elements_located((By.XPATH,"//
 table = table_id.find_element_by_tag_name("table")
 table_body = table.find_element_by_tag_name("tbody")
 rows = table_body.find_elements(By.TAG_NAME, "tr")
+counter = 0
+case_list = []
+counter2 = 0
+url = ""
+
 for row in rows:
     col = row.find_elements(By.TAG_NAME,"td")
     for c in col:
+        counter2 = counter2 +1
         a_tags = c.find_elements(By.TAG_NAME,"a")
         count = 0
+
         for a_tag in a_tags:
-            # print(a_tag.text)
+            counter = counter + 1
+            #print(a_tag.text)
             if count >0:
                 break
-            print(a_tag.get_attribute('href'))
-            count = count + 1
-            print(count)
+            url = a_tag.get_attribute('href')
+            count = count + 1        
+        case_list.append(c.text)
+        #print(counter2)
         #print (c.text)
-# table = driver.find_element_by_id("JBJ")
-# for table_text in table:
-#     tablearr = table_text.text
-#     print(tablearr)
+        if counter2 == 20:
+            sn = case_list[0]
+            print(sn)
+            print(url)
+            case_list = []
+            counter2 = 0
+#print(case_list)
+#print(counter/2)
+#x = int(counter/2)
+#case_list = ""
+# for i in range(0, x):
+#     if len(c.text) ==0:
+#         break
+#     else:
+#case_list = case_list.append(c.text)
 
-# table = driver.find_element_by_css_selector("#JBJ td").text
-# print(table)
 driver.quit() #to close browser window
 
 
