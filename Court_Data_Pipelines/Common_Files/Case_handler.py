@@ -2,6 +2,7 @@ import re
 import regex
 import spacy
 import datetime
+from string import punctuation
 nlp = spacy.load('en_core_web_sm')
 sal_re_indicators = ['Shri', 'Sh\.', 'Sh', 'Mr\.', 'Mr', 'Miss', 'Ms\.', 'Ms', 'Mrs\.', 'Ms', 'Dr\.', 'Dr']
 section_re_indicators = ['s\.', 'section', 'rule', 'article', 'chapter', 'clause', 'paragraph', 'explanation']
@@ -13,6 +14,7 @@ list_stop = ['of', 'for', 'the', 'and', 'under', '\.', ',', '\(', '\)', '\-']
 list_stop_regex = '('+'|'.join(list_stop)+')'
 first_cap_regex = '([A-Z]\S*\s*('+list_stop_regex+'*\s*'+'([A-Z]|\d)\S*\s*)+)'
 law_regex_no_words = first_cap_regex+'(((,|of)\s+)?(\d)*\s*)*'
+act_name_patterns = 'act|law|constitution|rule|notification|circular|paragraph|article|statute|reference|section|interpretation|regulation|regulations'
 
 
 #****************************CASE CLASS DEFINITION****************************
@@ -168,7 +170,8 @@ def case_get_acts_list(case_text):
     except: 
         print("oops parsing")
     combine_laws(law_dict)
-    return repr_laws(law_dict)
+    provisions_array = break_provisions(repr_laws(law_dict))
+    return provisions_array
 
 def case_get_cases_list(case_text):
     case_regexp = get_case_regexp(case_re_indicators)
@@ -380,3 +383,29 @@ def find_petitioner(petitioner, txt):
             print ("oops petitioner")
             petitioner = ''
     return petitioner
+
+def break_provisions(provisions_string):
+    if type(provisions_string) == str:
+        provisions_array = []
+        for act in provisions_string.split(';'):
+            act_splits = re.split('[|:]',act)
+            act_splits = [i for i in act_splits if i]
+            if len(act_splits):
+                act_name = act_splits[0].strip(punctuation)
+                if  re.search(act_name_patterns,act_name,re.IGNORECASE) == None : 
+                    # print('Act_name ommited: ' + act_name + '..........')
+                    # print(act_splits)
+                    continue
+                act_sections = act_splits[1:]
+                ommit_sections = []
+                for section in act_sections:
+                    if re.search(r"S\.|s\.|S\. |s\. |rule",section,re.IGNORECASE) != None : 
+                        if re.search(r"\d+", section) == None :
+                            # print(act_name + "'s section ommited: " + section)
+                            ommit_sections.append(section)
+                for section in ommit_sections:
+                    while section in act_sections:
+                            act_sections.remove(section)
+                act_sections = list(set(act_sections)) 
+                provisions_array.append({"act_name": act_name, "act_sections": act_sections})
+    return provisions_array
