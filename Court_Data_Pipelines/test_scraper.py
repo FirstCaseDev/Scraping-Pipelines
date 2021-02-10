@@ -671,8 +671,7 @@ February 5th, 2021
 
 '''
 case.process_text()
-for paragraph in case.judgement_text_paragraphs:
-      print(paragraph)
-print(case.judgement_text)
+print(len(case.judgement_text_paragraphs))
+print(len(case.judgement_text))
 print("cases cited : " + str(case.cases_cited))
 print("provisions referred : " + str(case.provisions_referred))

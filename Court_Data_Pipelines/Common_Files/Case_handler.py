@@ -43,6 +43,9 @@ class CaseDoc:
 
 
 #****************************CASE SPECIFIC FUNCTIONS****************************
+def case_get_bench(case_text):
+    pass
+
 def case_get_text_paragraphs(case_text):
     paragraphs = re.split('(\n\n()?\d\d\. )|(\n\n()?\d\. )',case_text)
     try:
