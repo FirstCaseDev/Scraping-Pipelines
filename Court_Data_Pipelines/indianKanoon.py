@@ -10,6 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import NoSuchElementException
 from Common_Files.Case_handler import CaseDoc
 from Common_Files.Case_storage import store_case_document
 case = CaseDoc()
@@ -27,8 +28,7 @@ original_case_handle = ''
 
 def process_IndKanoon_case_url(url):
     case = CaseDoc()
-    # driver.get(url)
-    script = "window.open('{0}', 'new_window')".format(url)
+    script = "window.open('{0}', 'case_window')".format(url)
     driver.execute_script(script)
     original_case_handle = driver.window_handles[-2]
     driver.switch_to_window(driver.window_handles[-1])
@@ -54,6 +54,7 @@ def process_IndKanoon_case_url(url):
     for i in dates:
         date = i
     case.title = title
+    print(case.title)
     case.petitioner = title.split(' vs ')[0].translate(str.maketrans('', '', string.punctuation)).strip()
     case.respondent = title.split(' vs ')[1].split(' on ')[0]
     case.date = date
@@ -78,7 +79,20 @@ def process_IndKanoon_paginated_table_url(url):
     original_table_handle = driver.window_handles[-2]
     driver.switch_to_window(driver.window_handles[-1])
     print("Total Cases: " + str(driver.find_element_by_css_selector("b:nth-child(1)").text.split('of')[-1]))
-    #TODO : CRAWL PAGINATED TABLE AND CALL CASE HANDLER
+    case_count_in_table = 0
+    found_next_page = True
+    while(found_next_page):
+        case_tags = driver.find_elements_by_css_selector(".result_title a")
+        case_count_in_table = case_count_in_table + len(case_tags)
+        for case_tag in case_tags:
+            case_url = case_tag.get_attribute("href")
+            case = process_IndKanoon_case_url(case_url)
+        try:
+            next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
+            driver.get(next_page_tag_url)
+        except NoSuchElementException:
+            print("...scraped total cases :" + str(case_count_in_table))
+            found_next_page = False
     driver.close()
     driver.switch_to_window(original_table_handle)
 
@@ -118,7 +132,6 @@ for court_tag in court_tags:
     process_IndKanoon_court_years_url(court_url)
 
 # driver.get("https://www.google.com/") #any dummy url
-# process_IndKanoon_paginated_table_url("https://indiankanoon.org/search/?formInput=doctypes:supremecourt%20fromdate:1-1-1947%20todate:%2031-1-1947")
 # case = process_IndKanoon_case_url("https://indiankanoon.org/doc/1386912/")
 # case.print_case_attributes()
 # case = process_IndKanoon_case_url("https://indiankanoon.org/doc/871220/")
@@ -127,8 +140,4 @@ for court_tag in court_tags:
 # case.print_case_attributes()
 
 driver.quit()
-
 # store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
-
-
-#ERROR - PAGE CLOSING INSTEAD OF OPENING NEXT CONTEXT'S NEW TAB
