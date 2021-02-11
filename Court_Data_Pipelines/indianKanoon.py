@@ -1,6 +1,7 @@
 from selenium import webdriver
 import time
 import datefinder
+import re
 import string
 import pymongo
 from selenium.webdriver.common.keys import Keys
@@ -25,13 +26,20 @@ def process_IndKanoon_url(url):
     driver.get(url)
     judgement_div = driver.find_element_by_css_selector(".judgments")
     author = driver.find_element_by_css_selector(".doc_author").text.split(':')[-1].translate(str.maketrans('', '', string.punctuation)).strip()
-    bench = driver.find_element_by_css_selector(".doc_bench").text.split(':')[-1].split(',') # process
+    bench = driver.find_element_by_css_selector(".doc_bench").text.split(':')[-1].split(',|, |:|;|\\|')
+    if '[' in bench[0]:
+        bench = re.findall("\[(.*?)\]", bench[0])
     title = driver.find_element_by_css_selector(".doc_title").text
     source = driver.find_element_by_css_selector(".docsource_main").text
     query_terms_elements = driver.find_elements_by_css_selector(".item_toselect") 
     p_tags = judgement_div.find_elements_by_tag_name("p")
+    pre_tags = judgement_div.find_elements_by_tag_name("pre")
     bq_tags = judgement_div.find_elements_by_tag_name("blockquote")
-    paragraphs = p_tags + bq_tags
+    pre_text = ""
+    for pre_tag in pre_tags:
+        pre_text = pre_text + "\n\n" + pre_tag.text
+    pre_text_splitted = pre_text.replace('ACT:','>>>').replace('HEADNOTE:','>>>').replace('CITATION:','>>>').replace('JUDGEMENT:','>>>').split('>>>')
+    paragraphs = p_tags[1:] + bq_tags
     for query_terms_element in query_terms_elements:
         case.query_terms.append(query_terms_element.text)  
     dates = datefinder.find_dates(title)
@@ -46,14 +54,14 @@ def process_IndKanoon_url(url):
     case.bench = bench
     case.source = source
     case.judgement_text = judgement_div.text
-    case.process_text()
+    case.process_text() 
     case.judgement_text_paragraphs = []
+    case.judgement_text_paragraphs.append(pre_text_splitted[0])
     for paragraph in paragraphs:
         case.judgement_text_paragraphs.append(paragraph.text)
-    # case.print_case_attributes()
     driver.quit()
     return case
 
-case = process_IndKanoon_url("https://indiankanoon.org/doc/145116477/")
+case = process_IndKanoon_url("https://indiankanoon.org/doc/1386912/")
 case.print_case_attributes()
 # store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
