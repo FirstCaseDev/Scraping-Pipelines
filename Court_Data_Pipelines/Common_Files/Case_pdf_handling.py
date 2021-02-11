@@ -1,13 +1,17 @@
-# # import requests
-# import os
+########################  Downloading Pdf Files ########################
+import requests
 
 
-# def Pdf2dwnld(a,b):
-#     url = a
-#     r = requests.get(url)
-#     filename = b
-#     print(filename)
-#     open(filename, 'wb').write(r.content)
+
+def download_Pdf(a):
+    url = a
+    r = requests.get(url)
+    filename = r.url[url.rfind('/')+1:]
+    print(filename)
+    open(filename, 'wb').write(r.content)
+a = "http://164.100.69.66/jupload/dhc/MMH/judgement/10-02-2021/MMH09022021CW17272021_211950.pdf"
+
+download_Pdf(a)    
 ########################################################################
 # import PyPDF2
 
@@ -25,57 +29,58 @@
 #     print("done")
 #     return 
 #######################################################
-from io import StringIO
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-from pdfminer.converter import TextConverter
-from pdfminer.layout import LAParams
-from pdfminer.pdfpage import PDFPage
-import os
-import sys, getopt
-
 ##### Using Pdfminer##########################
+# from io import StringIO
+# from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+# from pdfminer.converter import TextConverter
+# from pdfminer.layout import LAParams
+# from pdfminer.pdfpage import PDFPage
+# import os
+# import sys, getopt
 
 
 
 
-def extract_txt(fname, pages=None):
-    if not pages:
-        pagenums = set()
-    else:
-        pagenums = set(pages)
-
-    output = StringIO()
-    manager = PDFResourceManager()
-    converter = TextConverter(manager, output, laparams=LAParams())
-    interpreter = PDFPageInterpreter(manager, converter)
-
-    infile = open(fname, 'rb')
-    for page in PDFPage.get_pages(infile, pagenums):
-        interpreter.process_page(page)
-    infile.close()
-    converter.close()
-    text = output.getvalue()
-    output.close
-    return text 
 
 
+# def extract_txt(fname, pages=None):
+#     if not pages:
+#         pagenums = set()
+#     else:
+#         pagenums = set(pages)
+
+#     output = StringIO()
+#     manager = PDFResourceManager()
+#     converter = TextConverter(manager, output, laparams=LAParams())
+#     interpreter = PDFPageInterpreter(manager, converter)
+
+#     infile = open(fname, 'rb')
+#     for page in PDFPage.get_pages(infile, pagenums):
+#         interpreter.process_page(page)
+#     infile.close()
+#     converter.close()
+#     text = output.getvalue()
+#     output.close
+#     return text 
 
 
-def Pdf2Conv(initial_Dir, Final_Dir):
-    if initial_Dir == "": initial_Dir = os.getcwd() + "\\" 
-    for pdf in os.listdir(initial_Dir): 
-        fileExtension = pdf.split(".")[-1]
-        if fileExtension == "pdf":
-            pdfFilename = initial_Dir + pdf 
-            text = extract_txt(pdfFilename) 
-            textFilename = Final_Dir + pdf + ".txt"
-            textFile = open(textFilename, "w") #make text file
-            textFile.write(text) #write text to text file
+
+
+# def Pdf2Conv(initial_Dir, Final_Dir):
+#     if initial_Dir == "": initial_Dir = os.getcwd() + "\\" 
+#     for pdf in os.listdir(initial_Dir): 
+#         fileExtension = pdf.split(".")[-1]
+#         if fileExtension == "pdf":
+#             pdfFilename = initial_Dir + pdf 
+#             text = extract_txt(pdfFilename) 
+#             textFilename = Final_Dir + pdf + ".txt"
+#             textFile = open(textFilename, "w") #make text file
+#             textFile.write(text) #write text to text file
 			
-initial_Dir = (r"C:\\Users\\Pushpak\\Documents\\First_case\\pdf\\")
-Final_Dir = (r"C:\\Users\\Pushpak\\Documents\\First_case\\text\\")
-Pdf2Conv(initial_Dir, Final_Dir)
-print("Pdf saved")
+# initial_Dir = (r"C:\\Users\\Pushpak\\Documents\\First_case\\pdf\\")
+# Final_Dir = (r"C:\\Users\\Pushpak\\Documents\\First_case\\text\\")
+# Pdf2Conv(initial_Dir, Final_Dir)
+# print("Pdf saved")
 # extract_information(r"C:\\Users\\Pushpak\\Documents\\First_case\\my.pdf")
 #####################################################################################
 # os.system('pdf2txt.py -o pdf2txt.txt my.pdf')
@@ -96,14 +101,6 @@ print("Pdf saved")
 #     data_txt = file.read()
 #     print(data_txt)
 
-##############Downloading Pdf Files    
-# import requests
-# for i in range(len(k)):
-#     url = k[i]
-#     r = requests.get(url)
-#     filename = r.url[k[i].rfind('/')+1:]
-#     print(filename)
-#     open(filename, 'wb').write(r.content)
+ 
 
-# print("Download Completed")
 # ##########################################
