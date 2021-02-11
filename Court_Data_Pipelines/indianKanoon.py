@@ -18,12 +18,20 @@ options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 PATH = "C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
-driver = webdriver.Chrome(PATH,chrome_options=options) #Uncomment for Headless
-# driver = webdriver.Chrome(PATH) #Uncomment for Windowed
+driver = webdriver.Chrome(PATH,chrome_options=options) #Uncomment only this line for Headless
+# driver = webdriver.Chrome(PATH) #Uncomment only this line for Windowed
+original_years_handle = ''
+original_months_handle = ''
+original_table_handle = ''
+original_case_handle = ''
 
-def process_IndKanoon_url(url):
+def process_IndKanoon_case_url(url):
     case = CaseDoc()
-    driver.get(url)
+    # driver.get(url)
+    script = "window.open('{0}', 'new_window')".format(url)
+    driver.execute_script(script)
+    original_case_handle = driver.window_handles[-2]
+    driver.switch_to_window(driver.window_handles[-1])
     judgement_div = driver.find_element_by_css_selector(".judgments")
     author = driver.find_element_by_css_selector(".doc_author").text.split(':')[-1].translate(str.maketrans('', '', string.punctuation)).strip()
     bench = driver.find_element_by_css_selector(".doc_bench").text.split(':')[-1].split(',|, |:|;|\\|')
@@ -59,9 +67,68 @@ def process_IndKanoon_url(url):
     case.judgement_text_paragraphs.append(pre_text_splitted[0])
     for paragraph in paragraphs:
         case.judgement_text_paragraphs.append(paragraph.text)
-    driver.quit()
+    driver.close()
+    driver.switch_to_window(original_case_handle)
     return case
 
-case = process_IndKanoon_url("https://indiankanoon.org/doc/1386912/")
-case.print_case_attributes()
+def process_IndKanoon_paginated_table_url(url):
+    time.sleep(2)
+    script = "window.open('{0}', 'table_window')".format(url)
+    driver.execute_script(script)
+    original_table_handle = driver.window_handles[-2]
+    driver.switch_to_window(driver.window_handles[-1])
+    print("Total Cases: " + str(driver.find_element_by_css_selector("b:nth-child(1)").text.split('of')[-1]))
+    #TODO : CRAWL PAGINATED TABLE AND CALL CASE HANDLER
+    driver.close()
+    driver.switch_to_window(original_table_handle)
+
+def process_IndKanoon_months_url(url):
+    time.sleep(2)
+    script = "window.open('{0}', 'month_window')".format(url)
+    driver.execute_script(script)
+    original_months_handle = driver.window_handles[-2]
+    driver.switch_to_window(driver.window_handles[-1])
+    month_tags = driver.find_elements_by_css_selector(".browselist a")
+    for month_tag in month_tags:
+        print(month_tag.text)
+        paginated_table_url = month_tag.get_attribute("href")
+        process_IndKanoon_paginated_table_url(paginated_table_url)
+    driver.close()
+    driver.switch_to_window(original_months_handle)
+
+def process_IndKanoon_court_years_url(url):
+    time.sleep(2)
+    script = "window.open('{0}', 'year_window')".format(url)
+    driver.execute_script(script)
+    original_years_handle = driver.window_handles[-2]
+    driver.switch_to_window(driver.window_handles[-1])
+    year_tags = driver.find_elements_by_css_selector(".browselist a")
+    for year_tag in year_tags:
+        print(year_tag.text)
+        month_url = year_tag.get_attribute("href")
+        process_IndKanoon_months_url(month_url)
+    driver.close()
+    driver.switch_to_window(original_years_handle)
+
+driver.get("https://indiankanoon.org/browse/")
+court_tags = driver.find_elements_by_css_selector(".browselist") 
+for court_tag in court_tags:
+    print(court_tag.text)
+    court_url = court_tag.find_element_by_tag_name("a").get_attribute("href")
+    process_IndKanoon_court_years_url(court_url)
+
+# driver.get("https://www.google.com/") #any dummy url
+# process_IndKanoon_paginated_table_url("https://indiankanoon.org/search/?formInput=doctypes:supremecourt%20fromdate:1-1-1947%20todate:%2031-1-1947")
+# case = process_IndKanoon_case_url("https://indiankanoon.org/doc/1386912/")
+# case.print_case_attributes()
+# case = process_IndKanoon_case_url("https://indiankanoon.org/doc/871220/")
+# case.print_case_attributes()
+# case = process_IndKanoon_case_url("https://indiankanoon.org/doc/1902038/")
+# case.print_case_attributes()
+
+driver.quit()
+
 # store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
+
+
+#ERROR - PAGE CLOSING INSTEAD OF OPENING NEXT CONTEXT'S NEW TAB
