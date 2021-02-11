@@ -18,7 +18,6 @@ def page_reader():
             for a_tag in a_tags:
                 print(a_tag.text)
                 print(a_tag.get_attribute('href'))
-                
             print(c.text)    
 
 def judgementDate():
@@ -120,31 +119,6 @@ for i in range(len(w)):
 
 
 
-#############################PDF
-# import os
-# os.system('pdf2txt.py -o pdf2html.html -t html xyz.pdf')
-# os.system('pdf2txt.py -o pdf2text.txt xyz.pdf')
-
-# with open('new-output.html', encoding="utf8") as file:
-#     data_html = file.read()
-#     print(data_html)
-
-# with open('pdf2text.txt', encoding="utf8") as file:
-#     data_txt = file.read()
-#     print(data_txt)
-
-##############Downloading Pdf Files    
-# import requests
-# for i in range(len(k)):
-#     url = k[i]
-#     r = requests.get(url)
-#     filename = r.url[k[i].rfind('/')+1:]
-#     print(filename)
-#     open(filename, 'wb').write(r.content)
-
-# print("Download Completed")
-# ##########################################
-#date input monthly
 
 
 
