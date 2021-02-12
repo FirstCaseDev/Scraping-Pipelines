@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
 from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from Common_Files.Case_handler import CaseDoc
 from Common_Files.Case_storage import store_case_document
 case = CaseDoc()
@@ -32,6 +32,12 @@ def process_IndKanoon_case_url(url):
     driver.execute_script(script)
     original_case_handle = driver.window_handles[-2]
     driver.switch_to_window(driver.window_handles[-1])
+    driver.set_page_load_timeout(10)
+    try:
+        source = driver.find_element_by_css_selector(".docsource_main").text
+    except TimeoutException:
+        print(url + " was partially loaded")
+        # driver.execute_script("return window.stop")
     try:
         judgement_div = driver.find_element_by_css_selector(".judgments")
     except NoSuchElementException: 
@@ -89,6 +95,7 @@ def process_IndKanoon_case_url(url):
     case.source = source
     case.process_text() 
     case.print_case_attributes()
+    
     driver.close()
     driver.switch_to_window(original_case_handle)
     return case
@@ -150,17 +157,17 @@ def process_IndKanoon_court_years_url(url):
     driver.close()
     driver.switch_to_window(original_years_handle)
 
-driver.get("https://indiankanoon.org/browse/")
-court_tags = driver.find_elements_by_css_selector(".browselist") 
-for court_tag in court_tags:
-    print(court_tag.text)
-    court_url = court_tag.find_element_by_tag_name("a").get_attribute("href")
-    process_IndKanoon_court_years_url(court_url)
+# driver.get("https://indiankanoon.org/browse/")
+# court_tags = driver.find_elements_by_css_selector(".browselist") 
+# for court_tag in court_tags:
+#     print(court_tag.text)
+#     court_url = court_tag.find_element_by_tag_name("a").get_attribute("href")
+#     process_IndKanoon_court_years_url(court_url)
 
-# driver.get("https://www.google.com/") #any dummy url
-# case = process_IndKanoon_case_url("https://indiankanoon.org/doc/1386912/")
+driver.get("https://www.google.com/") #any dummy url
+case = process_IndKanoon_case_url("https://indiankanoon.org/doc/126137620/")
 # case.print_case_attributes()
-# case = process_IndKanoon_case_url("https://indiankanoon.org/doc/871220/")
+case = process_IndKanoon_case_url("https://indiankanoon.org/doc/871220/")
 # case.print_case_attributes()
 # case = process_IndKanoon_case_url("https://indiankanoon.org/doc/1902038/")
 # case.print_case_attributes()

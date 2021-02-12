@@ -65,7 +65,6 @@ class CaseDoc:
         print("cases cited : " + str(self.cases_cited))
         print("provisions referred : " + str(self.provisions_referred))
         print("judgement_text length : " + str(len(self.judgement_text)))
-        # print("Number of paragraphs : " + str(len(self.judgement_text_paragraphs)))
 
 
 
@@ -173,7 +172,6 @@ def case_get_cases_list(case_text):
 
 def case_get_length(case_text):
     return(len(case_text)) 
-
 #****************************HELPER FUNCTIONS****************************
 def find_assoc_law(text):
     return re.match(law_regex_no_words, text)
