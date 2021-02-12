@@ -19,7 +19,6 @@ def download_Pdf(a):
 
 #######################################################
 ##### Using Pdfminer Pdf to text converter ##########################
-<<<<<<< Updated upstream
 from io import StringIO
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import TextConverter
@@ -60,50 +59,6 @@ def extract_txt(url, fname, pages=None):
 
 
 
-def Pdf2Conv(initial_Dir, Final_Dir):
-    if initial_Dir == "": initial_Dir = os.getcwd() + "\\" 
-    for pdf in os.listdir(initial_Dir): 
-        fileExtension = pdf.split(".")[-1]
-        if fileExtension == "pdf":
-            pdfFilename = initial_Dir + pdf 
-            text = extract_txt(pdfFilename) 
-            textFilename = Final_Dir + pdf + ".txt"
-            textFile = open(textFilename, "w") #make text file
-            textFile.write(text) #write text to text file
-=======
-# from io import StringIO
-# from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-# from pdfminer.converter import TextConverter
-# from pdfminer.layout import LAParams
-# from pdfminer.pdfpage import PDFPage
-# import os
-# import sys, getopt
-
-
-
-# def extract_txt(fname, pages=None):
-#     if not pages:
-#         pagenums = set()
-#     else:
-#         pagenums = set(pages)
-
-#     output = StringIO()
-#     manager = PDFResourceManager()
-#     converter = TextConverter(manager, output, laparams=LAParams())
-#     interpreter = PDFPageInterpreter(manager, converter)
-
-#     infile = open(fname, 'rb')
-#     for page in PDFPage.get_pages(infile, pagenums):
-#         interpreter.process_page(page)
-#     infile.close()
-#     converter.close()
-#     text = output.getvalue()
-#     output.close
-#     return text 
-
-
-
-
 # def Pdf2Conv(initial_Dir, Final_Dir):
 #     if initial_Dir == "": initial_Dir = os.getcwd() + "\\" 
 #     for pdf in os.listdir(initial_Dir): 
@@ -114,7 +69,6 @@ def Pdf2Conv(initial_Dir, Final_Dir):
 #             textFilename = Final_Dir + pdf + ".txt"
 #             textFile = open(textFilename, "w") #make text file
 #             textFile.write(text) #write text to text file
->>>>>>> Stashed changes
 
 # test convert file #############################			
 # initial_Dir = (r"C:\\Users\\Pushpak\\Documents\\First_case\\pdf\\")
