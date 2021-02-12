@@ -6,10 +6,15 @@ import requests
 def download_Pdf(a):
     url = a
     r = requests.get(url)
-    filename = r.url[url.rfind('/')+1:]
-    print(filename)
+    download_location = r"C:\\Users\\Pushpak\\Documents\\First_case\\pdf\\"
+    filename = download_location + r.url[url.rfind('/')+1:]
+    # textFilename = Final_Dir + pdf + ".txt"
     open(filename, 'wb').write(r.content)
+    print("File Downloaded Successfully")
 
+# test download
+a = "http://164.100.69.66/jupload/dhc/SID/judgement/11-02-2021/SID10022021CRLW2802021_232130.pdf"
+download_Pdf(a)
 #######################################################################
 
 #######################################################
@@ -57,7 +62,8 @@ def Pdf2Conv(initial_Dir, Final_Dir):
             textFilename = Final_Dir + pdf + ".txt"
             textFile = open(textFilename, "w") #make text file
             textFile.write(text) #write text to text file
-			
+
+# test convert file #############################			
 # initial_Dir = (r"C:\\Users\\Pushpak\\Documents\\First_case\\pdf\\")
 # Final_Dir = (r"C:\\Users\\Pushpak\\Documents\\First_case\\text\\")
 # Pdf2Conv(initial_Dir, Final_Dir)
