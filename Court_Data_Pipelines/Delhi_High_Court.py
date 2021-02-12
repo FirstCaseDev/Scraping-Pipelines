@@ -1,12 +1,16 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from Common_Files.Case_pdf_handling import download_Pdf
+
+
+
 
 
 PATH = "C:\Program Files (x86)\chromedriver.exe"
 driver = webdriver.Chrome(PATH)
 
-def page_reader():
+def page_reader():################# for Reading Contents of page when date is entered ###################
     link = driver.find_element_by_xpath("/html/body/table[2]")
     table = link.find_element_by_xpath("/html/body/table[2]/tbody")
     rows = table.find_elements(By.TAG_NAME, "tr")
@@ -18,16 +22,17 @@ def page_reader():
             for a_tag in a_tags:
                 print(a_tag.text)
                 print(a_tag.get_attribute('href'))
+                download_Pdf(a_tag.get_attribute('href'))
             print(c.text)    
 
-def judgementDate():
+def judgementDate():###############  navigate to JudgementDate Page ####################################
     driver.get("http://164.100.69.66/jsearch/")
     print(driver.title)
     link = driver.find_element_by_xpath("/html/body/table[2]/tbody/tr/td[@class='style13'][3]/b/input[@class='btn']")
     link.click()
 
 
-def Calendar(D, M,Y, D1, M2, Y2):
+def Calendar(D, M,Y, D1, M2, Y2):######  for date iteration to be entered ##############################
 
     D = int(D)
     M = int(M)
@@ -97,8 +102,8 @@ for i in range(len(w)):
         submit_btn = driver.find_element_by_name("Submit")
         submit_btn.click()
         driver.switch_to.default_content()
-        #######################################for grasping data######################
-        frame = driver.find_element_by_name("dynfr")
+        
+        frame = driver.find_element_by_name("dynfr")############################for grasping data##########
         driver.switch_to.frame(frame)
         page_reader()
         

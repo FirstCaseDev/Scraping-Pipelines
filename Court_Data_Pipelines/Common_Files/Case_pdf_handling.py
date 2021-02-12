@@ -9,98 +9,60 @@ def download_Pdf(a):
     filename = r.url[url.rfind('/')+1:]
     print(filename)
     open(filename, 'wb').write(r.content)
-a = "http://164.100.69.66/jupload/dhc/MMH/judgement/10-02-2021/MMH09022021CW17272021_211950.pdf"
 
-download_Pdf(a)    
-########################################################################
-# import PyPDF2
+#######################################################################
 
-
-
-# def extract_information(pdf_path):
-#     with open(pdf_path, 'rb') as f:
-#         Pdfread =PyPDF2.PdfFileReader(f)
-#         x=Pdfread.numPages
-#         pageobj=Pdfread.getPage(0)
-#         text = pageobj.extractText()
-#         file1=open(r"C:\Users\Pushpak\Documents\First_case\date.txt","a")
-#         file1.writelines(text)
-#         file1.close()
-#     print("done")
-#     return 
 #######################################################
-##### Using Pdfminer##########################
-# from io import StringIO
-# from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-# from pdfminer.converter import TextConverter
-# from pdfminer.layout import LAParams
-# from pdfminer.pdfpage import PDFPage
-# import os
-# import sys, getopt
+##### Using Pdfminer Pdf to text converter ##########################
+from io import StringIO
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfpage import PDFPage
+import os
+import sys, getopt
+
+
+
+def extract_txt(fname, pages=None):
+    if not pages:
+        pagenums = set()
+    else:
+        pagenums = set(pages)
+
+    output = StringIO()
+    manager = PDFResourceManager()
+    converter = TextConverter(manager, output, laparams=LAParams())
+    interpreter = PDFPageInterpreter(manager, converter)
+
+    infile = open(fname, 'rb')
+    for page in PDFPage.get_pages(infile, pagenums):
+        interpreter.process_page(page)
+    infile.close()
+    converter.close()
+    text = output.getvalue()
+    output.close
+    return text 
 
 
 
 
-
-
-# def extract_txt(fname, pages=None):
-#     if not pages:
-#         pagenums = set()
-#     else:
-#         pagenums = set(pages)
-
-#     output = StringIO()
-#     manager = PDFResourceManager()
-#     converter = TextConverter(manager, output, laparams=LAParams())
-#     interpreter = PDFPageInterpreter(manager, converter)
-
-#     infile = open(fname, 'rb')
-#     for page in PDFPage.get_pages(infile, pagenums):
-#         interpreter.process_page(page)
-#     infile.close()
-#     converter.close()
-#     text = output.getvalue()
-#     output.close
-#     return text 
-
-
-
-
-# def Pdf2Conv(initial_Dir, Final_Dir):
-#     if initial_Dir == "": initial_Dir = os.getcwd() + "\\" 
-#     for pdf in os.listdir(initial_Dir): 
-#         fileExtension = pdf.split(".")[-1]
-#         if fileExtension == "pdf":
-#             pdfFilename = initial_Dir + pdf 
-#             text = extract_txt(pdfFilename) 
-#             textFilename = Final_Dir + pdf + ".txt"
-#             textFile = open(textFilename, "w") #make text file
-#             textFile.write(text) #write text to text file
+def Pdf2Conv(initial_Dir, Final_Dir):
+    if initial_Dir == "": initial_Dir = os.getcwd() + "\\" 
+    for pdf in os.listdir(initial_Dir): 
+        fileExtension = pdf.split(".")[-1]
+        if fileExtension == "pdf":
+            pdfFilename = initial_Dir + pdf 
+            text = extract_txt(pdfFilename) 
+            textFilename = Final_Dir + pdf + ".txt"
+            textFile = open(textFilename, "w") #make text file
+            textFile.write(text) #write text to text file
 			
 # initial_Dir = (r"C:\\Users\\Pushpak\\Documents\\First_case\\pdf\\")
 # Final_Dir = (r"C:\\Users\\Pushpak\\Documents\\First_case\\text\\")
 # Pdf2Conv(initial_Dir, Final_Dir)
 # print("Pdf saved")
-# extract_information(r"C:\\Users\\Pushpak\\Documents\\First_case\\my.pdf")
+
 #####################################################################################
-# os.system('pdf2txt.py -o pdf2txt.txt my.pdf')
-# with open(r'C:\Users\Pushpak\Documents\First_case\New folder\pdf2txt.txt', encoding="utf8") as file:
-#     data_txt = file.read()
-#     print(data_txt)
 
-#############################PDF
-# import os
-# os.system('pdf2txt.py -o pdf2html.html -t html xyz.pdf')
-# os.system('pdf2txt.py -o pdf2text.txt xyz.pdf')
 
-# with open('new-output.html', encoding="utf8") as file:
-#     data_html = file.read()
-#     print(data_html)
-
-# with open('pdf2text.txt', encoding="utf8") as file:
-#     data_txt = file.read()
-#     print(data_txt)
-
- 
-
-# ##########################################
