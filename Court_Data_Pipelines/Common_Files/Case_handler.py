@@ -21,6 +21,7 @@ act_name_patterns = 'act|law|constitution|rule|notification|circular|paragraph|a
 class CaseDoc:
     def __init__(self):
         self.title = ""                     #self defined
+        self.case_id = ""                    #self defined
         self.url = ""                       #self defined
         self.source = ""                    #self defined
         self.date = datetime.datetime.now() #self defined
@@ -34,20 +35,18 @@ class CaseDoc:
         self.cases_citing = []              #self defined
         self.judgement = ""                 #function done
         self.judgement_text = ""            #self defined
-        self.judgement_text_paragraphs = [] #function done
-        self.provisions_referred = []       #function to be modified for datatype 
+        self.provisions_referred = []       #function done 
         self.query_terms = []               #self defined
     
     def process_text(self): #processes text and retrieves a set of case variables
         print("*********processing text*********") 
-        self.judgement_text_paragraphs = case_get_text_paragraphs(self.judgement_text) #works well for pdfminer extraction
-        text = self.judgement_text.replace('\n', '').replace('\r','').replace('','')
-        self.judgement_text = text
+        #HANDLE JUDGEMENT TEXT YOURSELF : Break text into paragraphs, retain formatting of intro and join all paragraphs with >>>>, then store into judgement_text
+        text = self.judgement_text.replace('>>>>','')
         self.cases_cited = case_get_cases_list(text)
         self.provisions_referred = case_get_acts_list(text)
         self.petitioner_counsel = case_get_petitioner_counsel(text)
         self.respondent_counsel = case_get_respondent_counsel(text)
-        self.judgement = case_get_judgement(self.judgement_text_paragraphs[-3:]) # increase -3 if judgement is not extracted
+        self.judgement = case_get_judgement(self.judgement_text.split('>>>>')[-3:]) # increase -3 if judgement is not extracted
         print("*********processed text*********") 
 
     def print_case_attributes(self):
@@ -66,7 +65,7 @@ class CaseDoc:
         print("cases cited : " + str(self.cases_cited))
         print("provisions referred : " + str(self.provisions_referred))
         print("judgement_text length : " + str(len(self.judgement_text)))
-        print("Number of paragraphs : " + str(len(self.judgement_text_paragraphs)))
+        # print("Number of paragraphs : " + str(len(self.judgement_text_paragraphs)))
 
 
 
@@ -119,7 +118,17 @@ def case_get_judgement(paragraphs):
                 if 'partly' in segment:
                     judgement = 'partly allowed'
                 break
+            elif 'allowed' in segment:
+                judgement = 'allowed'
+                if 'partly' in segment:
+                    judgement = 'partly allowed'
+                break
             elif 'dismiss' in segment:
+                judgement = 'dismissed'
+                if 'partly' in segment:
+                    judgement = 'partly dismissed'
+                break    
+            elif 'dismissed' in segment:
                 judgement = 'dismissed'
                 if 'partly' in segment:
                     judgement = 'partly dismissed'

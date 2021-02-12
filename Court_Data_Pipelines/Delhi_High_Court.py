@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from Common_Files.Case_pdf_handling import download_Pdf
+# from Common_Files.Case_handler import CaseDoc 
 
 
 
@@ -10,20 +11,39 @@ from Common_Files.Case_pdf_handling import download_Pdf
 PATH = "C:\Program Files (x86)\chromedriver.exe"
 driver = webdriver.Chrome(PATH)
 
+
+
 def page_reader():################# for Reading Contents of page when date is entered ###################
+    
+    case = CaseDoc()
+
     link = driver.find_element_by_xpath("/html/body/table[2]")
     table = link.find_element_by_xpath("/html/body/table[2]/tbody")
     rows = table.find_elements(By.TAG_NAME, "tr")
     rows.pop()
     for row in rows:
         col = row.find_elements(By.TAG_NAME,"td")
-        for c in col:
-            a_tags = c.find_elements(By.TAG_NAME,"a")
-            for a_tag in a_tags:
-                print(a_tag.text)
-                print(a_tag.get_attribute('href'))
-                download_Pdf(a_tag.get_attribute('href'))
-            print(c.text)    
+        print(col[1].text)
+        # for c in range(len(col)):
+            
+        #     if c == 1:
+        #         case_name.append(print(col[c].text))
+                
+
+        #     elif c == 2:
+        #         case=case_date.append(print(col(c).text))   
+            
+        #     elif c == 3:
+        #         case=case_party.append(print(col(c).text))  
+            # print(c.text)
+            # print(case_name) 
+            # a_tags = c.find_elements(By.TAG_NAME,"a")
+            # for a_tag in a_tags:
+            #     # print(a_tag.text)
+            #     # print(a_tag.get_attribute('href'))
+            #     # download_Pdf(a_tag.get_attribute('href'))
+            
+             
 
 def judgementDate():###############  navigate to JudgementDate Page ####################################
     driver.get("http://164.100.69.66/jsearch/")

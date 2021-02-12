@@ -20,7 +20,7 @@ def store_case_document(case):
         "citing_cases": case.cases_citing,
         "judgement": case.judgement,
         "judgement_text": case.judgement_text,
-        "judgement_text_paragraphs": case.judgement_text_paragraphs,
+        # "judgement_text_paragraphs": case.judgement_text_paragraphs,
         "provisions_referred": case.provisions_referred,
         "query_terms": case.query_terms
     }
