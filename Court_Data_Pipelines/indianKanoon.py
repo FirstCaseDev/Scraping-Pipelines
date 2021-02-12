@@ -1,9 +1,7 @@
 from selenium import webdriver
-import time
 import datefinder
 import re
 import string
-import pymongo
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -37,7 +35,7 @@ def process_IndKanoon_case_url(url):
         source = driver.find_element_by_css_selector(".docsource_main").text
     except TimeoutException:
         print(url + " was partially loaded")
-        # driver.execute_script("return window.stop")
+        #TODO Make a rewritable file of missed cases which are to be processed through pdfs
     try:
         judgement_div = driver.find_element_by_css_selector(".judgments")
     except NoSuchElementException: 
@@ -48,10 +46,10 @@ def process_IndKanoon_case_url(url):
         print("no author found")
     try:
         bench = driver.find_element_by_css_selector(".doc_bench").text.split(':')[-1].split(',')
+        if '[' in bench[0]:
+            bench = re.findall("\[(.*?)\]", bench[0])
     except NoSuchElementException:
         print("no bench found")
-    if '[' in bench[0]:
-        bench = re.findall("\[(.*?)\]", bench[0])
     try:
         title = driver.find_element_by_css_selector(".doc_title").text
     except NoSuchElementException:
@@ -61,7 +59,9 @@ def process_IndKanoon_case_url(url):
     except NoSuchElementException:
         print("no source found")
     try:
-        query_terms_elements = driver.find_elements_by_css_selector(".item_toselect") 
+        query_terms_elements = driver.find_elements_by_css_selector(".item_toselect")
+        for query_terms_element in query_terms_elements:
+            case.query_terms.append(query_terms_element.text)  
     except NoSuchElementException:
         print("no query terms found")
     try:
@@ -79,8 +79,6 @@ def process_IndKanoon_case_url(url):
     for paragraph in paragraphs:
         judgement_text_paragraphs.append(paragraph.text.replace('\n','').replace('\r','').replace('',''))
     case.judgement_text = ' >>>> '.join(judgement_text_paragraphs)
-    for query_terms_element in query_terms_elements:
-        case.query_terms.append(query_terms_element.text)  
     dates = datefinder.find_dates(title)
     for i in dates:
         date = i
@@ -101,7 +99,7 @@ def process_IndKanoon_case_url(url):
     return case
 
 def process_IndKanoon_paginated_table_url(url):
-    time.sleep(2)
+    # time.sleep(2)
     script = "window.open('{0}', 'table_window')".format(url)
     driver.execute_script(script)
     original_table_handle = driver.window_handles[-2]
@@ -118,7 +116,7 @@ def process_IndKanoon_paginated_table_url(url):
             case_url = case_tag.get_attribute("href")
             # print("...#" + str(current_count) + " of total " + str(total_case_mentioned) + "cases...")
             case = process_IndKanoon_case_url(case_url)
-            # store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
+            store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
             current_count = current_count + 1
         try:
             next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
@@ -130,7 +128,7 @@ def process_IndKanoon_paginated_table_url(url):
     driver.switch_to_window(original_table_handle)
 
 def process_IndKanoon_months_url(url):
-    time.sleep(2)
+    # time.sleep(2)
     script = "window.open('{0}', 'month_window')".format(url)
     driver.execute_script(script)
     original_months_handle = driver.window_handles[-2]
@@ -144,7 +142,7 @@ def process_IndKanoon_months_url(url):
     driver.switch_to_window(original_months_handle)
 
 def process_IndKanoon_court_years_url(url):
-    time.sleep(2)
+    # time.sleep(2)
     script = "window.open('{0}', 'year_window')".format(url)
     driver.execute_script(script)
     original_years_handle = driver.window_handles[-2]
@@ -165,9 +163,9 @@ def process_IndKanoon_court_years_url(url):
 #     process_IndKanoon_court_years_url(court_url)
 
 driver.get("https://www.google.com/") #any dummy url
-case = process_IndKanoon_case_url("https://indiankanoon.org/doc/126137620/")
+case = process_IndKanoon_case_url("https://indiankanoon.org/doc/105912122/")
 # case.print_case_attributes()
-case = process_IndKanoon_case_url("https://indiankanoon.org/doc/871220/")
+# case = process_IndKanoon_case_url("https://indiankanoon.org/doc/871220/")
 # case.print_case_attributes()
 # case = process_IndKanoon_case_url("https://indiankanoon.org/doc/1902038/")
 # case.print_case_attributes()

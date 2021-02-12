@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "C:\\Users\\punee\\AppData\\Local\\Programs\\Python\\Python36\\python.exe"
+    "python.pythonPath": "C:\\Users\\punee\\AppData\\Local\\Programs\\Python\\Python36\\python.exe",
+    "python.analysis.extraPaths": ["C:\\Users\\punee\\Documents\\GitHub\\Scraping-Pipelines\\Court_Data_Pipelines"]
 }

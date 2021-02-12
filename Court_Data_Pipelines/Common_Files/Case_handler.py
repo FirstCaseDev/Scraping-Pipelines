@@ -1,5 +1,4 @@
 import re
-import regex
 import spacy
 import datetime
 from string import punctuation
@@ -21,7 +20,7 @@ act_name_patterns = 'act|law|constitution|rule|notification|circular|paragraph|a
 class CaseDoc:
     def __init__(self):
         self.title = ""                     #self defined
-        self.case_id = ""                    #self defined
+        self.case_id = ""                   #self defined
         self.url = ""                       #self defined
         self.source = ""                    #self defined
         self.date = datetime.datetime.now() #self defined
@@ -42,11 +41,12 @@ class CaseDoc:
         print("*********processing text*********") 
         #HANDLE JUDGEMENT TEXT YOURSELF : Break text into paragraphs, retain formatting of intro and join all paragraphs with >>>>, then store into judgement_text
         text = self.judgement_text.replace('>>>>','')
-        self.cases_cited = case_get_cases_list(text)
-        self.provisions_referred = case_get_acts_list(text)
-        self.petitioner_counsel = case_get_petitioner_counsel(text)
-        self.respondent_counsel = case_get_respondent_counsel(text)
-        self.judgement = case_get_judgement(self.judgement_text.split(' >>>> ')[-3:]) # increase -3 if judgement is not extracted
+        doc_nlp = nlp(text)
+        self.cases_cited = case_get_cases_list(text,doc_nlp)
+        self.provisions_referred = case_get_acts_list(text,doc_nlp)
+        self.petitioner_counsel = case_get_petitioner_counsel(text,doc_nlp)
+        self.respondent_counsel = case_get_respondent_counsel(text,doc_nlp)
+        self.judgement = case_get_judgement(self.judgement_text.split(' >>>> ')[-5:]) # increase -3 if judgement is not extracted
         print("*********processed text*********") 
 
     def print_case_attributes(self):
@@ -69,12 +69,14 @@ class CaseDoc:
 
 
 #****************************CASE SPECIFIC FUNCTIONS****************************
-def case_get_petitioner_counsel(case_text):
+#TODO Document functions
+#TODO corrections required in case_get_acts_list and case_get_judgement
+def case_get_petitioner_counsel(case_text,doc_nlp):
     sal_regexp = get_salutation_regexp(sal_re_indicators)
     counsel_petitioner_regexp = get_counsel_regexp(counsel_petitioner_re_indicators)
     petitioner_counsel = set()
     try:
-        doc_nlp = nlp(case_text)
+        # doc_nlp = nlp(case_text)
         for sent in doc_nlp.sents:
             txt_lower = sent.text.lower()
             start = 0
@@ -87,12 +89,12 @@ def case_get_petitioner_counsel(case_text):
     petitioner_counsel = normalize_person_set(petitioner_counsel, sal_regexp)
     return list(petitioner_counsel)
 
-def case_get_respondent_counsel(case_text):
+def case_get_respondent_counsel(case_text,doc_nlp):
     sal_regexp = get_salutation_regexp(sal_re_indicators)
     counsel_respondent_regexp = get_counsel_regexp(counsel_respondent_re_indicators)
     respondent_counsel = set()
     try:
-        doc_nlp = nlp(case_text)
+        # doc_nlp = nlp(case_text)
         for sent in doc_nlp.sents:
             txt_lower = sent.text.lower()
             start = 0
@@ -131,17 +133,22 @@ def case_get_judgement(paragraphs):
                 judgement = 'dismissed'
                 if 'partly' in segment:
                     judgement = 'partly dismissed'
+                break 
+            elif 'disposed' in segment:
+                judgement = 'dismissed'
+                if 'partly' in segment:
+                    judgement = 'partly dismissed'
                 break    
             else:
                 judgement = 'tied / unclear'
     return judgement
 
-def case_get_acts_list(case_text):
+def case_get_acts_list(case_text,doc_nlp):
     section_regexp = get_section_regexp(section_re_indicators)
     law_regexp = get_law_regexp(law_re_indicators)
     law_dict = {}
     try:
-        doc_nlp = nlp(case_text)
+        # doc_nlp = nlp(case_text)
         law_prev = ''
         for sent in doc_nlp.sents:
             txt_lower = sent.text.lower()
@@ -157,11 +164,11 @@ def case_get_acts_list(case_text):
     provisions_array = break_provisions(repr_laws(law_dict))
     return provisions_array
 
-def case_get_cases_list(case_text):
+def case_get_cases_list(case_text,doc_nlp):
     case_regexp = get_case_regexp(case_re_indicators)
     case_list = []
     try:
-        doc_nlp = nlp(case_text)
+        # doc_nlp = nlp(case_text)
         for sent in doc_nlp.sents:
             txt_lower = sent.text.lower()
             if re.search(case_regexp, sent.text):
@@ -172,6 +179,8 @@ def case_get_cases_list(case_text):
 
 def case_get_length(case_text):
     return(len(case_text)) 
+
+
 #****************************HELPER FUNCTIONS****************************
 def find_assoc_law(text):
     return re.match(law_regex_no_words, text)
