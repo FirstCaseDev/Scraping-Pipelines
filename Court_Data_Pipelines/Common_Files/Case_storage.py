@@ -7,6 +7,7 @@ def store_case_document(case):
     col = db["cases"]
     data_object = {
         "title": case.title,
+        "case_id": case.case_id,
         "url": case.url,
         "source": case.source,
         "date": case.date,

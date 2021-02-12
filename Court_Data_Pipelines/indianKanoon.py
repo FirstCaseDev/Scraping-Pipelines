@@ -72,7 +72,7 @@ def process_IndKanoon_case_url(url):
     judgement_text_paragraphs.append(pre_text_splitted[0])
     for paragraph in paragraphs:
         judgement_text_paragraphs.append(paragraph.text.replace('\n','').replace('\r','').replace('',''))
-    case.judgement_text = '>>>>'.join(judgement_text_paragraphs)
+    case.judgement_text = ' >>>> '.join(judgement_text_paragraphs)
     for query_terms_element in query_terms_elements:
         case.query_terms.append(query_terms_element.text)  
     dates = datefinder.find_dates(title)

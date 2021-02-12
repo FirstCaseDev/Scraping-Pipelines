@@ -46,7 +46,7 @@ class CaseDoc:
         self.provisions_referred = case_get_acts_list(text)
         self.petitioner_counsel = case_get_petitioner_counsel(text)
         self.respondent_counsel = case_get_respondent_counsel(text)
-        self.judgement = case_get_judgement(self.judgement_text.split('>>>>')[-3:]) # increase -3 if judgement is not extracted
+        self.judgement = case_get_judgement(self.judgement_text.split(' >>>> ')[-3:]) # increase -3 if judgement is not extracted
         print("*********processed text*********") 
 
     def print_case_attributes(self):
@@ -136,30 +136,6 @@ def case_get_judgement(paragraphs):
             else:
                 judgement = 'tied / unclear'
     return judgement
-
-def case_get_text_paragraphs(case_text):
-    paragraphs = re.split('(\n\n()?\d\d\. )|(\n\n()?\d\. )',case_text)
-    try:
-        paragraphs = [i.strip(' ') for i in paragraphs]
-    except:
-        print("oops paragraph stripping")
-    while('' in paragraphs):
-        paragraphs.remove('')
-    while(None in paragraphs):
-        paragraphs.remove(None)
-    count = 0
-    joined_paragraphs = []
-    while(count<=len(paragraphs)):
-        if count==len(paragraphs)-1:
-            joined_paragraphs.append(paragraphs[count])
-            # pass
-        else: 
-            try:
-                joined_paragraphs.append(paragraphs[count] + " " + paragraphs[count+1])
-            except:
-                pass
-        count = count + 2
-    return joined_paragraphs
 
 def case_get_acts_list(case_text):
     section_regexp = get_section_regexp(section_re_indicators)

@@ -1,7 +1,32 @@
 ########################  Downloading Pdf Files ########################
 import requests
+import re
 
 
+def case_get_text_paragraphs(case_text):
+    paragraphs = re.split('(\n\n()?\d\d\. )|(\n\n()?\d\. )',case_text)
+    paragraphs.insert(1,' ')
+    try:
+        paragraphs = [i.strip(' ') for i in paragraphs]
+    except Exception as inst:
+        print(str(inst) + " : oops paragraph stripping")
+    while('' in paragraphs):
+        paragraphs.remove('')
+    while(None in paragraphs):
+        paragraphs.remove(None)
+    count = 0
+    joined_paragraphs = []
+    while(count<=len(paragraphs)):
+        if count==len(paragraphs)-1:
+            joined_paragraphs.append(paragraphs[count])
+            # pass
+        else: 
+            try:
+                joined_paragraphs.append(paragraphs[count] + " " + paragraphs[count+1])
+            except:
+                pass
+        count = count + 2
+    return joined_paragraphs
 
 def download_Pdf(a):
     url = a
@@ -54,7 +79,16 @@ def extract_txt(url, fname, pages=None):
     converter.close()
     text = output.getvalue()
     output.close
-    return text 
+
+    cleaned_paragraphs = []
+    paragraphs = case_get_text_paragraphs(text)
+    cleaned_paragraphs.append(paragraphs[0])
+    # cleaned_paragraphs.append(" ")
+    paragraphs.pop(0)
+    for paragraph in paragraphs:
+        cleaned_paragraphs.append(paragraph.replace('\n','').replace('\r','').replace('',''))
+    return ' >>>> '.join(cleaned_paragraphs)
+    # return text 
 
 
 
