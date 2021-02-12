@@ -24,7 +24,14 @@ import sys, getopt
 
 
 
-def extract_txt(fname, pages=None):
+def extract_txt(url, fname, pages=None):
+
+    r = requests.get(url)
+    #filename = r.url[url.rfind('/')+1:]
+    #print(filename)
+    open(fname, 'wb').write(r.content)
+
+    #processing-text
     if not pages:
         pagenums = set()
     else:

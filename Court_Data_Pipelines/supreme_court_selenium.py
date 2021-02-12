@@ -6,12 +6,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 PATH = r"C:\\Users\\risha\\Downloads\\chromedriver.exe"
 from selenium.webdriver.chrome.options import Options
+from Common_Files.Case_pdf_handling import extract_txt
+from Common_Files.Case_handler import CaseDoc
+import datefinder
+
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 
-#driver = webdriver.Chrome(PATH,chrome_options=options) #Headless
-driver = webdriver.Chrome(PATH)
+driver = webdriver.Chrome(PATH,chrome_options=options) #Headless
+#driver = webdriver.Chrome(PATH)
 
 # WebDriverWait wait = new WebDriverWait(webDriver, timeoutInSeconds);
 # wait.until(ExpectedConditions.visibilityOfElementLocated(By.id<locator>));
@@ -77,21 +81,35 @@ for row in rows:
         #print(counter2)
         #print (c.text)
         if counter2 == 20:
+            case = CaseDoc()
             sn = case_list[0]
-            print (case_list)
-            print(sn)
-            print(url)
+            
+            case.title = case_list[8] + " vs " + case_list[10]
+            case.case_id = case_list[5]
+            case.url = url
+            dates = datefinder.find_dates(case_list[6])
+            for i in dates:
+                date = i
+            case.date = date
+            case.source = "Supreme Court of India"
+            case.doc_author = case_list[18]
+            case.petitioner = case_list[8]
+            case.respondent = case_list[10]
+            case.bench = case_list[16].split(",")
+
+            case.petitioner_counsel = case_list[12].split(",")
+            case.respondent_counsel = case_list[14].split(",")
+
+            case.judgement_text = extract_txt(url, 'supreme_court_judgement.pdf')
+            #print(case.title)
+            #print(case.doc_author)
+            #print (case_list)
+            # print(sn)
+            # print(url)
+            print(case.judgement_text)
             case_list = []
             counter2 = 0
-#print(case_list)
-#print(counter/2)
-#x = int(counter/2)
-#case_list = ""
-# for i in range(0, x):
-#     if len(c.text) ==0:
-#         break
-#     else:
-#case_list = case_list.append(c.text)
+
 
 driver.quit() #to close browser window
 
@@ -110,3 +128,21 @@ driver.quit() #to close browser window
 
 
 print ("GG no Re")
+
+        # self.title = ""                     #self defined   done
+        # self.case_id = ""                    #self defined   done
+        # self.url = ""                       #self defined   done
+        # self.source = ""                    #self defined     done
+        # self.date = datetime.datetime.now() #self defined   done
+        # self.doc_author = ""                #self defined     done
+        # self.petitioner = ""                #self defined     done
+        # self.respondent = ""                #self defined     done
+        # self.bench = []                     #self defined     done
+        # self.petitioner_counsel = []        #function      done
+        # self.respondent_counsel = []        #function      done
+        # self.cases_cited = []               #function --- from case.process_text
+        # self.cases_citing = []              #self defined --- not now
+        # self.judgement = ""                 #function done   from case.process_text
+        # self.judgement_text = ""            #self defined     done
+        # self.provisions_referred = []       #function to be modified for datatype    from case.process_text
+        # self.query_terms = []               #self defined  ---- not now
