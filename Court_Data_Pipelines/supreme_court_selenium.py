@@ -78,6 +78,7 @@ for row in rows:
         #print (c.text)
         if counter2 == 20:
             sn = case_list[0]
+            print (case_list)
             print(sn)
             print(url)
             case_list = []
