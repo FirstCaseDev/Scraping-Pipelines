@@ -21,7 +21,7 @@ act_name_patterns = 'act|law|constitution|rule|notification|circular|paragraph|a
 class CaseDoc:
     def __init__(self):
         self.title = ""                     #self defined
-        self.caseID = ""                    #self defined
+        self.case_id = ""                    #self defined
         self.url = ""                       #self defined
         self.source = ""                    #self defined
         self.date = datetime.datetime.now() #self defined
