@@ -3,7 +3,7 @@ import json
 import re
 import pymongo
 client = pymongo.MongoClient("mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority")
-db = client["courtdata"]
+db = client["indian_court_data"]
 col = db["cases"]
 
 def compute_jaccard_sim(str_1, str_2):
@@ -16,20 +16,22 @@ def compute_jaccard_sim(str_1, str_2):
 count=0
 titles_list = []
 paragraphs_list = []
-for count, doc in enumerate(col.find({"$text":{"$search":"Ambani"}})):
+for count, doc in enumerate(col.find()):#{"$text":{"$search":"Ambani"}}
     judgement_text = doc['judgement_text']
-    paragraphs = judgement_text.split('\n\n')
-    print(judgement_text)
-    title = doc['title']
-    titles_list.append(title)
-    print(count)
+    paragraphs = judgement_text.split('>>>>')#\n\n
+    # print(len(paragraphs))
+    # title = doc['title']
+    for paragraph in paragraphs:
+        paragraphs_list.append(paragraph)
+    # print(count)
 
-# similarites = []
-# for title1 in titles_list:
-#     for title2 in titles_list:
-#         if(title1!=title2):
-#             similarites.append({"title1":title1, "title2":title2, "similarity":compute_jaccard_sim(title1,title2)})
+similarites = []
+for paragraph1 in paragraphs_list:
+    for paragraph2 in paragraphs_list:
+        if(paragraph1!=paragraph2):
+            similarites.append({"paragraph1":paragraph1, "paragraph2":paragraph2, "similarity":compute_jaccard_sim(paragraph1,paragraph2)})
 
-# similarites.sort(key=lambda json: json['similarity'], reverse=True)
-# print(similarites)
-# print(compute_jaccard_sim("My name isn't soumya", "My name is soumya"))
+
+similarites.sort(key=lambda json: json['similarity'], reverse=True)
+print(similarites[:30])
+#TODO compute sum of similarities and then sort for each paragraph
