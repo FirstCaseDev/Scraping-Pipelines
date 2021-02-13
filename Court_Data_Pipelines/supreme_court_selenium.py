@@ -101,12 +101,12 @@ for row in rows:
             case.respondent_counsel = case_list[14].split(",")
 
             case.judgement_text = extract_txt(url, 'supreme_court_judgement.pdf')
-            #print(case.title)
+            print(case.title)
             #print(case.doc_author)
             #print (case_list)
             # print(sn)
             # print(url)
-            print(case.judgement_text)
+            #print(case.judgement_text)
             case_list = []
             counter2 = 0
 
