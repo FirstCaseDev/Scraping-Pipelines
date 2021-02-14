@@ -97,7 +97,8 @@ def process_IndKanoon_case_url(url):
         case.process_text() 
         store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
         # case.print_case_attributes()
-    except:
+    except Exception as inst:
+        print(inst)
         open("indian_kanoon_missed_urls.txt", 'a+').write("%s\n" %(url) )
         print("Missed : %s\n" %(url) )   
     driver.close()
