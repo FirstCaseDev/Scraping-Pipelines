@@ -23,7 +23,7 @@ def case_get_text_paragraphs(case_text):
         else: 
             try:
                 joined_paragraphs.append(paragraphs[count] + " " + paragraphs[count+1])
-            except:
+            except Exception:
                 pass
         count = count + 2
     return joined_paragraphs

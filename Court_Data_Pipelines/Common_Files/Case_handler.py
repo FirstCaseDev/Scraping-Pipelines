@@ -70,7 +70,12 @@ class CaseDoc:
 
 #****************************CASE SPECIFIC FUNCTIONS****************************
 #TODO Document functions
+#TODO get_acts_lsit adhiniyam
+#TODO case ID function for indkanoon cases
 #TODO corrections required in case_get_acts_list and case_get_judgement
+#TODO Bench function
+#TODO Doc_author function
+#TODO cases_Cited ignore title case
 def case_get_petitioner_counsel(case_text,doc_nlp):
     sal_regexp = get_salutation_regexp(sal_re_indicators)
     counsel_petitioner_regexp = get_counsel_regexp(counsel_petitioner_re_indicators)
