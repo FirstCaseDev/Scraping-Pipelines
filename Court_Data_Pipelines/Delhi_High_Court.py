@@ -1,8 +1,30 @@
+"""    Documentation For Delhi High Court Scraper
+
+Functions Used
+1. page_reader() : Used for navigating  to the elements on the Court orders page and storing the different data to their respective values on server and extracting 
+    text from the pdf and storing it to server.
+
+2. judgementDate():Used for navigating to the judgement date page where date is to be entered.
+
+3. Calendar(D,M,Y,D2,M2,Y2):It takes date as input in DD MM YYYY format in which first from date is to be entered and then end date is to be entered for which it generates strings in format "DD/MM/YYYY" to be entered in 
+   date section in judgement date page.
+
+Working of Code :
+
+From date is to be entered first and then end date is to be entered in then calendar funtion is called where it return a list of strings in date format then in try loop it enters the date string in date section and 
+then page_reader Function is called if an error comes for no judgements on that date then except loop is called with NoSuchElementException.
+After all the data is stored on server from that page then a try loop is called in which a while loop is called for checking link text for "Next" if exist then it goes to next page if not then except loop is continued.
+
+        
+
+"""
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from Common_Files.Case_pdf_handling import extract_txt
 from Common_Files.Case_handler import CaseDoc
+from Common_Files.Case_storage import store_case_document
 from selenium.webdriver.chrome.options import Options
 import datefinder
 from selenium.common.exceptions import NoSuchElementException
@@ -60,7 +82,8 @@ def page_reader():################# for Reading Contents of page when date is en
         case.title = case_title
         case.respondent = case_respondent
         case.process_text()
-        case.print_case_attributes()
+        # case.print_case_attributes()
+        store_case_document(case)
         
         
 
@@ -77,12 +100,12 @@ def judgementDate():###############  navigate to JudgementDate Page ############
     link.click()
 
 
-def Calendar(D, M,Y, D1, M2, Y2):######  for date iteration to be entered ##############################
+def Calendar(D,M,Y,D2, M2, Y2):######  for date iteration to be entered ##############################
 
     D = int(D)
     M = int(M)
     Y = int(Y)
-    D1 = int(D1)
+    D2 = int(D2)
     M2 = int(M2)
     Y2 = int(Y2)
 
@@ -119,7 +142,7 @@ def Calendar(D, M,Y, D1, M2, Y2):######  for date iteration to be entered ######
     if M==0:
         M=M+1
     if M==M2 and Y==Y2:
-        k = D1-D
+        k = D2-D
         for i in range(k):
             a = str(D+i)+"/"+str(M)+"/"+str(Y)
             date.append(a)
@@ -129,8 +152,8 @@ def Calendar(D, M,Y, D1, M2, Y2):######  for date iteration to be entered ######
 
 
 D,M,Y = input().split()          
-D1,M2,Y2 = input().split()
-w=Calendar(D,M,Y,D1,M2,Y2)
+D2,M2,Y2 = input().split()
+w=Calendar(D,M,Y,D2,M2,Y2)
 
 
 
@@ -144,7 +167,7 @@ for i in range(len(w)):
         input_box = driver.find_element_by_xpath("//*[@id='juddt']")
         driver.execute_script('document.getElementsByName("juddt")[0].removeAttribute("readonly")')
         input_box.clear()
-        input_box.send_keys(u) ## Uncomment this when working woth date iterator
+        input_box.send_keys(u) 
         submit_btn = driver.find_element_by_name("Submit")
         submit_btn.click()
         driver.switch_to.default_content()
