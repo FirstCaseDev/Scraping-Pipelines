@@ -5,7 +5,7 @@ from string import punctuation
 nlp = spacy.load('en_core_web_sm')
 sal_re_indicators = ['Shri', 'Sh\.', 'Sh', 'Mr\.', 'Mr', 'Miss', 'Ms\.', 'Ms', 'Mrs\.', 'Ms', 'Dr\.', 'Dr']
 section_re_indicators = ['s\.', 'section', 'rule', 'article', 'chapter', 'clause', 'paragraph', 'explanation']
-law_re_indicators = ['Act', 'Statute', 'Rules', 'Regulations', 'Reference', 'Constitution', 'Circular', 'Notice', 'Notification']
+law_re_indicators = ['Act', 'Statute', 'Rules', 'Regulations', 'Reference', 'Constitution', 'Circular', 'Notice', 'Notification', 'Code']
 case_re_indicators = ['v', 'v\.', 'vs', 'vs\.', 'Vs', 'Vs\.', 'versus', 'Versus']
 counsel_petitioner_re_indicators = ['for(\s+)(the)?(\s+)((appellant(s?))|(petitioner(s?)))(\.?)']
 counsel_respondent_re_indicators = ['for(\s+)(the)?(\s+)respondent(s?)(\.?)']
@@ -14,6 +14,15 @@ list_stop_regex = '('+'|'.join(list_stop)+')'
 first_cap_regex = '([A-Z]\S*\s*('+list_stop_regex+'*\s*'+'([A-Z]|\d)\S*\s*)+)'
 law_regex_no_words = first_cap_regex+'(((,|of)\s+)?(\d)*\s*)*'
 act_name_patterns = 'act|law|constitution|rule|notification|circular|paragraph|article|statute|reference|section|interpretation|regulation|regulations'
+
+"""
+Constitutional Bench is not a law - DONE
+'Section' is never mentioned under the Constitution - DONE
+'The Act' is not a law - TODO
+Some laws contain the word 'Code' - DONE
+Similarly occurring extraction - The Constitution + Constitution of India - TODO
+Abbreviated Laws - IPC (Indian Penal Code, 1860), CrPC (Criminal Procedural Code, 1973), CPC (Code of Civil Procedure, 1908), IBC (Insolvency & Bankruptcy Code, 2018) - DONE
+"""
 
 
 #****************************CASE CLASS DEFINITION****************************
@@ -38,16 +47,16 @@ class CaseDoc:
         self.query_terms = []               #self defined
     
     def process_text(self): #processes text and retrieves a set of case variables
-        print("*********processing text*********") 
+        print("********processing text********") 
         #HANDLE JUDGEMENT TEXT YOURSELF : Break text into paragraphs, retain formatting of intro and join all paragraphs with >>>>, then store into judgement_text
         text = self.judgement_text.replace('>>>>','')
         doc_nlp = nlp(text)
-        self.cases_cited = case_get_cases_list(text,doc_nlp)
-        self.provisions_referred = case_get_acts_list(text,doc_nlp)
-        self.petitioner_counsel = case_get_petitioner_counsel(text,doc_nlp)
-        self.respondent_counsel = case_get_respondent_counsel(text,doc_nlp)
+        self.cases_cited = case_get_cases_list(text, doc_nlp)
+        self.provisions_referred = case_get_acts_list(text, doc_nlp)
+        self.petitioner_counsel = case_get_petitioner_counsel(text, doc_nlp)
+        self.respondent_counsel = case_get_respondent_counsel(text, doc_nlp)
         self.judgement = case_get_judgement(self.judgement_text.split(' >>>> ')[-5:]) # increase -3 if judgement is not extracted
-        print("*********processed text*********") 
+        print("********processed text********") 
 
     def print_case_attributes(self):
         print("date : "  + str(self.date))
@@ -76,7 +85,7 @@ class CaseDoc:
 #TODO Bench function
 #TODO Doc_author function
 #TODO cases_Cited ignore title case
-def case_get_petitioner_counsel(case_text,doc_nlp):
+def case_get_petitioner_counsel(case_text, doc_nlp):
     sal_regexp = get_salutation_regexp(sal_re_indicators)
     counsel_petitioner_regexp = get_counsel_regexp(counsel_petitioner_re_indicators)
     petitioner_counsel = set()
@@ -94,7 +103,7 @@ def case_get_petitioner_counsel(case_text,doc_nlp):
     petitioner_counsel = normalize_person_set(petitioner_counsel, sal_regexp)
     return list(petitioner_counsel)
 
-def case_get_respondent_counsel(case_text,doc_nlp):
+def case_get_respondent_counsel(case_text, doc_nlp):
     sal_regexp = get_salutation_regexp(sal_re_indicators)
     counsel_respondent_regexp = get_counsel_regexp(counsel_respondent_re_indicators)
     respondent_counsel = set()
@@ -148,7 +157,7 @@ def case_get_judgement(paragraphs):
                 judgement = 'tied / unclear'
     return judgement
 
-def case_get_acts_list(case_text,doc_nlp):
+def case_get_acts_list(case_text, doc_nlp):
     section_regexp = get_section_regexp(section_re_indicators)
     law_regexp = get_law_regexp(law_re_indicators)
     law_dict = {}
@@ -164,12 +173,13 @@ def case_get_acts_list(case_text,doc_nlp):
                 if len(sent_laws) > 0:
                     law_prev = sent_laws[-1][0]
     except: 
-        print("oops parsing")
+        print("oops parsing laws")
+    law_dict.pop("Constitutional Bench", None)
     combine_laws(law_dict)
     provisions_array = break_provisions(repr_laws(law_dict))
     return provisions_array
 
-def case_get_cases_list(case_text,doc_nlp):
+def case_get_cases_list(case_text, doc_nlp):
     case_regexp = get_case_regexp(case_re_indicators)
     case_list = []
     try:
@@ -179,7 +189,7 @@ def case_get_cases_list(case_text,doc_nlp):
             if re.search(case_regexp, sent.text):
                 case_list.extend(find_case(sent.text, case_regexp))
     except: 
-        print("oops parsing")
+        print("oops parsing cases")
     return case_list
 
 def case_get_length(case_text):
@@ -346,13 +356,32 @@ def combine_laws(law_dict):
     init_keys = list(law_dict.keys())
     mapping = {}
     for law in init_keys:
+        law_abbr = None
+        if "constitution" in law.lower():
+            for elem in law_dict[law]:
+                if "s. " in elem or "section" in elem:
+                    law_dict[law].remove(elem)
+        if law == "IPC":
+            law_abbr = "Indian Penal Code, 1860"
+        if law == "CrPC":
+            law_abbr = "Criminal Procedural Code, 1973"
+        if law == "CPC":
+            law_abbr = "Code of Civil Procedure, 1908"
+        if law == "IBC":
+            law_abbr = "Insolvency & Bankruptcy Code, 2018"
         law_norm = remove_stop(law)
         if law_norm in law_dict:
             if mapping[law_norm][1] < len(law_dict[law]):
-                mapping[law_norm] = (law, len(law_dict[law]))
+                if law_abbr:
+                    mapping[law_norm] = (law_abbr, len(law_dict[law]))
+                else:
+                    mapping[law_norm] = (law, len(law_dict[law]))
             law_dict[law_norm].extend(law_dict[law])
         else:
-            mapping[law_norm] = (law, len(law_dict[law]))
+            if law_abbr:
+                mapping[law_norm] = (law_abbr, len(law_dict[law]))
+            else:
+                mapping[law_norm] = (law, len(law_dict[law]))
             law_dict[law_norm] = law_dict[law][:]
         del law_dict[law]
     new_keys = list(law_dict.keys())
