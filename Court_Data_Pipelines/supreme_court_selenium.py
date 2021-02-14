@@ -37,7 +37,7 @@ options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 
 #driver = webdriver.Chrome(PATH,chrome_options=options) #For running Chromedriver Headless
-driver = webdriver.Chrome(PATH)
+driver = webdriver.Chrome(PATH) #For running windowed chrome
 
 # WebDriverWait wait = new WebDriverWait(webDriver, timeoutInSeconds);
 # wait.until(ExpectedConditions.visibilityOfElementLocated(By.id<locator>));
