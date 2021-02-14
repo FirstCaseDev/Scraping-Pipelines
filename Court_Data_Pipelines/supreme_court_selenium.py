@@ -15,14 +15,30 @@ from Common_Files.Case_pdf_handling import extract_txt
 from Common_Files.Case_handler import CaseDoc
 import datefinder
 from Common_Files.Case_storage import store_case_document
+import datetime as DT
+
+'''
+Extraction of today's date
+'''
+today = DT.date.today() #Today's date
+today_str = today.strftime("%Y-%m-%d")
+update_today = DT.datetime.strptime(today_str, '%Y-%m-%d').strftime('%d-%m-%Y')
+#update_today_str = today.strftime("%d-%m-%Y")
+
+week_ago = today - DT.timedelta(days=7) # number of days we want to go back
+week_ago_str = week_ago.strftime("%Y-%m-%d")
+update_week_ago = DT.datetime.strptime(week_ago_str, '%Y-%m-%d').strftime('%d-%m-%Y')
+#update_week_ago_str = today.strftime("%d-%m-%Y")
+#print(update_today)
+#print(update_week_ago)
 
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 
-driver = webdriver.Chrome(PATH,chrome_options=options) #For running Chromedriver Headless
+#driver = webdriver.Chrome(PATH,chrome_options=options) #For running Chromedriver Headless
+driver = webdriver.Chrome(PATH)
 
-#driver = webdriver.Chrome(PATH)
 # WebDriverWait wait = new WebDriverWait(webDriver, timeoutInSeconds);
 # wait.until(ExpectedConditions.visibilityOfElementLocated(By.id<locator>));
 #driver.implicitly_wait(3)
@@ -37,8 +53,11 @@ captcha= search.text # Captcha text extracted
 search=driver.find_element_by_xpath("//*[@id='ansCaptcha']") # Finding Captcha box element
 search.click() #Captcha box clicked
 search.send_keys(captcha) # Captcha entered
-start_date="01-01-2021"
-end_date="15-01-2021"
+start_date=update_week_ago
+end_date=update_today
+
+# start_date="01-01-2021"
+# end_date="15-01-2021"
 wait = WebDriverWait(driver,10) 
 
 '''
@@ -130,7 +149,7 @@ for row in rows:
             case.petitioner_counsel = case_list[12].split(",")
             case.respondent_counsel = case_list[14].split(",")
 
-            store_case_document(case)
+            # store_case_document(case)
 
             #case.print_case_attributes()
             #print(case.title)
