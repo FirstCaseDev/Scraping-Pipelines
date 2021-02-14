@@ -83,7 +83,7 @@ def page_reader():################# for Reading Contents of page when date is en
         case.respondent = case_respondent
         case.process_text()
         # case.print_case_attributes()
-        store_case_document(case) 
+        # store_case_document(case) 
         
         
 
