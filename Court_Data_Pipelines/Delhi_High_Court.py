@@ -24,10 +24,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from Common_Files.Case_pdf_handling import extract_txt
 from Common_Files.Case_handler import CaseDoc
-from Common_Files.Case_storage import store_case_document
+from Common_Files.Case_storage import store_case_document,case_exists_by_case_id
 from selenium.webdriver.chrome.options import Options
 import datefinder
 from selenium.common.exceptions import NoSuchElementException
+
 
 options = Options()
 options.add_argument('--headless')
@@ -49,42 +50,66 @@ def page_reader():################# for Reading Contents of page when date is en
     table = link.find_element_by_xpath("/html/body/table[2]/tbody")
     rows = table.find_elements(By.TAG_NAME, "tr")
     rows.pop()
-    
-    for row in rows:
-        col = row.find_elements(By.TAG_NAME,"td")
-        Sno = col[0].text
-        case_number = col[1].text
-        case_title = col[3].text.replace("\n"," ").replace("\r"," ")
-        case_petitioner = case_title.split("Vs")[0]
-        case_respondent = case_title.split("Vs")[1]
-        case.case_id = case_number
-        dates = datefinder.find_dates(u)
-        for i in dates:
-            date = i
-
-        for c in col:
-        #     # print(c.text)
-        #     # print(case_name) 
-            a_tags = c.find_elements(By.TAG_NAME,"a")
+    try:
+        for row in rows:
             
-            for a_tag in a_tags:
-        #         # print(a_tag.text)
-        #         # print(a_tag.get_attribute('href'))
-                case_url = a_tag.get_attribute("href")
+            
+            col = row.find_elements(By.TAG_NAME,"td")
+            try:
+                case_number = col[1].text
+                case_exists_by_case_id(case_number)
+
+                for c in col:
+                #     # print(c.text)
+                #     # print(case_name) 
+                    a_tags = c.find_elements(By.TAG_NAME,"a")
+                    
+                    for a_tag in a_tags:
+                #         # print(a_tag.text)
+                #         # print(a_tag.get_attribute('href'))
+                        try:
+                            case_url = a_tag.get_attribute("href")
+                        except NoSuchElementException:
+                            print("No Case-url found.")
+
+                        judgement_text = extract_txt(case_url, "Delhi_High_Court_Extract.pdf")
+
+                try:
+                    case_number = col[1].text
+                except NoSuchElementException:
+                    print("No Case number is found.")
+                try:
+                    case_title = col[3].text.replace("\n"," ").replace("\r"," ")
+                except NoSuchElementException:
+                    print("No Case title is found.")
+                try:
+                    case_petitioner = case_title.split("Vs")[0]
+                except NoSuchElementException:
+                    print("No Petitioner is found.")
+                try:
+                    case_respondent = case_title.split("Vs")[1]
+                except NoSuchElementException:
+                    print("No Case Respondent.")
                 
-                judgement_text = extract_txt(case_url, "Delhi_High_Court_Extract.pdf")
-        
-        case.date = date
-        case.source = "Delhi High Court"
-        case.url = case_url
-        case.petitioner = case_petitioner
-        case.judgement_text = judgement_text
-        case.title = case_title
-        case.respondent = case_respondent
-        case.process_text()
-        # case.print_case_attributes()
-        # store_case_document(case) 
-        
+                case.case_id = case_number
+                dates = datefinder.find_dates(u)
+                for i in dates:
+                    date = i
+                case.date = date
+                
+                case.source = "Delhi High Court"
+                case.url = case_url
+                case.petitioner = case_petitioner
+                case.judgement_text = judgement_text
+                case.title = case_title
+                case.respondent = case_respondent
+                case.process_text()
+                # case.print_case_attributes()
+                # store_case_document(case) 
+            except Exception as inst:
+                print(inst)
+                open("Delhi_High_Court_missed_urls.txt", 'a+').write("%s\n" %(case_number) )
+                print("Missed : %s\n" %(case_number) )     
         
 
 
