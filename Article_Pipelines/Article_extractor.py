@@ -3,7 +3,7 @@ import regex
 import spacy
 from string import punctuation
 nlp = spacy.load('en_core_web_sm')
-law_re_indicators = ['Act', 'Statute', 'Rules', 'Regulations', 'Reference', 'Constitution', 'Circular', 'Notice', 'Notification', 'Code']
+law_re_indicators = ['Act', 'Statute', 'Rules', 'Regulations', 'Reference', 'Constitution', 'Circular', 'Notice', 'Notification', 'Code', 'Adhiniyam']
 section_re_indicators = ['s\.', 'section', 'rule', 'article', 'chapter', 'clause', 'paragraph', 'explanation']
 list_stop = ['of', 'for', 'the', 'and', 'under', '\.', ',', '\(', '\)', '\-']
 list_stop_regex = '('+'|'.join(list_stop)+')'
