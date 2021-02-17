@@ -14,8 +14,9 @@ from selenium.webdriver.chrome.options import Options
 from Common_Files.Case_pdf_handling import extract_txt
 from Common_Files.Case_handler import CaseDoc
 import datefinder
-from Common_Files.Case_storage import store_case_document
+from Common_Files.Case_storage import store_case_document, case_exists_by_url
 import datetime as DT
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 '''
 Extraction of today's date
@@ -113,11 +114,17 @@ counter2 = 0
 url = ""
 
 for row in rows:
-    col = row.find_elements(By.TAG_NAME,"td")
+    try:
+        col = row.find_elements(By.TAG_NAME,"td")
+    except NoSuchElementException:
+            print("No Table found")
     for c in col:
         counter2 = counter2 +1
-        a_tags = c.find_elements(By.TAG_NAME,"a")
-        
+        try:
+            a_tags = c.find_elements(By.TAG_NAME,"a")
+        except NoSuchElementException:
+            print("No url found")
+
         count = 0
         for a_tag in a_tags:
             #print(a_tag.text)
@@ -149,7 +156,11 @@ for row in rows:
             case.petitioner_counsel = case_list[12].split(",")
             case.respondent_counsel = case_list[14].split(",")
 
-            # store_case_document(case)
+            case_exist = case_exists_by_url(url)
+            if case_exist == 0:
+                store_case_document(case)
+            else:
+                pass
 
             #case.print_case_attributes()
             #print(case.title)
