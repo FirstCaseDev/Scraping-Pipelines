@@ -44,3 +44,12 @@ def case_exists_by_title(title):
         return 1
     else:
         return 0
+
+def case_exists_by_case_id(case_id):
+    client = pymongo.MongoClient("mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority")
+    db = client["indian_court_data"]
+    col = db["cases"]
+    if(col.find({"case_id": case_id}).count()>0):
+        return 1
+    else:
+        return 0
