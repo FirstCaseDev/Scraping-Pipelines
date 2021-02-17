@@ -45,7 +45,7 @@ while(1):
             continue
         source = "IndianCorpLaw"
         original_handle = driver.window_handles[0]
-        text = article_get_text(url)
+        text = article_get_text(url).replace('\n','').replace('\r','')
         for handle in driver.window_handles:
             if(handle!=original_handle):
                 driver.switch_to_window(handle)
