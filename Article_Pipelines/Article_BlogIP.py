@@ -44,7 +44,7 @@ while(1):
                 print("article already present : "+ str(title))
                 continue
             original_handle = driver.window_handles[0]
-            text = article_get_text(url)
+            text = article_get_text(url).replace('\n','').replace('\r','')
             source = "IPleaders"
             for handle in driver.window_handles:
                 if(handle!=original_handle):

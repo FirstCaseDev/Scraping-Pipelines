@@ -38,7 +38,6 @@ def process_IndKanoon_case_url(url):
             source = driver.find_element_by_css_selector(".docsource_main").text
         except TimeoutException:
             print(url + " was partially loaded")
-            #TODO Make a rewritable file of missed cases which are to be processed through pdfs
         try:
             judgement_div = driver.find_element_by_css_selector(".judgments")
         except NoSuchElementException: 
@@ -95,8 +94,8 @@ def process_IndKanoon_case_url(url):
         case.bench = bench
         case.source = source
         case.process_text() 
-        store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
-        # case.print_case_attributes()
+        # store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
+        case.print_case_attributes()
     except Exception as inst:
         print(inst)
         open("indian_kanoon_missed_urls.txt", 'a+').write("%s\n" %(url) )

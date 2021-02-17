@@ -64,7 +64,7 @@ for title in titles:
     if(col.find({"url": url}).count()>0):
         print("article already present : "+ str(title_text))
         continue
-    text = article_get_text(url)
+    text = article_get_text(url).replace('\n','').replace('\r','')
     for handle in driver.window_handles:
         if(handle!=original_handle):
             driver.switch_to_window(handle)

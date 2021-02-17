@@ -79,6 +79,8 @@ class CaseDoc:
 
 #****************************CASE SPECIFIC FUNCTIONS****************************
 #TODO Document functions
+#TODO Break paragraphs into subparagraphs
+#TODO Remove starting lines with random characters, like %, * 
 #TODO get_acts_lsit adhiniyam
 #TODO case ID function for indkanoon cases
 #TODO corrections required in case_get_acts_list and case_get_judgement
