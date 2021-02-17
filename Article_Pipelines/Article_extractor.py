@@ -1,14 +1,16 @@
 import re
 import regex
 import spacy
+from string import punctuation
 nlp = spacy.load('en_core_web_sm')
-law_re_indicators = ['Act', 'Statute', 'Rules', 'Regulations', 'Reference', 'Constitution', 'Circular', 'Notice', 'Notification']
+law_re_indicators = ['Act', 'Statute', 'Rules', 'Regulations', 'Reference', 'Constitution', 'Circular', 'Notice', 'Notification', 'Code', 'Adhiniyam']
 section_re_indicators = ['s\.', 'section', 'rule', 'article', 'chapter', 'clause', 'paragraph', 'explanation']
 list_stop = ['of', 'for', 'the', 'and', 'under', '\.', ',', '\(', '\)', '\-']
 list_stop_regex = '('+'|'.join(list_stop)+')'
 first_cap_regex = '([A-Z]\S*\s*('+list_stop_regex+'*\s*'+'([A-Z]|\d)\S*\s*)+)'
 law_regex_no_words = first_cap_regex+'(((,|of)\s+)?(\d)*\s*)*'
 case_re_indicators = ['v', 'v\.', 'vs', 'vs\.', 'Vs', 'Vs\.', 'versus', 'Versus']
+act_name_patterns = 'act|law|constitution|rule|notification|circular|paragraph|article|statute|reference|section|interpretation|regulation|regulations'
 
 #****************************ARTICLE SPECIFIC FUNCTIONS****************************
 def article_get_acts_list(article_text):
@@ -27,9 +29,10 @@ def article_get_acts_list(article_text):
                 if len(sent_laws) > 0:
                     law_prev = sent_laws[-1][0]
     except: 
-        print("oops parsing")
+        print("oops parsing laws")
+    law_dict.pop("Constitutional Bench", None)
     combine_laws(law_dict)
-    return repr_laws(law_dict)
+    return break_provisions(repr_laws(law_dict))
 
 def article_get_cases_list(article_text):
     case_regexp = get_case_regexp(case_re_indicators)
@@ -41,7 +44,7 @@ def article_get_cases_list(article_text):
             if re.search(case_regexp, sent.text):
                 case_list.extend(find_case(sent.text, case_regexp))
     except: 
-        print("oops parsing")
+        print("oops parsing cases")
     return case_list
 
 def article_get_length(article_text):
@@ -81,18 +84,38 @@ def combine_laws(law_dict):
     init_keys = list(law_dict.keys())
     mapping = {}
     for law in init_keys:
+        law_abbr = None
+        if "constitution" in law.lower():
+            for elem in law_dict[law]:
+                if "s. " in elem or "section" in elem:
+                    law_dict[law].remove(elem)
+        if law == "IPC":
+            law_abbr = "Indian Penal Code, 1860"
+        if law == "CrPC":
+            law_abbr = "Criminal Procedural Code, 1973"
+        if law == "CPC":
+            law_abbr = "Code of Civil Procedure, 1908"
+        if law == "IBC":
+            law_abbr = "Insolvency & Bankruptcy Code, 2018"
         law_norm = remove_stop(law)
         if law_norm in law_dict:
             if mapping[law_norm][1] < len(law_dict[law]):
-                mapping[law_norm] = (law, len(law_dict[law]))
+                if law_abbr:
+                    mapping[law_norm] = (law_abbr, len(law_dict[law]))
+                else:
+                    mapping[law_norm] = (law, len(law_dict[law]))
             law_dict[law_norm].extend(law_dict[law])
         else:
-            mapping[law_norm] = (law, len(law_dict[law]))
+            if law_abbr:
+                mapping[law_norm] = (law_abbr, len(law_dict[law]))
+            else:
+                mapping[law_norm] = (law, len(law_dict[law]))
             law_dict[law_norm] = law_dict[law][:]
         del law_dict[law]
     new_keys = list(law_dict.keys())
     for law in new_keys:
         law_dict[mapping[law][0]] = law_dict.pop(law)
+
 
 def find_section_and_law(law_dict, sent_text, section_regexp, law_regexp, law_prev, sent_laws):
     curr_idx = -1
@@ -168,3 +191,30 @@ def find_first_set_cap_words(str_in):
         if len(m) > 0:
             return m[0][0]
     return None
+
+def break_provisions(provisions_string):
+    if type(provisions_string) == str:
+        provisions_array = []
+        for act in provisions_string.split(';'):
+            act_splits = re.split('[|:]',act)
+            act_splits = [i for i in act_splits if i]
+            if len(act_splits):
+                act_name = act_splits[0].strip(punctuation)
+                if  re.search(act_name_patterns,act_name,re.IGNORECASE) == None : 
+                    # print('Act_name ommited: ' + act_name + '..........')
+                    # print(act_splits)
+                    continue
+                act_sections = act_splits[1:]
+                ommit_sections = []
+                for section in act_sections:
+                    if re.search(r"S\.|s\.|S\. |s\. |rule",section,re.IGNORECASE) != None : 
+                        if re.search(r"\d+", section) == None :
+                            # print(act_name + "'s section ommited: " + section)
+                            ommit_sections.append(section)
+                for section in ommit_sections:
+                    while section in act_sections:
+                            act_sections.remove(section)
+                act_sections = list(set(act_sections)) 
+                provisions_array.append({"act_name": act_name, "act_sections": act_sections})
+        return provisions_array
+    else: return []

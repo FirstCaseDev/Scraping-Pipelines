@@ -5,7 +5,7 @@ from string import punctuation
 nlp = spacy.load('en_core_web_sm')
 sal_re_indicators = ['Shri', 'Sh\.', 'Sh', 'Mr\.', 'Mr', 'Miss', 'Ms\.', 'Ms', 'Mrs\.', 'Ms', 'Dr\.', 'Dr']
 section_re_indicators = ['s\.', 'section', 'rule', 'article', 'chapter', 'clause', 'paragraph', 'explanation']
-law_re_indicators = ['Act', 'Statute', 'Rules', 'Regulations', 'Reference', 'Constitution', 'Circular', 'Notice', 'Notification', 'Code']
+law_re_indicators = ['Act', 'Statute', 'Rules', 'Regulations', 'Reference', 'Constitution', 'Circular', 'Notice', 'Notification', 'Code','Adhiniyam']
 case_re_indicators = ['v', 'v\.', 'vs', 'vs\.', 'Vs', 'Vs\.', 'versus', 'Versus']
 counsel_petitioner_re_indicators = ['for(\s+)(the)?(\s+)((appellant(s?))|(petitioner(s?)))(\.?)']
 counsel_respondent_re_indicators = ['for(\s+)(the)?(\s+)respondent(s?)(\.?)']
@@ -48,7 +48,6 @@ class CaseDoc:
     
     def process_text(self): #processes text and retrieves a set of case variables
         print("********processing text********") 
-        #HANDLE JUDGEMENT TEXT YOURSELF : Break text into paragraphs, retain formatting of intro and join all paragraphs with >>>>, then store into judgement_text
         text = self.judgement_text.replace('>>>>','')
         doc_nlp = nlp(text)
         self.cases_cited = case_get_cases_list(text, doc_nlp)
@@ -78,13 +77,11 @@ class CaseDoc:
 
 
 #****************************CASE SPECIFIC FUNCTIONS****************************
-#TODO Document functions
-#TODO get_acts_lsit adhiniyam
-#TODO case ID function for indkanoon cases
-#TODO corrections required in case_get_acts_list and case_get_judgement
-#TODO Bench function
-#TODO Doc_author function
-#TODO cases_Cited ignore title case
+#TODO Remove starting lines with random characters, like %, *                       @PDFS
+#TODO case ID function for indkanoon cases                                          Later
+#TODO corrections required in case_get_acts_list and case_get_judgement             
+#TODO Bench function (Looks to be source specific)
+#TODO Doc_author function (Check for source specific nature)
 def case_get_petitioner_counsel(case_text, doc_nlp):
     sal_regexp = get_salutation_regexp(sal_re_indicators)
     counsel_petitioner_regexp = get_counsel_regexp(counsel_petitioner_re_indicators)
@@ -108,7 +105,6 @@ def case_get_respondent_counsel(case_text, doc_nlp):
     counsel_respondent_regexp = get_counsel_regexp(counsel_respondent_re_indicators)
     respondent_counsel = set()
     try:
-        # doc_nlp = nlp(case_text)
         for sent in doc_nlp.sents:
             txt_lower = sent.text.lower()
             start = 0
@@ -190,6 +186,14 @@ def case_get_cases_list(case_text, doc_nlp):
                 case_list.extend(find_case(sent.text, case_regexp))
     except: 
         print("oops parsing cases")
+    removal_indices = []    
+    if len(case_list)>0:
+        for i in range(len(case_list)):
+            if case_list[i].find('\n') != -1:
+                print("Omitting from cited case list: " + str(case_list[i]))
+                removal_indices.append(i)
+    for index in removal_indices:
+        case_list.pop(index)
     return case_list
 
 def case_get_length(case_text):

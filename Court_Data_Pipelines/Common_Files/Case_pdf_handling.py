@@ -5,6 +5,7 @@ import re
 
 def case_get_text_paragraphs(case_text):
     paragraphs = re.split('(\n\n()?\d\d\. )|(\n\n()?\d\. )',case_text)
+    #TODO add subparagraphs line
     paragraphs.insert(1,' ')
     try:
         paragraphs = [i.strip(' ') for i in paragraphs]

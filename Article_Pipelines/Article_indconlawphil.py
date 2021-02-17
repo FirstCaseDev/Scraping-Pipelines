@@ -29,7 +29,7 @@ while(1):
             print("article already present : "+ str(title))
             continue
         source = "Indian Constitution Law and Philosophy"
-        text =  blog.find_element_by_css_selector(".entry-content").text
+        text =  blog.find_element_by_css_selector(".entry-content").text.replace('\n','').replace('\r','')
         acts_list = article_get_acts_list(text)
         cases_list = article_get_cases_list(text)
         article = {"source": source, "text": text, "title": title, "url": url, "acts_list": acts_list, "cases_list": cases_list}
