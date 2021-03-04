@@ -1,6 +1,7 @@
 from selenium import webdriver
 import time
 import datetime
+import datefinder
 from Common_Files.Case_pdf_handling import extract_txt
 from Common_Files.Case_storage import store_case_document
 from Common_Files.Case_handler import CaseDoc 
@@ -18,10 +19,10 @@ options.add_argument('--disable-gpu')
 
 #setting up the driver
 PATH='C://Program Files (x86)//chromedriver.exe'
-#driver= webdriver.Chrome(PATH)
+driver= webdriver.Chrome(PATH)
 
 #Headless
-driver = webdriver.Chrome(PATH,chrome_options=options) 
+#driver = webdriver.Chrome(PATH,chrome_options=options) 
 
 #opening an instance @bombay HC
 driver.get('https://bombayhighcourt.nic.in/')
@@ -97,6 +98,7 @@ time.sleep(2)
 
 
 #scrapping page's data
+case=CaseDoc()
 #loacting target table for scrapping
 
 table=driver.find_element_by_xpath('/html/body/form/table[2]')
@@ -141,7 +143,7 @@ for row in rows:
                 temp=[]
                 temp.append(c.text)
                 temp_str=temp[0]
-                print('Judge(s)        :',temp_str)
+                #print('Judge(s)        :',temp_str)
 
 
             #parties distinguished
@@ -149,9 +151,11 @@ for row in rows:
                 temp=[]
                 temp.append(c.text)
                 temp_str=temp[0]
-                indice_1=temp_str.find('Vs')
-                print('Petitioner Name :',temp_str[:indice_1])
-                print('Respondent Name :', temp_str[indice_1+3:])
+                indice_1=temp_str.find(' Vs ')
+                #print('Petitioner Name :',temp_str[:indice_1])
+                case.petitioner=temp_str[:indice_1]
+                #print('Respondent Name :', temp_str[indice_1+4:])
+                case.respondent=temp_str[indice_1+4:]
 
 
             #judgement date and bench seperation
@@ -160,9 +164,14 @@ for row in rows:
                 temp.append(c.text)
                 temp_str=temp[0]
                 
-                print('Judgement Date  :',temp_str[:10])
-                print('Bench           :',temp_str[11:])
-
+                #print('Judgement Date  :',temp_str[:10])
+                date=datefinder.find_dates(temp_str[:10])
+                for i in date:
+                    date=i 
+                case.date=date
+                #print('Bench           :',temp_str[11:])
+                case.bench=temp_str[11:]
+                case.source='High Court of Bombay'
 
             #case no. and pdf seperation
             if td_counter==5:
@@ -172,18 +181,27 @@ for row in rows:
                 indice_1=temp_str.find('(')
                 indice_2=temp_str.find(')')
                 
-                print('Case Number     :', temp_str[:indice_1])
+                #print('Case Number     :', temp_str[:indice_1])
+                case.case_id=temp_str[:indice_1]
                 #print('Upload Date    :', temp_str[indice_2+2:])
 
                 a_tags = c.find_elements(By.TAG_NAME,"a")
                 for a_tag in a_tags:
-                    print('Pdf link        :',a_tag.get_attribute('href'))                        
+                    #print('Pdf link        :',a_tag.get_attribute('href'))                        
+                    pdf_link=a_tag.get_attribute('href')
+                    case.url=pdf_link
+                    judgement_txt=extract_txt(pdf_link, 'Bombay_High_Court_Extract.pdf')
+                    case.judgement_text=judgement_txt
 
         #spacing between cases        
-        print()
+        #print()
+
+        #processing all the extracted data
+        case.process_text()
+        case.print_case_attributes()
 
 #closing window/instance
-driver.quit()
+#driver.quit()
 
 
 

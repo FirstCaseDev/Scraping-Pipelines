@@ -52,10 +52,10 @@ while True:
             #slicing string according to the entry fields
             
             #Petioner-name and respondent-name
-            indice_2=all_data_str.find('v')
+            indice_2=all_data_str.find(' v ')
             indice_0=all_data_str.find('[')    
             print('Petitioner Name :', all_data_str[:indice_2])
-            print('Respondent Name :', all_data_str[indice_2+2:indice_0-1])
+            print('Respondent Name :', all_data_str[indice_2+3:indice_0-1])
 
             #excluding pet. and resp. names
             slice_1=all_data_str[all_data_str.find('\n')+1:]
@@ -82,14 +82,11 @@ while True:
 
             txt_counter+=1
             print()
-    '''        
-    else:
-        print('..............................................................PAGE_NO_',pg_counter,'COMPLETE........................................')
-    '''
+    
         
-        #clicking next pg button
-        driver.find_element_by_xpath('/html/body/form/div[4]/section[2]/div/div[2]/div[3]/div[4]/div[3]/a').click()
-        time.sleep(2)
+    #clicking next pg button
+    driver.find_element_by_xpath('/html/body/form/div[4]/section[2]/div/div[2]/div[3]/div[4]/div[3]/a').click()
+    time.sleep(2)
         
         
 
