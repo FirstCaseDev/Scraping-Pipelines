@@ -169,6 +169,7 @@ for row in rows:
                 for i in date:
                     date=i 
                 case.date=date
+                case.judgement_year = date.strftime("%Y")
                 #print('Bench           :',temp_str[11:])
                 case.bench=temp_str[11:]
                 case.source='High Court of Bombay'
@@ -199,6 +200,8 @@ for row in rows:
         #processing all the extracted data
         case.process_text()
         case.print_case_attributes()
+        store_case_document(case)
+
 
 #closing window/instance
 #driver.quit()

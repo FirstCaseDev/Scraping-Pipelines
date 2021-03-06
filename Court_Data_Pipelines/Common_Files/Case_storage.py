@@ -1,8 +1,8 @@
 import pymongo
-
+path = "mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority"
 
 def store_case_document(case):
-    client = pymongo.MongoClient("mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority")
+    client = pymongo.MongoClient(path)
     db = client["indian_court_data"]
     col = db["cases"]
     data_object = {
@@ -11,6 +11,7 @@ def store_case_document(case):
         "url": case.url,
         "source": case.source,
         "date": case.date,
+        "judgement_year": case.judgement_year,
         "doc_author": case.doc_author,
         "petitioner": case.petitioner,
         "respondent": case.respondent,

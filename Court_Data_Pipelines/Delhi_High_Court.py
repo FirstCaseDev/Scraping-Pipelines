@@ -75,6 +75,7 @@ def page_reader():################# for Reading Contents of page when date is en
                 judgement_text = extract_txt(case_url, "Delhi_High_Court_Extract.pdf")
         
         case.date = date
+        case.judgement_year = date.strftime("%Y")
         case.source = "Delhi High Court"
         case.url = case_url
         case.petitioner = case_petitioner
@@ -82,7 +83,7 @@ def page_reader():################# for Reading Contents of page when date is en
         case.title = case_title
         case.respondent = case_respondent
         case.process_text()
-        # case.print_case_attributes()
+        case.print_case_attributes()
         store_case_document(case) 
         
         
