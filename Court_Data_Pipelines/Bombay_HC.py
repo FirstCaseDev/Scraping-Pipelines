@@ -204,7 +204,7 @@ for row in rows:
 
 
 #closing window/instance
-#driver.quit()
+driver.quit()
 
 
 
