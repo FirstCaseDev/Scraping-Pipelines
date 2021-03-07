@@ -89,6 +89,7 @@ def process_IndKanoon_case_url(url):
         case.petitioner = title.split(' vs ')[0].translate(str.maketrans('', '', string.punctuation)).strip()
         case.respondent = title.split(' vs ')[1].split(' on ')[0]
         case.date = date
+        case.year = date.strftime("%Y")
         case.url = url
         case.doc_author = author
         case.bench = bench

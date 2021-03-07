@@ -138,7 +138,7 @@ for row in rows:
             for i in dates:
                 date = i
             case.date = date
-            case.judgement_year = date.strftime("%Y")
+            case.year = date.strftime("%Y")
             case.source = "Supreme Court of India"
             case.doc_author = case_list[18]
             case.petitioner = case_list[8]

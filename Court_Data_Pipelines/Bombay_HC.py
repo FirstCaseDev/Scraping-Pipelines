@@ -169,7 +169,7 @@ for row in rows:
                 for i in date:
                     date=i 
                 case.date=date
-                case.judgement_year = date.strftime("%Y")
+                case.year = date.strftime("%Y")
                 #print('Bench           :',temp_str[11:])
                 case.bench=temp_str[11:]
                 case.source='High Court of Bombay'

@@ -11,7 +11,7 @@ def store_case_document(case):
         "url": case.url,
         "source": case.source,
         "date": case.date,
-        "judgement_year": case.judgement_year,
+        "year": case.year,
         "doc_author": case.doc_author,
         "petitioner": case.petitioner,
         "respondent": case.respondent,
