@@ -166,20 +166,9 @@ for row in rows:
 driver.quit() #to close browser window
 
 
-# import os
-# os.system('pdf2txt.py -o pdf2html.html -t html xyz.pdf')
-# os.system('pdf2txt.py -o pdf2text.txt xyz.pdf')
-
-# with open('new-output.html', encoding="utf8") as file:
-#     data_html = file.read()
-#     print(data_html)
-
-# with open('pdf2text.txt', encoding="utf8") as file:
-#     data_txt = file.read()
-#     print(data_txt)
 
 
-print ("GG no Re")
+# print ("GG no Re")
 
         # self.title = ""                     #self defined   done
         # self.case_id = ""                    #self defined   done
