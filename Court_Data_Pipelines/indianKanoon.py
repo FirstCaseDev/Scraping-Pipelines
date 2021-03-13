@@ -103,7 +103,8 @@ def process_IndKanoon_case_url(url):
     except Exception as inst:
         print(inst)
         open("indian_kanoon_missed_urls.txt", 'a+').write("%s\n" %(url) )
-        print("Missed : %s\n" %(url) )   
+        print("Missed : %s\n" %(url) + (datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")) )
+   
     driver.close()
     driver.switch_to_window(original_case_handle) 
     return case
@@ -182,6 +183,7 @@ process_IndKanoon_months_url(year_url)
 # case.print_case_attributes()
 
 driver.quit()
+print("Completed")
 # store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
 
 # TODO: ADD TRY EXCEPT BLOCKS FOR TAGS EXTRACTION
