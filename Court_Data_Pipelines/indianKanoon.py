@@ -87,26 +87,49 @@ def process_IndKanoon_case_url(url):
         dates = datefinder.find_dates(title)
         for i in dates:
             date = i    
-        case.title = title.split(" on ")[0]
-        #print(case.title)
-        case.petitioner = title.split(' vs ')[0].translate(str.maketrans('', '', string.punctuation)).strip()
-        case.respondent = title.split(' vs ')[1].split(' on ')[0]
-        case.date = date
-        case.year = date.strftime("%Y")
-        case.month = date.strftime("%B")
-        case.day = date.strftime("%d")
-        case.url = url
-        case.doc_author = author
-        case.bench = bench
-        case.source = source
+        try:
+            case.title = title.split(" on ")[0]
+            #print(case.title)
+        except:
+            print("Title not assigned")
+        try:
+            case.petitioner = title.split(' vs ')[0].translate(str.maketrans('', '', string.punctuation)).strip()
+        except:
+            print("petitioner not assigned")
+        try:
+            case.respondent = title.split(' vs ')[1].split(' on ')[0]
+        except:
+            print("respondent not assigned")
+        try:
+            case.date = date
+            case.year = date.strftime("%Y")
+            case.month = date.strftime("%B")
+            case.day = date.strftime("%d")
+        except:
+            print("date not assigned")
+        try:
+            case.url = url
+        except:
+            print("url not assigned")
+        try:
+            case.doc_author = author
+        except:
+            print("author not assigned")
+        try:
+            case.bench = bench
+        except:
+            print("bench not assigned")
+        try:
+            case.source = source
+        except:
+            print("source not assigned")    
         case.process_text() 
-        store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
-        #case.print_case_attributes()
+        #store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
+        case.print_case_attributes()
     except Exception as inst:
         print(inst)
-        open("indian_kanoon_missed_urls.txt", 'a+').write("%s\n" %(url) + "  "+ datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n")
-        print("Missed : %s\n" %(url) + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
-   
+        open("indian_kanoon_missed_urls.txt", 'a+').write("from case url "+"%s" %(url) + "  "+ datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
+        print("Missed : %s" %(url) + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
     driver.close()
     driver.switch_to_window(original_case_handle) 
     return case
@@ -117,25 +140,30 @@ def process_IndKanoon_paginated_table_url(url):
     driver.execute_script(script)
     original_table_handle = driver.window_handles[-2]
     driver.switch_to_window(driver.window_handles[-1])
-    total_case_mentioned = int(driver.find_element_by_css_selector("b:nth-child(1)").text.split('of')[-1])
-    # print("Total Cases: " + str(total_case_mentioned))
-    case_count_in_table = 0
-    found_next_page = True
-    while(found_next_page):
-        case_tags = driver.find_elements_by_css_selector(".result_title a")
-        case_count_in_table = case_count_in_table + len(case_tags)
-        current_count = 1
-        for case_tag in case_tags:
-            case_url = case_tag.get_attribute("href")
-            # print("...#" + str(current_count) + " of total " + str(total_case_mentioned) + "cases...")
-            process_IndKanoon_case_url(case_url)
-            current_count = current_count + 1
-        try:
-            next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
-            driver.get(next_page_tag_url)
-        except NoSuchElementException:
-            print("...cases missed in paginated table :" + str(total_case_mentioned - case_count_in_table))
-            found_next_page = False
+    try:
+        #total_case_mentioned = int(driver.find_element_by_css_selector("b:nth-child(1)").text.split('of')[-1])
+        # print("Total Cases: " + str(total_case_mentioned))
+        #case_count_in_table = 0
+        found_next_page = True
+        while(found_next_page):
+            case_tags = driver.find_elements_by_css_selector(".result_title a")
+            #case_count_in_table = case_count_in_table + len(case_tags)
+            #current_count = 1
+            for case_tag in case_tags:
+                case_url = case_tag.get_attribute("href")
+                # print("...#" + str(current_count) + " of total " + str(total_case_mentioned) + "cases...")
+                process_IndKanoon_case_url(case_url)
+            #   current_count = current_count + 1
+            try:
+                next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
+                driver.get(next_page_tag_url)
+            except NoSuchElementException:
+                print("...cases missed in paginated table :" + str(total_case_mentioned - case_count_in_table))
+                found_next_page = False
+    except Exception as inst:
+        print(inst)
+        open("indian_kanoon_missed_urls.txt", 'a+').write("From paginated table url "+"%s" %(url) + "  "+ datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
+        print("Missed : %s" %(url) + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
     driver.close()
     driver.switch_to_window(original_table_handle)
 
@@ -145,11 +173,17 @@ def process_IndKanoon_months_url(url):
     driver.execute_script(script)
     original_months_handle = driver.window_handles[-2]
     driver.switch_to_window(driver.window_handles[-1])
-    month_tags = driver.find_elements_by_css_selector(".browselist a")
-    for month_tag in month_tags:
-        print(month_tag.text)
-        paginated_table_url = month_tag.get_attribute("href")
-        process_IndKanoon_paginated_table_url(paginated_table_url)
+    try:
+        month_tags = driver.find_elements_by_css_selector(".browselist a")
+        for month_tag in month_tags:
+            print(month_tag.text)
+            paginated_table_url = month_tag.get_attribute("href")
+            process_IndKanoon_paginated_table_url(paginated_table_url)
+    except Exception as inst:
+        print(inst)
+        open("indian_kanoon_missed_urls.txt", 'a+').write("From month url "+"%s" %(url) + "  "+ datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
+        print("Missed : %s" %(url) + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
+    
     driver.close()
     driver.switch_to_window(original_months_handle)
 
@@ -159,11 +193,16 @@ def process_IndKanoon_court_years_url(url):
     driver.execute_script(script)
     original_years_handle = driver.window_handles[-2]
     driver.switch_to_window(driver.window_handles[-1])
-    year_tags = driver.find_elements_by_css_selector(".browselist a")
-    for year_tag in year_tags:
-        print(year_tag.text)
-        month_url = year_tag.get_attribute("href")
-        process_IndKanoon_months_url(month_url)
+    try:
+        year_tags = driver.find_elements_by_css_selector(".browselist a")
+        for year_tag in year_tags:
+            print(year_tag.text)
+            month_url = year_tag.get_attribute("href")
+            process_IndKanoon_months_url(month_url)
+    except Exception as inst:
+        print(inst)
+        open("indian_kanoon_missed_urls.txt", 'a+').write("From years url "+"%s" %(url) + "  "+ datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
+        print("Missed : %s" %(url) + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
     driver.close()
     driver.switch_to_window(original_years_handle)
 
@@ -180,7 +219,7 @@ court_url = "https://indiankanoon.org/browse/supremecourt/"
 process_IndKanoon_court_years_url(court_url)
 
 # driver.get("https://www.google.com/") #any dummy url
-# case = process_IndKanoon_case_url("https://indiankanoon.org/doc/105912122/")
+#case = process_IndKanoon_case_url("https://indiankanoon.org/doc/39849105/")
 # case.print_case_attributes()
 # case = process_IndKanoon_case_url("https://indiankanoon.org/doc/871220/")
 # case.print_case_attributes()

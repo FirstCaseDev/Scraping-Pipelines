@@ -13,9 +13,11 @@ client = pymongo.MongoClient("mongodb+srv://PuneetShrivas:admin@betatesting.nsnx
 db = client["article_data"]
 col = db["articles"]
 options = Options()
+options.add_argument('--no-sandbox')
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
-PATH = "C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
+#PATH = r"C:\\Program Files (x86)\\chromedriver.exe"
+PATH = "/root/chromedriver" ## only uncomment when on server
 driver = webdriver.Chrome(PATH,chrome_options=options) #Headless
 # driver = webdriver.Chrome(PATH) #Windowed
 driver.get("https://indconlawphil.wordpress.com/")
