@@ -124,8 +124,8 @@ def process_IndKanoon_case_url(url):
         except:
             print("source not assigned")    
         case.process_text() 
-        #store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
-        case.print_case_attributes()
+        store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
+        #case.print_case_attributes()
     except Exception as inst:
         print(inst)
         open("indian_kanoon_missed_urls.txt", 'a+').write("from case url "+"%s" %(url) + "  "+ datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
