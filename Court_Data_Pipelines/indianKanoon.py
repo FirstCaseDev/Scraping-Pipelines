@@ -2,6 +2,7 @@ from selenium import webdriver
 import datefinder
 import re
 import string
+import datetime
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -16,12 +17,13 @@ case = CaseDoc()
 missed_cases_count = 0
 scraped_cases_count = 0
 options = Options()
+options.add_argument('--no-sandbox')
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
-# PATH = r"C:\\Program Files (x86)\\chromedriver.exe"
+#PATH = r"C:\\Program Files (x86)\\chromedriver.exe"
 PATH = "/root/chromedriver" ## only uncomment when on server
-# driver = webdriver.Chrome(PATH,chrome_options=options) #Uncomment only this line for Headless
-driver = webdriver.Chrome(PATH) #Uncomment only this line for Windowed
+driver = webdriver.Chrome(PATH,chrome_options=options) #Uncomment only this line for Headless
+#driver = webdriver.Chrome(PATH) #Uncomment only this line for Windowed
 original_years_handle = ''
 original_months_handle = ''
 original_table_handle = ''
@@ -84,9 +86,9 @@ def process_IndKanoon_case_url(url):
         case.judgement_text = ' >>>> '.join(judgement_text_paragraphs)
         dates = datefinder.find_dates(title)
         for i in dates:
-            date = i
-        case.title = title
-        print(case.title)
+            date = i    
+        case.title = title.split(" on ")[0]
+        #print(case.title)
         case.petitioner = title.split(' vs ')[0].translate(str.maketrans('', '', string.punctuation)).strip()
         case.respondent = title.split(' vs ')[1].split(' on ')[0]
         case.date = date
@@ -99,11 +101,11 @@ def process_IndKanoon_case_url(url):
         case.source = source
         case.process_text() 
         store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
-        case.print_case_attributes()
+        #case.print_case_attributes()
     except Exception as inst:
         print(inst)
-        open("indian_kanoon_missed_urls.txt", 'a+').write("%s\n" %(url) )
-        print("Missed : %s\n" %(url) + (datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")) )
+        open("indian_kanoon_missed_urls.txt", 'a+').write("%s\n" %(url) + "  "+ datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n")
+        print("Missed : %s\n" %(url) + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
    
     driver.close()
     driver.switch_to_window(original_case_handle) 
@@ -132,7 +134,7 @@ def process_IndKanoon_paginated_table_url(url):
             next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
             driver.get(next_page_tag_url)
         except NoSuchElementException:
-            print("...cases missed in scraping :" + str(total_case_mentioned - case_count_in_table))
+            print("...cases missed in paginated table :" + str(total_case_mentioned - case_count_in_table))
             found_next_page = False
     driver.close()
     driver.switch_to_window(original_table_handle)
@@ -165,14 +167,15 @@ def process_IndKanoon_court_years_url(url):
     driver.close()
     driver.switch_to_window(original_years_handle)
 
-# driver.get("https://indiankanoon.org/browse/")
-# court_tags = driver.find_elements_by_css_selector(".browselist") 
-# for court_tag in court_tags:
-#     print(court_tag.text)
-#     court_url = court_tag.find_element_by_tag_name("a").get_attribute("href")
-#     process_IndKanoon_court_years_url(court_url)
-year_url = "https://indiankanoon.org/browse/supremecourt/2021/"
-process_IndKanoon_months_url(year_url)
+driver.get("https://indiankanoon.org/browse/")
+court_tags = driver.find_elements_by_css_selector(".browselist") 
+for court_tag in court_tags:
+    print(court_tag.text)
+    court_url = court_tag.find_element_by_tag_name("a").get_attribute("href")
+    process_IndKanoon_court_years_url(court_url)
+
+#year_url = "https://indiankanoon.org/browse/supremecourt/2021/"
+#process_IndKanoon_months_url(year_url)
 
 # driver.get("https://www.google.com/") #any dummy url
 # case = process_IndKanoon_case_url("https://indiankanoon.org/doc/105912122/")
