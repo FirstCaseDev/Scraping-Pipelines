@@ -158,7 +158,7 @@ def process_IndKanoon_paginated_table_url(url):
                 next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
                 driver.get(next_page_tag_url)
             except NoSuchElementException:
-                print("...cases missed in paginated table :" + str(total_case_mentioned - case_count_in_table))
+                #print("...cases missed in paginated table :" + str(total_case_mentioned - case_count_in_table))
                 found_next_page = False
     except Exception as inst:
         print(inst)
