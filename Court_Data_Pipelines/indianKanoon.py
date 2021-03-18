@@ -167,15 +167,17 @@ def process_IndKanoon_court_years_url(url):
     driver.close()
     driver.switch_to_window(original_years_handle)
 
-driver.get("https://indiankanoon.org/browse/")
-court_tags = driver.find_elements_by_css_selector(".browselist") 
-for court_tag in court_tags:
-    print(court_tag.text)
-    court_url = court_tag.find_element_by_tag_name("a").get_attribute("href")
-    process_IndKanoon_court_years_url(court_url)
+# driver.get("https://indiankanoon.org/browse/")
+# court_tags = driver.find_elements_by_css_selector(".browselist") 
+# for court_tag in court_tags:
+#     print(court_tag.text)
+#     court_url = court_tag.find_element_by_tag_name("a").get_attribute("href")
+#     process_IndKanoon_court_years_url(court_url)
 
 #year_url = "https://indiankanoon.org/browse/supremecourt/2021/"
 #process_IndKanoon_months_url(year_url)
+court_url = "https://indiankanoon.org/browse/supremecourt/"
+process_IndKanoon_court_years_url(court_url)
 
 # driver.get("https://www.google.com/") #any dummy url
 # case = process_IndKanoon_case_url("https://indiankanoon.org/doc/105912122/")
