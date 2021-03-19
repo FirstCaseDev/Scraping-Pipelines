@@ -8,14 +8,17 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
 from selenium.webdriver.chrome.options import Options
-
-client = pymongo.MongoClient("mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority")
+#path = "mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority" #### OLD SERVER LINK
+path = "mongodb://db_user:firstCaseDevTeam@3.236.211.156:27017,34.229.44.83:27017,54.165.160.182:27017/?authSource=admin&replicaSet=aName&readPreference=primaryPreferred&ssl=false"
+client = pymongo.MongoClient(path)
 db = client["article_data"]
 col = db["articles"]
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
-PATH = "C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
+options.add_argument('--no-sandbox')
+#PATH = "C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
+PATH = "/root/chromedriver" ## when to run on server
 driver = webdriver.Chrome(PATH,chrome_options=options) #Headless
 # driver = webdriver.Chrome(PATH) #Windowed
 
