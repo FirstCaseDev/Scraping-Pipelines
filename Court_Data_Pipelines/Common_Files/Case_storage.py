@@ -1,6 +1,8 @@
 import pymongo
 #path = "mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority"
-path = "mongodb://db_user:firstCaseDevTeam@3.236.211.156:27017,34.229.44.83:27017,54.165.160.182:27017/?authSource=admin&replicaSet=aName&readPreference=primaryPreferred&ssl=false"
+#path = "mongodb://db_user:firstCaseDevTeam@3.236.211.156:27017,34.229.44.83:27017,54.165.160.182:27017/?authSource=admin&replicaSet=aName&readPreference=primaryPreferred&ssl=false"
+path = "mongodb://db_user:firstCaseDevTeam@54.225.30.33:27017,54.208.244.16:27017,54.198.49.231:27017/?authSource=admin&replicaSet=aName&readPreference=primaryPreferred&ssl=false"
+
 def store_case_document(case):
     client = pymongo.MongoClient(path)
     db = client["indian_court_data"]
