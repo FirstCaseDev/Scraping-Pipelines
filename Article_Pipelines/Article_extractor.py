@@ -50,7 +50,7 @@ def article_get_cases_list(article_text):
 def article_get_length(article_text):
     return(len(article_text)) 
 
-#****************************HELPER FUNCTIONS****************************
+                    #****************************HELPER FUNCTIONS****************************
 
 def remove_stop(text):
     text = text.lower()

@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "C:\\Users\\tejas\\AppData\\Local\\Programs\\Python\\Python38\\python.exe",
+    "python.pythonPath": "C:\\Users\\hp\\AppData\\Local\\Programs\\Python\\Python37\\python.exe",
     "python.analysis.extraPaths": ["C:\\Users\\tejas\\Documents\\GitHub\\Scraping-Pipelines\\Court_Data_Pipelines","C:\\Users\\tejas\\Documents\\GitHub\\Scraping-Pipelines\\Article_Pipelines"]
 }
