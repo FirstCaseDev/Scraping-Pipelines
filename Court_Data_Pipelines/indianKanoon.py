@@ -18,9 +18,10 @@ scraped_cases_count = 0
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
-PATH = "C:\Program Files (x86)\chromedriver.exe"
-driver = webdriver.Chrome(PATH,chrome_options=options) #Uncomment only this line for Headless
-# driver = webdriver.Chrome(PATH) #Uncomment only this line for Windowed
+# PATH = r"C:\\Program Files (x86)\\chromedriver.exe"
+PATH = "/root/chromedriver" ## only uncomment when on server
+# driver = webdriver.Chrome(PATH,chrome_options=options) #Uncomment only this line for Headless
+driver = webdriver.Chrome(PATH) #Uncomment only this line for Windowed
 original_years_handle = ''
 original_months_handle = ''
 original_table_handle = ''
@@ -90,17 +91,20 @@ def process_IndKanoon_case_url(url):
         case.respondent = title.split(' vs ')[1].split(' on ')[0]
         case.date = date
         case.year = date.strftime("%Y")
+        case.month = date.strftime("%B")
+        case.day = date.strftime("%d")
         case.url = url
         case.doc_author = author
         case.bench = bench
         case.source = source
         case.process_text() 
-        # store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
+        store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
         case.print_case_attributes()
     except Exception as inst:
         print(inst)
         open("indian_kanoon_missed_urls.txt", 'a+').write("%s\n" %(url) )
-        print("Missed : %s\n" %(url) )   
+        print("Missed : %s\n" %(url) + (datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")) )
+   
     driver.close()
     driver.switch_to_window(original_case_handle) 
     return case
@@ -179,6 +183,7 @@ process_IndKanoon_months_url(year_url)
 # case.print_case_attributes()
 
 driver.quit()
+print("Completed")
 # store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
 
 # TODO: ADD TRY EXCEPT BLOCKS FOR TAGS EXTRACTION

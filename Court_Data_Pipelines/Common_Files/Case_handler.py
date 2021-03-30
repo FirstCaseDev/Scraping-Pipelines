@@ -46,6 +46,8 @@ class CaseDoc:
         self.provisions_referred = []       #function done 
         self.query_terms = []               #self defined
         self.year = ""            #self defined
+        self.month = ""
+        self.day = ""
     def process_text(self): #processes text and retrieves a set of case variables
         print("********processing text********") 
         text = self.judgement_text.replace('>>>>','')
@@ -60,6 +62,8 @@ class CaseDoc:
     def print_case_attributes(self):
         print("date : "  + str(self.date))
         print("year : " + str(self.year))
+        print("month : " + str(self.month))
+        print("day : " + str(self.day))
         print("url : "  + str(self.url))
         print("author : "  + str(self.doc_author))
         print("bench : "  + str(self.bench))

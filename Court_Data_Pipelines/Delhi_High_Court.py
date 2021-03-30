@@ -76,6 +76,8 @@ def page_reader():################# for Reading Contents of page when date is en
         
         case.date = date
         case.year = date.strftime("%Y")
+        case.month = date.strftime("%B")
+        case.day = date.strftime("%d")
         case.source = "Delhi High Court"
         case.url = case_url
         case.petitioner = case_petitioner

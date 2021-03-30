@@ -9,7 +9,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-PATH = r"C:\\Users\\risha\\Downloads\\chromedriver.exe"
+PATH = r"C:\\Program Files (x86)\\chromedriver.exe"
 from selenium.webdriver.chrome.options import Options
 from Common_Files.Case_pdf_handling import extract_txt
 from Common_Files.Case_handler import CaseDoc
@@ -139,6 +139,8 @@ for row in rows:
                 date = i
             case.date = date
             case.year = date.strftime("%Y")
+            case.month = date.strftime("%B")
+            case.day = date.strftime("%d")
             case.source = "Supreme Court of India"
             case.doc_author = case_list[18]
             case.petitioner = case_list[8]
@@ -150,7 +152,7 @@ for row in rows:
             case.petitioner_counsel = case_list[12].split(",")
             case.respondent_counsel = case_list[14].split(",")
 
-            # store_case_document(case)
+            store_case_document(case)
 
             #case.print_case_attributes()
             #print(case.title)

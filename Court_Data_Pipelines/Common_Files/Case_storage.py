@@ -12,6 +12,8 @@ def store_case_document(case):
         "source": case.source,
         "date": case.date,
         "year": case.year,
+        "month": case.month,
+        "day" : case.day,
         "doc_author": case.doc_author,
         "petitioner": case.petitioner,
         "respondent": case.respondent,
