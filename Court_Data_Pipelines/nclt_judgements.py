@@ -3,9 +3,9 @@ import time
 import datetime
 import datefinder
 import pymongo
-#from Common_Files.Case_pdf_handling import extract_txt
-#from Common_Files.Case_storage import store_case_document, case_exists_by_case_id
-#from Common_Files.Case_handler import CaseDoc 
+from Common_Files.Case_pdf_handling import extract_txt
+from Common_Files.Case_storage import store_case_document, case_exists_by_case_id
+from Common_Files.Case_handler import CaseDoc 
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -13,12 +13,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
 
-'''
+
 #accessing Case_storage database
 client = pymongo.MongoClient("mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority")
 db = client["indian_court_data"]
 col = db["cases"]
-'''
+
 
 #for headless
 options = Options()
@@ -79,7 +79,7 @@ for benches in range(2,23):
 
 
     #scrapping page's data
-    #case=CaseDoc()
+    case=CaseDoc()
     #loacting target table for scrapping
     try:
         table=driver.find_element_by_xpath('//*[@id="block-system-main"]/div/div/div[1]/table')
@@ -140,14 +140,13 @@ for benches in range(2,23):
                         temp=[]
                         temp.append(td.text)
                         print('Date of Judgement       :', temp[0])
-                        
-                        '''
+                                                
                         date=datefinder.find_dates(temp[0])
                         for i in date:
                             date=i 
                         case.date=date
                         case.year = date.strftime("%Y")
-                        '''
+                        
                     
                     #pdf link
                     if td_counter==5:
