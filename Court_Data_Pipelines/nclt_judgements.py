@@ -97,7 +97,7 @@ for benches in range(2,23):
         for row in rows:
             row_counter+=1
 
-            if row_counter>1:
+            if row_counter>0:
 
                 td_counter=0
                 
