@@ -15,7 +15,7 @@ from selenium.webdriver.support.expected_conditions import presence_of_all_eleme
 
 
 #accessing Case_storage database
-client = pymongo.MongoClient("mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb://db_user:firstCaseDevTeam@107.20.44.181:27017,3.229.151.98:27017,54.175.129.116:27017/?authSource=admin&replicaSet=aName&readPreference=primaryPreferred&ssl=false")
 db = client["indian_court_data"]
 col = db["cases"]
 

@@ -15,7 +15,7 @@ from selenium.webdriver.support.expected_conditions import presence_of_all_eleme
 
 
 #accessing Case_storage database
-client = pymongo.MongoClient("mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority")
+client = pymongo.MongoClient('mongodb://db_user:firstCaseDevTeam@107.20.44.181:27017,3.229.151.98:27017,54.175.129.116:27017/?authSource=admin&replicaSet=aName&readPreference=primaryPreferred&ssl=false')
 db = client["indian_court_data"]
 col = db["cases"]
 
@@ -109,8 +109,12 @@ for benches in range(2,23):
                 for z in tds:
                     total_td+=1
                 '''
-                #bench name
+
+                #bench name and source
                 print('Bench                   :', bench_name)
+                case.bench = bench_name
+                case.source = 'National Company Law Tribunal'
+
 
                 for td in tds:
                     td_counter+=1
@@ -119,7 +123,9 @@ for benches in range(2,23):
                     if td_counter==2:
                         temp=[]
                         temp.append(td.text)
-                        print('Case id                 :', temp[0])
+                        #print('Case id                 :', temp[0])
+                        case.case_id = temp[0]
+
 
                     #petitioner & respondent
                     if td_counter==3:
@@ -130,16 +136,18 @@ for benches in range(2,23):
                         slice_2=temp_str.find('\n')
                         slice_3=temp_str.find('Respondent Advocate')
                         #print(temp)
-                        print('Petitioner              :', temp_str[0:slice_1])
-                        print('Respondent              :', temp_str[slice_1+4:slice_2])
+                        #print('Petitioner              :', temp_str[0:slice_1])
+                        #print('Respondent              :', temp_str[slice_1+4:slice_2])
                         #print('Respondent Advocate     :', temp_str[slice_2+1:slice_3-1])
+                        case.petitioner = temp_str[0:slice_1]
+                        case.respondent = temp_str[slice_1+4:slice_2]
 
 
                     #date of judgement
                     if td_counter==4:
                         temp=[]
                         temp.append(td.text)
-                        print('Date of Judgement       :', temp[0])
+                        #print('Date of Judgement       :', temp[0])
                                                 
                         date=datefinder.find_dates(temp[0])
                         for i in date:
@@ -152,11 +160,20 @@ for benches in range(2,23):
                     if td_counter==5:
                         a_tags = td.find_elements(By.TAG_NAME,"a")
                         for a_tag in a_tags:
-                            print('Pdf link                :', a_tag.get_attribute('href'))
-                
+                            #print('Pdf link                :', a_tag.get_attribute('href'))
+                            pdf_link=a_tag.get_attribute('href')
+                            case.url=pdf_link
+                            judgement_txt=extract_txt(pdf_link, 'Court_Extract.pdf')
+                            case.judgement_text=judgement_txt
+                            
                 #spacing b/w judgemnets
-                print()            
-        
+                #print()            
+
+                #processing all the extracted data
+                case.process_text()
+                case.print_case_attributes()
+                #store_case_document(case)
+                
         #back to bench selection page
         driver.back()
 

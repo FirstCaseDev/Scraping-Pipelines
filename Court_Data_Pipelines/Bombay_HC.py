@@ -197,7 +197,7 @@ for row in rows:
                     #print('Pdf link        :',a_tag.get_attribute('href'))                        
                     pdf_link=a_tag.get_attribute('href')
                     case.url=pdf_link
-                    judgement_txt=extract_txt(pdf_link, 'Bombay_High_Court_Extract.pdf')
+                    judgement_txt=extract_txt(pdf_link, 'Court_Extract.pdf')
                     case.judgement_text=judgement_txt
 
             #cross-checking-- if case already present then skip
