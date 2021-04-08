@@ -48,26 +48,15 @@ else:
 
 #print(n_pages)
 
-#1  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[1]/span
-#1  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[1]/a   (while on 2nd pg)
-#2  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[2]/a
-#3  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[3]/a
-#4  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[4]/a
-#.  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[11]/a
-#11 //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[2]/span
-#12 //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[3]/a
-#.  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[12]/a
-#22 //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[3]/a
 
-
-#page counter
-pg_counter=0
+#page counter is set to 1 as scraping starts from pg 1
+pg_counter=1
+pg_counter_1=3
 
 #loop for iterating pages
-for x in range(1,n_pages):
+for x in range(1,n_pages+1):
 
-    pg_counter+=1
-
+    
     #scrapping page's data
     #loacting target table for scrapping
     table=driver.find_element_by_xpath('//*[@id="ctl00_ContentPlaceHolder1_grdArticles"]')
@@ -76,6 +65,7 @@ for x in range(1,n_pages):
     rows=t_body.find_elements(By.TAG_NAME,'tr')
     row_counter=0
     
+    
     '''
     #accounting total no. of rows
     total_rows=0
@@ -83,7 +73,7 @@ for x in range(1,n_pages):
         total_rows+=1
     print(total_rows) #42
     '''
-
+    
     #for row_counter condition
     k=0
 
@@ -125,15 +115,19 @@ for x in range(1,n_pages):
             #print(asdc.text)
 
             temp_str=asdc.text
+            #author name
             a_slice=temp_str[temp_str.find('Author:')+8 : temp_str.find('|')]
             temp_str=temp_str[temp_str.find('|')+1 :]
 
+            #subject
             s_slice=temp_str[temp_str.find('Subject:')+9 : temp_str.find('|')]
             temp_str=temp_str[temp_str.find('|')+1 :]
 
+            #date
             d_slice=temp_str[temp_str.find('Date:')+6 : temp_str.find('|')]
             temp_str=temp_str[temp_str.find('|')+1 :]
 
+            #category
             c_slice=temp_str[temp_str.find('(')+1 : temp_str.find(')')]
             
             print('Author name              :', a_slice)
@@ -143,24 +137,51 @@ for x in range(1,n_pages):
 
             #spacing b/w articles
             print()
-
-
-
-
-
-
-
-    '''
-    #condition for pg_counter
-    if:
     
+
+
+    pg_counter+=1
+
+    #condition for pg_counter and pg_counter_1
+    #1  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[1]/span
+    #1  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[1]/a   (while on 2nd pg)
+    #2  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[2]/a
+    #3  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[3]/a
+    #4  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[4]/a
+    #.  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[11]/a
+    #11 //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[2]/span
+    #12 //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[3]/a
+    #.  //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[12]/a
+    #22 //*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[3]/a
+    
+    if x<11:
+        #x=10 --> pg_counter=11
+        next_pg=driver.find_element_by_xpath('//*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[{0}]/a'.format(pg_counter))
+        next_pg.click()
+        
+        time.sleep(1)
+
     else:
-    '''
+        #x-->11 pg_counter-->12 pg_counter_1=3
+
+        if pg_counter_1>=3 and pg_counter_1<=12:
+            next_pg=driver.find_element_by_xpath('//*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[{0}]/a'.format(pg_counter_1))
+            pg_counter_1+=1
+            next_pg.click()
+            
+            time.sleep(1)
+
+        else:
+            pg_counter_1=3
+            
+            next_pg=driver.find_element_by_xpath('//*[@id="ctl00_ContentPlaceHolder1_grdArticles"]/tbody/tr[42]/td/table/tbody/tr/td[{0}]/a'.format(pg_counter_1))
+            pg_counter_1+=1
+            next_pg.click()
+            
+            time.sleep(1)
 
 
-
-
-
+    
 #closing chrome istance/window
 driver.quit()
 
