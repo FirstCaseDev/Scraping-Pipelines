@@ -105,8 +105,8 @@ time.sleep(2)
 
 #scrapping page's data
 case=CaseDoc()
-#loacting target table for scrapping
 
+#loacting target table for scrapping
 table=driver.find_element_by_xpath('/html/body/form/table[2]')
 t_body=table.find_element_by_tag_name('tbody')
 
