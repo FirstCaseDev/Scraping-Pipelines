@@ -1,20 +1,12 @@
-from selenium import webdriver
-import datefinder
-import re
-import string
-import datetime
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
-from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from Common_Files.Case_handler import CaseDoc
+from Common_Files.Case_pdf_handling import extract_txt
+case = CaseDoc()
+case.judgement_text = extract_txt(r"https://main.sci.gov.in/supremecourt/2007/1677/1677_2007_36_1501_26135_Judgement_12-Feb-2021.pdf","xyz.pdf")
+print(case.judgement_text)
+# case.process_text()
 
-options = Options()
-# options.add_argument('--no-sandbox')
-# options.add_argument('--headless')
-options.add_argument('--disable-gpu')
-PATH = r"C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
-driver = webdriver.Chrome(PATH) #Uncomment only this line for Windowed
-driver.get("https://texts.com")
+# print("judgement : "  + str(case.judgement))
+# print("petitioner counsel : "  + str(case.petitioner_counsel))
+# print("respondent counsel : "  + str(case.respondent_counsel))
+# print("cases cited : " + str(case.cases_cited))
+# print("provisions referred : " + str(case.provisions_referred))

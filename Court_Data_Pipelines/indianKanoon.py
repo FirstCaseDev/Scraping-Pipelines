@@ -20,10 +20,10 @@ options = Options()
 options.add_argument('--no-sandbox')
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
-PATH = r"C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
-# PATH = "/root/chromedriver" ## only uncomment when on server
+#PATH = r"C:\\Program Files (x86)\\chromedriver.exe"
+PATH = "/root/chromedriver" ## only uncomment when on server
 driver = webdriver.Chrome(PATH,chrome_options=options) #Uncomment only this line for Headless
-# driver = webdriver.Chrome(PATH) #Uncomment only this line for Windowed
+#driver = webdriver.Chrome(PATH) #Uncomment only this line for Windowed
 original_years_handle = ''
 original_months_handle = ''
 original_table_handle = ''
@@ -122,11 +122,9 @@ def process_IndKanoon_case_url(url):
         try:
             case.source = source
         except:
-            print("source not assigned")
-        print(case.title)
-        # case.process_text() 
-        # case.print_case_attributes()
-        # store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
+            print("source not assigned")    
+        case.process_text() 
+        store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
         #case.print_case_attributes()
     except Exception as inst:
         print(inst)
@@ -215,14 +213,14 @@ def process_IndKanoon_court_years_url(url):
 #     court_url = court_tag.find_element_by_tag_name("a").get_attribute("href")
 #     process_IndKanoon_court_years_url(court_url)
 
-month_url = "https://indiankanoon.org/search/?formInput=doctypes:supremecourt%20fromdate:1-11-2013%20todate:%2030-11-2013   "
-process_IndKanoon_paginated_table_url(month_url)
+#year_url = "https://indiankanoon.org/browse/supremecourt/2021/"
 #process_IndKanoon_months_url(year_url)
-# court_url = "https://indiankanoon.org/browse/supremecourt/"
-# process_IndKanoon_court_years_url(court_url)
+court_url = "https://indiankanoon.org/browse/supremecourt/"
+process_IndKanoon_court_years_url(court_url)
 
 # driver.get("https://www.google.com/") #any dummy url
-# case = process_IndKanoon_case_url("https://indiankanoon.org/doc/434621/")
+#case = process_IndKanoon_case_url("https://indiankanoon.org/doc/39849105/")
+# case.print_case_attributes()
 # case = process_IndKanoon_case_url("https://indiankanoon.org/doc/871220/")
 # case.print_case_attributes()
 # case = process_IndKanoon_case_url("https://indiankanoon.org/doc/1902038/")
