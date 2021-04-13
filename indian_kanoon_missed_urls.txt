@@ -1,0 +1,15 @@
+from case url https://indiankanoon.org/docfragment/52754564/?formInput=doctypes%3A%20supremecourt%20fromdate%3A%201-1-1947%20todate%3A%2031-1-1947  03/20/2021, 20:14:14'NoneType' object has no attribute 'replace'
+From paginated table url https://indiankanoon.org/search/?formInput=doctypes:supremecourt%20fromdate:1-1-1947%20todate:%2031-1-1947  03/20/2021, 20:14:14Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=89.0.4389.82)
+
+from case url https://indiankanoon.org/doc/434621/  04/13/2021, 09:43:33A password is required.
+from case url https://indiankanoon.org/doc/434621/  04/13/2021, 09:49:35A password is required.
+from case url https://indiankanoon.org/doc/434621/  04/13/2021, 09:52:14A password is required.
+from case url https://indiankanoon.org/doc/434621/  04/13/2021, 09:52:58A password is required.
+from case url https://indiankanoon.org/doc/434621/  04/13/2021, 10:18:43E11000 duplicate key error collection: indian_court_data.users index: username_1 dup key: { username: null }, full error: {'index': 0, 'code': 11000, 'keyPattern': {'username': 1}, 'keyValue': {'username': None}, 'errmsg': 'E11000 duplicate key error collection: indian_court_data.users index: username_1 dup key: { username: null }'}
+from case url https://indiankanoon.org/doc/434621/  04/13/2021, 10:27:25'method' object is not subscriptable
+from case url https://indiankanoon.org/doc/434621/  04/13/2021, 10:28:09'method' object is not subscriptable
+from case url https://indiankanoon.org/doc/434621/  04/13/2021, 10:29:18'title'
+from case url https://indiankanoon.org/doc/434621/  04/13/2021, 10:29:46E11000 duplicate key error collection: indian_court_data.users index: username_1 dup key: { username: null }, full error: {'index': 0, 'code': 11000, 'keyPattern': {'username': 1}, 'keyValue': {'username': None}, 'errmsg': 'E11000 duplicate key error collection: indian_court_data.users index: username_1 dup key: { username: null }'}
+from case url https://indiankanoon.org/doc/434621/  04/13/2021, 10:37:51E11000 duplicate key error collection: indian_court_data.users index: username_1 dup key: { username: null }, full error: {'index': 0, 'code': 11000, 'keyPattern': {'username': 1}, 'keyValue': {'username': None}, 'errmsg': 'E11000 duplicate key error collection: indian_court_data.users index: username_1 dup key: { username: null }'}

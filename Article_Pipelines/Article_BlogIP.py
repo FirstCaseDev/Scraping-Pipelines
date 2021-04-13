@@ -14,12 +14,12 @@ client = pymongo.MongoClient(path)
 db = client["article_data"]
 col = db["articles"]
 options = Options()
-options.add_argument('--headless')
+# options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 options.add_argument("--window-size=1280,720")
-options.add_argument("--no-sandbox")
-#PATH = "C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
-PATH = "/root/chromedriver" ## only uncomment when on server
+# options.add_argument("--no-sandbox")
+PATH = "C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
+# PATH = "/root/chromedriver" ## only uncomment when on server
 
 driver = webdriver.Chrome(PATH,chrome_options=options) #Headless
 #driver = webdriver.Chrome(PATH) #Windowed

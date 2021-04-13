@@ -14,11 +14,11 @@ client = pymongo.MongoClient(path)
 db = client["article_data"]
 col = db["articles"]
 options = Options()
-options.add_argument('--headless')
+# options.add_argument('--headless')
 options.add_argument('--disable-gpu')
-options.add_argument('--no-sandbox')
-PATH = "/root/chromedriver"
-#PATH = "C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
+# options.add_argument('--no-sandbox')
+# PATH = "/root/chromedriver"
+PATH = "C:\\Users\\punee\\Downloads\\chromedriver_win32\\chromedriver.exe"
 driver = webdriver.Chrome(PATH,chrome_options=options) #Headless
 # driver = webdriver.Chrome(PATH) #Windowed
 driver.get("https://www.mondaq.com/1/India")
