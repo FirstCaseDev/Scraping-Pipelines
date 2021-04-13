@@ -14,7 +14,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
 
 #accessing Case_storage database
-client = pymongo.MongoClient("mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb://db_user:firstCaseDevTeam@107.20.44.181:27017,3.229.151.98:27017,54.175.129.116:27017/?authSource=admin&replicaSet=aName&readPreference=primaryPreferred&ssl=false")
 db = client["indian_court_data"]
 col = db["cases"]
 
@@ -33,7 +33,7 @@ driver= webdriver.Chrome(PATH)
 #opening an instance @bombay HC
 driver.get('https://bombayhighcourt.nic.in/')
 
-
+#time.sleep(5)
 #accessing services -> orders & judgement -> rept. judgement/orders
 #services
 driver.find_element_by_xpath('//*[@id="smoothmenu1"]/ul[4]/li/a').click()
@@ -172,6 +172,7 @@ for row in rows:
                 
                 #print('Judgement Date  :',temp_str[:10])
                 date=datefinder.find_dates(temp_str[:10])
+                #print(date)
                 for i in date:
                     date=i 
                 case.date=date
@@ -212,7 +213,7 @@ for row in rows:
         #processing all the extracted data
         case.process_text()
         case.print_case_attributes()
-        store_case_document(case)
+        #store_case_document(case)
 
 
 #closing window/instance
