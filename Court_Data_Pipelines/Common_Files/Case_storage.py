@@ -1,5 +1,5 @@
 import pymongo
-path = "mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority"
+path = "mongodb://db_user:firstCaseDevTeam@107.20.44.181:27017,3.229.151.98:27017,54.175.129.116:27017/?authSource=admin&replicaSet=aName&readPreference=primaryPreferred&ssl=false"
 
 def store_case_document(case):
     client = pymongo.MongoClient(path)
@@ -31,7 +31,7 @@ def store_case_document(case):
     print(str(col.insert_one(data_object)))
 
 def case_exists_by_url(url):
-    client = pymongo.MongoClient("mongodb+srv://PuneetShrivas:admin@betatesting.nsnxl.mongodb.net/<dbname>?retryWrites=true&w=majority")
+    client = pymongo.MongoClient(path)
     db = client["indian_court_data"]
     col = db["cases"]
     if(col.find({"url": url}).count()>0):

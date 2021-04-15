@@ -10,8 +10,8 @@ from selenium.webdriver.support.expected_conditions import presence_of_all_eleme
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from Common_Files.Case_handler import CaseDoc
-from Common_Files.Case_storage import store_case_document, case_exists_by_url
-from datetime import date,datetime,timedelta
+from Common_Files.Case_storage import store_case_document
+import datetime
 case = CaseDoc()
 
 missed_cases_count = 0
@@ -88,39 +88,18 @@ def process_IndKanoon_case_url(url):
             date = i
         case.title = title
         print(case.title)
-        try:
-            case.petitioner = title.split(' vs ')[0].translate(str.maketrans('', '', string.punctuation)).strip()
-        except:
-            print("NO Petitioner")
-        try:
-            case.respondent = title.split(' vs ')[1].split(' on ')[0]
-        except:
-            print("No Respondent")
-        try:
-            case.date = date
-            case.year = date.strftime("%Y")
-            case.month = date.strftime("%B")
-            case.day = date.strftime("%d")
-        except:
-            print("Date error")
-        try:
-            case.url = url
-        except:
-            print("NO url")
-        try:
-            case.doc_author = author
-        except:
-            print("NO Author")
-        try:
-            case.bench = bench
-        except:
-            print("No Bench")
-        try:
-            case.source = source
-        except:
-            print("No Source")
+        case.petitioner = title.split(' vs ')[0].translate(str.maketrans('', '', string.punctuation)).strip()
+        case.respondent = title.split(' vs ')[1].split(' on ')[0]
+        case.date = date
+        case.year = date.strftime("%Y")
+        case.month = date.strftime("%B")
+        case.day = date.strftime("%d")
+        case.url = url
+        case.doc_author = author
+        case.bench = bench
+        case.source = source
         case.process_text() 
-        #store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
+        store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
         case.print_case_attributes()
     except Exception as inst:
         print(inst)
@@ -139,80 +118,30 @@ def process_IndKanoon_paginated_table_url(url):
     driver.switch_to_window(driver.window_handles[-1])
     try:
         total_case_mentioned = int(driver.find_element_by_css_selector("b:nth-child(1)").text.split('of')[-1])
-        print("Total Cases: " + str(total_case_mentioned))
-        if total_case_mentioned <= 400:
-            print("total")
-            case_count_in_table = 0
-            found_next_page = True
-            current_count = 1
-            while(found_next_page):
-                case_tags = driver.find_elements_by_css_selector(".result_title a")
-                case_count_in_table = case_count_in_table + len(case_tags)
-                
-                for case_tag in case_tags:
-                    case_url = case_tag.get_attribute("href")
-                    print("...#" + str(current_count) + " of total " + str(total_case_mentioned) + "cases...")
-                    process_IndKanoon_case_url(case_url)
-                    current_count = current_count + 1
-                try:
-                    next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
-                    driver.get(next_page_tag_url)
-                except NoSuchElementException:
-                    print("...cases missed in scraping :" + str(total_case_mentioned - case_count_in_table))
-                    found_next_page = False
-        else:
-            
-            url = driver.current_url
-            source = url.split("doctypes:")[1].split("%20fromdate:")[0]
-            f_date = url.split("fromdate:")[1].split("%20todate")[0]
-            t_date = url[::-1].split("02%")[0][::-1]
-            
-            link = driver.get(url)
-            for i in range(30):
-
-                date = datetime.strptime(f_date,'%d-%m-%Y')
-                startdate = date
-                nextdate = startdate + timedelta(days=1)
-                t_date = nextdate.strftime("%d-%m-%Y")
-                
-                
-
-                searchbox = driver.find_element_by_xpath('//*[@id="search-box"]')
-                searchbox.clear()
-                searchbox.send_keys(f"doctypes: {source} fromdate: {f_date} todate: {t_date} sortby: leastrecent")
-                submit = driver.find_element_by_xpath('//*[@id="submit-button"]')
-                submit.click()
-                try:
-                    total_case_mentioned = int(driver.find_element_by_css_selector("b:nth-child(1)").text.split('of')[-1])
-                    # print("Total Cases: " + str(total_case_mentioned))
-                    case_count_in_table = 0
-                    found_next_page = True
-                    current_count = 1
-                    while(found_next_page):
-                        case_tags = driver.find_elements_by_css_selector(".result_title a")
-                        case_count_in_table = case_count_in_table + len(case_tags)
-                        
-                        for case_tag in case_tags:
-                            case_url = case_tag.get_attribute("href")
-                            print("...#" + str(current_count) + " of total " + str(total_case_mentioned) + f"cases...mentioned on {f_date} - {t_date}")
-                            #if case_exists_by_url(case_url) == 1:
-                            #    print("case exist")
-                            #else:
-                            process_IndKanoon_case_url(case_url)
-                            current_count = current_count + 1
-                        try:
-                            next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
-                            driver.get(next_page_tag_url)
-                        except NoSuchElementException:
-                            print("...cases missed in scraping :" + str(total_case_mentioned - case_count_in_table))
-                            found_next_page = False    
-                except ValueError:
-                    print("No Case This Month.")
-                nextdate = startdate + timedelta(days=2)
-                t_date = nextdate.strftime("%d-%m-%Y")
-                f_date = t_date        
+        if total_case_mentioned > 400:
+            current_url = driver.current_url
+            print("Total Cases: " + str(total_case_mentioned) + " whose Url is : " + str(current_url))
+            open("indian_kanoon_missed_400above_urls.txt", 'a+').write("%s\n" %(current_url) )
     except:
-        print("nothing")
+        print("less than 400 or not having any case")
+    # case_count_in_table = 0
+    # found_next_page = True
+    # while(found_next_page):
+    #     case_tags = driver
+    # .find_elements_by_css_selector(".result_title a")
+    #     case_count_in_table = case_count_in_table + len(case_tags)
+    #     current_count = 1
+    #     for case_tag in case_tags:
+    #         case_url = case_tag.get_attribute("href")
+    #         # print("...#" + str(current_count) + " of total " + str(total_case_mentioned) + "cases...")
+    #         process_IndKanoon_case_url(case_url)
+    #         current_count = current_count + 1
+    #     try:
+    #         next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
+    #         driver.get(next_page_tag_url)
+    #     except NoSuchElementException:
+    #         print("...cases missed in scraping :" + str(total_case_mentioned - case_count_in_table))
+    #         found_next_page = False
     driver.close()
     driver.switch_to_window(original_table_handle)
 
@@ -250,8 +179,8 @@ def process_IndKanoon_court_years_url(url):
 #     print(court_tag.text)
 #     court_url = court_tag.find_element_by_tag_name("a").get_attribute("href")
 #     process_IndKanoon_court_years_url(court_url)
-court_url = "https://indiankanoon.org/browse/amravati/"
-process_IndKanoon_court_years_url(court_url)
+url = "https://indiankanoon.org/browse/kolkata/"
+process_IndKanoon_court_years_url(url)
 
 # driver.get("https://www.google.com/") #any dummy url
 # case = process_IndKanoon_case_url("https://indiankanoon.org/doc/105912122/")
