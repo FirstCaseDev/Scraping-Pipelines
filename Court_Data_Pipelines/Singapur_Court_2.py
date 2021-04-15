@@ -80,14 +80,15 @@ while True:
             #print('Decision Date   :', slice_2[indice_6+2:indice_6+13])
             case.date = slice_2[indice_6+2:indice_6+13]
             #print('Case number     :',slice_2[indice_6+14:])
-            case.case_number = slice_2[indice_6+14:]
+            case.case_id = slice_2[indice_6+14:]
             #pdf link
-            #print('Pdf link        :',pdf_link)
-            #judgement_text = extract_txt(pdf_link, "SingaporeSupreme.pdf")
-            #case.judgement_text = judgement_text
+            print('Pdf link        :',pdf_link)
+            judgement_text = extract_txt(pdf_link, "SingaporeSupreme.pdf")
+            case.judgement_text = judgement_text
             case.source = "Supreme Court Singapore"
+            case.process_text()
             case.print_case_attributes()
-            #store_case_document(case)
+            store_case_document(case)
             txt_counter+=1
             print()
     
