@@ -8,11 +8,16 @@ from selenium.webdriver.support.expected_conditions import presence_of_all_eleme
 from Common_Files.Case_pdf_handling import extract_txt
 from Common_Files.Case_handler import CaseDoc
 from Common_Files.Case_storage import store_case_document
+from selenium.webdriver.chrome.options import Options
 
 #setting up the driver
+options = Options()
+options.add_argument('--headless')
+options.add_argument('--disable-gpu')
 
 PATH='C://Program Files (x86)//chromedriver.exe'
 driver= webdriver.Chrome(PATH)
+#driver = webdriver.Chrome(PATH,chrome_options=options) #Uncomment only this line for Headless
 
 #opening an instance @Singapore Court
 driver.get('https://www.supremecourt.gov.sg/news/supreme-court-judgments')
@@ -84,6 +89,7 @@ while True:
             #pdf link
             print('Pdf link        :',pdf_link)
             judgement_text = extract_txt(pdf_link, "SingaporeSupreme.pdf")
+            print(len(judgement_text))
             case.judgement_text = judgement_text
             case.source = "Supreme Court Singapore"
             case.process_text()
