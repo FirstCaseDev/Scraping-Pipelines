@@ -87,6 +87,7 @@ while True:
             #case.judgement_text = judgement_text
             case.source = "Supreme Court Singapore"
             case.print_case_attributes()
+            #store_case_document(case)
             txt_counter+=1
             print()
     

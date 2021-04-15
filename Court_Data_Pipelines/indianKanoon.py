@@ -27,6 +27,7 @@ original_years_handle = ''
 original_months_handle = ''
 original_table_handle = ''
 original_case_handle = ''
+missed_cases_list = []
 #TODO Only discard first pre tag
 def process_IndKanoon_case_url(url):
     case = CaseDoc()
@@ -205,7 +206,10 @@ def process_IndKanoon_paginated_table_url(url):
                             driver.get(next_page_tag_url)
                         except NoSuchElementException:
                             print("...cases missed in scraping :" + str(total_case_mentioned - case_count_in_table))
-                            found_next_page = False    
+                            if (total_case_mentioned - case_count_in_table)>0:
+                                missed_cases_list.append(f"{total_case_mentioned-case_count_in_table} cases missed in between {f_date} - {t_date}")
+                            found_next_page = False
+
                 except ValueError:
                     print("No Case This Month.")
                 nextdate = startdate + timedelta(days=2)

@@ -124,24 +124,7 @@ def process_IndKanoon_paginated_table_url(url):
             open("indian_kanoon_missed_400above_urls.txt", 'a+').write("%s\n" %(current_url) )
     except:
         print("less than 400 or not having any case")
-    # case_count_in_table = 0
-    # found_next_page = True
-    # while(found_next_page):
-    #     case_tags = driver
-    # .find_elements_by_css_selector(".result_title a")
-    #     case_count_in_table = case_count_in_table + len(case_tags)
-    #     current_count = 1
-    #     for case_tag in case_tags:
-    #         case_url = case_tag.get_attribute("href")
-    #         # print("...#" + str(current_count) + " of total " + str(total_case_mentioned) + "cases...")
-    #         process_IndKanoon_case_url(case_url)
-    #         current_count = current_count + 1
-    #     try:
-    #         next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
-    #         driver.get(next_page_tag_url)
-    #     except NoSuchElementException:
-    #         print("...cases missed in scraping :" + str(total_case_mentioned - case_count_in_table))
-    #         found_next_page = False
+    
     driver.close()
     driver.switch_to_window(original_table_handle)
 
