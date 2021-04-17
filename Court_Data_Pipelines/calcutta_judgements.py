@@ -40,7 +40,7 @@ time.sleep(1)
 
 #setting start/end date- (past 1 week)
 current_day=datetime.date.today()
-week_control=current_day-datetime.timedelta(days=56)
+week_control=current_day-datetime.timedelta(days=7)
 
 from_date=week_control.strftime('%d-%b-%Y')
 #format 15-Apr-2021
