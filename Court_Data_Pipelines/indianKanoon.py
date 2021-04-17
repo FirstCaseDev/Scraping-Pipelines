@@ -2,7 +2,6 @@ from selenium import webdriver
 import datefinder
 import re
 import string
-import datetime
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -11,7 +10,8 @@ from selenium.webdriver.support.expected_conditions import presence_of_all_eleme
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from Common_Files.Case_handler import CaseDoc
-from Common_Files.Case_storage import store_case_document
+from Common_Files.Case_storage import store_case_document, case_exists_by_url
+from datetime import date, timedelta , datetime
 case = CaseDoc()
 
 missed_cases_count = 0
@@ -20,8 +20,8 @@ options = Options()
 options.add_argument('--no-sandbox')
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
-#PATH = r"C:\\Program Files (x86)\\chromedriver.exe"
-PATH = "/root/chromedriver" ## only uncomment when on server
+PATH = r"C:\\Program Files (x86)\\chromedriver.exe"
+#PATH = "/root/chromedriver" ## only uncomment when on server
 driver = webdriver.Chrome(PATH,chrome_options=options) #Uncomment only this line for Headless
 #driver = webdriver.Chrome(PATH) #Uncomment only this line for Windowed
 original_years_handle = ''
@@ -141,31 +141,6 @@ def process_IndKanoon_paginated_table_url(url):
     original_table_handle = driver.window_handles[-2]
     driver.switch_to_window(driver.window_handles[-1])
     try:
-<<<<<<< Updated upstream
-        #total_case_mentioned = int(driver.find_element_by_css_selector("b:nth-child(1)").text.split('of')[-1])
-        # print("Total Cases: " + str(total_case_mentioned))
-        #case_count_in_table = 0
-        found_next_page = True
-        while(found_next_page):
-            case_tags = driver.find_elements_by_css_selector(".result_title a")
-            #case_count_in_table = case_count_in_table + len(case_tags)
-            #current_count = 1
-            for case_tag in case_tags:
-                case_url = case_tag.get_attribute("href")
-                # print("...#" + str(current_count) + " of total " + str(total_case_mentioned) + "cases...")
-                process_IndKanoon_case_url(case_url)
-            #   current_count = current_count + 1
-            try:
-                next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
-                driver.get(next_page_tag_url)
-            except NoSuchElementException:
-                #print("...cases missed in paginated table :" + str(total_case_mentioned - case_count_in_table))
-                found_next_page = False
-    except Exception as inst:
-        print(inst)
-        open("indian_kanoon_missed_urls.txt", 'a+').write("From paginated table url "+"%s" %(url) + "  "+ datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
-        print("Missed : %s" %(url) + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
-=======
         total_case_mentioned = int(driver.find_element_by_css_selector("b:nth-child(1)").text.split('of')[-1])
         print("Total Cases: " + str(total_case_mentioned))
         if total_case_mentioned <= 400:
@@ -203,7 +178,7 @@ def process_IndKanoon_paginated_table_url(url):
                 nextdate = startdate + timedelta(days=1)
                 t_date = nextdate.strftime("%d-%m-%Y")
                 
-                
+                  
 
                 searchbox = driver.find_element_by_xpath('//*[@id="search-box"]')
                 searchbox.clear()
@@ -233,8 +208,6 @@ def process_IndKanoon_paginated_table_url(url):
                             driver.get(next_page_tag_url)
                         except NoSuchElementException:
                             print("...cases missed in scraping :" + str(total_case_mentioned - case_count_in_table))
-                            if (total_case_mentioned - case_count_in_table)>0:
-                                missed_cases_list.append(f"{total_case_mentioned-case_count_in_table} cases missed in between {f_date} - {t_date}")
                             found_next_page = False
 
                 except ValueError:
@@ -244,7 +217,6 @@ def process_IndKanoon_paginated_table_url(url):
                 f_date = t_date        
     except:
         print("nothing")
->>>>>>> Stashed changes
     driver.close()
     driver.switch_to_window(original_table_handle)
 
@@ -296,7 +268,7 @@ def process_IndKanoon_court_years_url(url):
 
 #year_url = "https://indiankanoon.org/browse/supremecourt/2021/"
 #process_IndKanoon_months_url(year_url)
-court_url = "https://indiankanoon.org/browse/supremecourt/"
+court_url = "https://indiankanoon.org/browse/amravati/"
 process_IndKanoon_court_years_url(court_url)
 
 # driver.get("https://www.google.com/") #any dummy url
