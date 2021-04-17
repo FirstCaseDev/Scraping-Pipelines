@@ -141,6 +141,7 @@ def process_IndKanoon_paginated_table_url(url):
     original_table_handle = driver.window_handles[-2]
     driver.switch_to_window(driver.window_handles[-1])
     try:
+<<<<<<< Updated upstream
         #total_case_mentioned = int(driver.find_element_by_css_selector("b:nth-child(1)").text.split('of')[-1])
         # print("Total Cases: " + str(total_case_mentioned))
         #case_count_in_table = 0
@@ -164,6 +165,86 @@ def process_IndKanoon_paginated_table_url(url):
         print(inst)
         open("indian_kanoon_missed_urls.txt", 'a+').write("From paginated table url "+"%s" %(url) + "  "+ datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
         print("Missed : %s" %(url) + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
+=======
+        total_case_mentioned = int(driver.find_element_by_css_selector("b:nth-child(1)").text.split('of')[-1])
+        print("Total Cases: " + str(total_case_mentioned))
+        if total_case_mentioned <= 400:
+            print("total")
+            case_count_in_table = 0
+            found_next_page = True
+            current_count = 1
+            while(found_next_page):
+                case_tags = driver.find_elements_by_css_selector(".result_title a")
+                case_count_in_table = case_count_in_table + len(case_tags)
+                
+                for case_tag in case_tags:
+                    case_url = case_tag.get_attribute("href")
+                    print("...#" + str(current_count) + " of total " + str(total_case_mentioned) + "cases...")
+                    process_IndKanoon_case_url(case_url)
+                    current_count = current_count + 1
+                try:
+                    next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
+                    driver.get(next_page_tag_url)
+                except NoSuchElementException:
+                    print("...cases missed in scraping :" + str(total_case_mentioned - case_count_in_table))
+                    found_next_page = False
+        else:
+            
+            url = driver.current_url
+            source = url.split("doctypes:")[1].split("%20fromdate:")[0]
+            f_date = url.split("fromdate:")[1].split("%20todate")[0]
+            t_date = url[::-1].split("02%")[0][::-1]
+            
+            link = driver.get(url)
+            for i in range(16):
+
+                date = datetime.strptime(f_date,'%d-%m-%Y')
+                startdate = date
+                nextdate = startdate + timedelta(days=1)
+                t_date = nextdate.strftime("%d-%m-%Y")
+                
+                
+
+                searchbox = driver.find_element_by_xpath('//*[@id="search-box"]')
+                searchbox.clear()
+                searchbox.send_keys(f"doctypes: {source} fromdate: {f_date} todate: {t_date} sortby: leastrecent")
+                submit = driver.find_element_by_xpath('//*[@id="submit-button"]')
+                submit.click()
+                try:
+                    total_case_mentioned = int(driver.find_element_by_css_selector("b:nth-child(1)").text.split('of')[-1])
+                    # print("Total Cases: " + str(total_case_mentioned))
+                    case_count_in_table = 0
+                    found_next_page = True
+                    current_count = 1
+                    while(found_next_page):
+                        case_tags = driver.find_elements_by_css_selector(".result_title a")
+                        case_count_in_table = case_count_in_table + len(case_tags)
+                        
+                        for case_tag in case_tags:
+                            case_url = case_tag.get_attribute("href")
+                            print("...#" + str(current_count) + " of total " + str(total_case_mentioned) + f"cases...mentioned on {f_date} - {t_date}")
+                            #if case_exists_by_url(case_url) == 1:
+                            #    print("case exist")
+                            #else:
+                            process_IndKanoon_case_url(case_url)
+                            current_count = current_count + 1
+                        try:
+                            next_page_tag_url = driver.find_element_by_css_selector(".pagenum+ a").get_attribute("href")
+                            driver.get(next_page_tag_url)
+                        except NoSuchElementException:
+                            print("...cases missed in scraping :" + str(total_case_mentioned - case_count_in_table))
+                            if (total_case_mentioned - case_count_in_table)>0:
+                                missed_cases_list.append(f"{total_case_mentioned-case_count_in_table} cases missed in between {f_date} - {t_date}")
+                            found_next_page = False
+
+                except ValueError:
+                    print("No Case This Month.")
+                nextdate = startdate + timedelta(days=2)
+                t_date = nextdate.strftime("%d-%m-%Y")
+                f_date = t_date        
+    except:
+        print("nothing")
+>>>>>>> Stashed changes
     driver.close()
     driver.switch_to_window(original_table_handle)
 

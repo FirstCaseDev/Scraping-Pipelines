@@ -39,7 +39,8 @@ while True:
             txt=li.find_element_by_xpath(str('//*[@id="ContentPlaceHolderContent_C008_DivCode"]/ul[1]/li['+str(txt_counter)+']/div/div[1]'))
             
             #accessing target a tag
-            a_tag=li.find_element_by_xpath(str('/html/body/form/div[4]/section[2]/div/div[2]/div[3]/ul[1]/li['+str(txt_counter)+']/div/div[2]/a'))
+            #a_tag=li.find_element_by_xpath(str('/html/body/form/div[4]/section[2]/div/div[2]/div[3]/ul[1]/li['+str(txt_counter)+']/div/div[2]/a'))
+            a_tag = li.find_element(By.CLASS_NAME,'pdf-download')
             pdf_link=a_tag.get_attribute('href')
 
             temp_list=[]
@@ -79,7 +80,17 @@ while True:
 
             #pdf link
             print('Pdf link        :',pdf_link)
+<<<<<<< Updated upstream
 
+=======
+            judgement_text = extract_txt(pdf_link, "SingaporeSupreme.pdf")
+            print(len(judgement_text))
+            case.judgement_text = judgement_text
+            case.source = "Supreme Court Singapore"
+            #case.process_text()
+            case.print_case_attributes()
+            #store_case_document(case)
+>>>>>>> Stashed changes
             txt_counter+=1
             print()
     
