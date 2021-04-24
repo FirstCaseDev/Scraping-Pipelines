@@ -154,7 +154,7 @@ end_day_box.send_keys(end_date)
 
 
 #loop for diffrent benches(21 in total)
-for benches in range(2,4):
+for benches in range(2,23):
 
     #accessing final judgements --> Bench wise
     driver.find_element_by_xpath('//*[@id="edit-field-bench-target-id"]').click()
