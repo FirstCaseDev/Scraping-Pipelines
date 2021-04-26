@@ -305,12 +305,12 @@ for benches in range(2,23):
                 time.sleep(1)
                 
         #back to bench selection page
-        #print('going back to bench selection pg')
+        print('going back to bench selection pg')
         driver.back()
 
     except:
         #back to bench selection page
-        #print('going back to bench selection pg--')
+        print('going back to bench selection pg--')
         driver.back()
 
 #closing chrome istance/window
