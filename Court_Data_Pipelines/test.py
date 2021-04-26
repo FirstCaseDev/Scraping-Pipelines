@@ -6,7 +6,7 @@ source = url.split("doctypes:")[1].split("%20fromdate:")[0]
 #f_date = url.split("fromdate:")[1].split("%20todate")[0]
 f_date = "01-01-2021"
 t_date = url[::-1].split("02%")[0][::-1]
-for i in range(16):
+for i in range(30):
     date = datetime.strptime(f_date,'%d-%m-%Y')
     startdate = date
     nextdate = startdate + timedelta(days=1)

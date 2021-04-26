@@ -197,7 +197,7 @@ def case_get_cases_list(case_text, doc_nlp):
             if case_list[i].find('\n') != -1:
                 print("Omitting from cited case list: " + str(case_list[i]))
                 removal_indices.append(i)
-    for index in removal_indices:
+    for index in reversed(removal_indices):
         case_list.pop(index)
     return case_list
 

@@ -5,12 +5,19 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
-
+from Common_Files.Case_pdf_handling import extract_txt
+from Common_Files.Case_handler import CaseDoc
+from Common_Files.Case_storage import store_case_document
+from selenium.webdriver.chrome.options import Options
 
 #setting up the driver
+options = Options()
+options.add_argument('--headless')
+options.add_argument('--disable-gpu')
 
 PATH='C://Program Files (x86)//chromedriver.exe'
 driver= webdriver.Chrome(PATH)
+#driver = webdriver.Chrome(PATH,chrome_options=options) #Uncomment only this line for Headless
 
 #opening an instance @Singapore Court
 driver.get('https://www.supremecourt.gov.sg/news/supreme-court-judgments')
@@ -20,7 +27,7 @@ driver.get('https://www.supremecourt.gov.sg/news/supreme-court-judgments')
 
 #scrapping page's data
 while True:
-    
+    case = CaseDoc()
     #pg_counter+=1
     
     #accessing target(ul) 
@@ -55,9 +62,10 @@ while True:
             #Petioner-name and respondent-name
             indice_2=all_data_str.find(' v ')
             indice_0=all_data_str.find('[')    
-            print('Petitioner Name :', all_data_str[:indice_2])
-            print('Respondent Name :', all_data_str[indice_2+3:indice_0-1])
-
+            #print('Petitioner Name :', all_data_str[:indice_2])
+            case.petitioner = all_data_str[:indice_2]
+            #print('Respondent Name :', all_data_str[indice_2+3:indice_0-1])
+            case.respondent = all_data_str[indice_2+3:indice_0-1]
             #excluding pet. and resp. names
             slice_1=all_data_str[all_data_str.find('\n')+1:]
 
@@ -66,31 +74,34 @@ while True:
             indice_4=slice_1.find(']')
             indice_5=slice_1.find('DECISION')
             
-            print('Filing Date     :', slice_1[indice_3+1:indice_4])
-            print('Bench           :', slice_1[indice_4+2:indice_5])
+            #print('Filing Date     :', slice_1[indice_3+1:indice_4])
             
+            #print('Bench           :', slice_1[indice_4+2:indice_5])
+            case.bench = slice_1[indice_4+2:indice_5]
             #excluding f-date & bench
             slice_2=slice_1[indice_5:]
 
             #decision date
             indice_6=slice_2.find(':')
-            print('Decision Date   :', slice_2[indice_6+2:indice_6+13])
-
-            print('Case number     :',slice_2[indice_6+14:])
-
+            #print('Decision Date   :', slice_2[indice_6+2:indice_6+13])
+            case.date = slice_2[indice_6+2:indice_6+13]
+            #print('Case number     :',slice_2[indice_6+14:])
+            case.case_id = slice_2[indice_6+14:]
             #pdf link
             print('Pdf link        :',pdf_link)
-<<<<<<< Updated upstream
 
-=======
+
+
             judgement_text = extract_txt(pdf_link, "SingaporeSupreme.pdf")
             print(len(judgement_text))
             case.judgement_text = judgement_text
             case.source = "Supreme Court Singapore"
-            #case.process_text()
+
+
+            case.process_text()
             case.print_case_attributes()
-            #store_case_document(case)
->>>>>>> Stashed changes
+            store_case_document(case)
+
             txt_counter+=1
             print()
     

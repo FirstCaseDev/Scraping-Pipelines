@@ -2,8 +2,9 @@ from selenium import webdriver
 import time
 import datetime
 import datefinder
+import pymongo
 from Common_Files.Case_pdf_handling import extract_txt
-from Common_Files.Case_storage import store_case_document
+from Common_Files.Case_storage import store_case_document, case_exists_by_case_id
 from Common_Files.Case_handler import CaseDoc 
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -12,7 +13,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
 
+#accessing Case_storage database
+client = pymongo.MongoClient("mongodb://db_user:firstCaseDevTeam@107.20.44.181:27017,3.229.151.98:27017,54.175.129.116:27017/?authSource=admin&replicaSet=aName&readPreference=primaryPreferred&ssl=false")
+db = client["indian_court_data"]
+col = db["cases"]
 
+#for headless
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
@@ -27,7 +33,7 @@ driver= webdriver.Chrome(PATH)
 #opening an instance @bombay HC
 driver.get('https://bombayhighcourt.nic.in/')
 
-
+#time.sleep(5)
 #accessing services -> orders & judgement -> rept. judgement/orders
 #services
 driver.find_element_by_xpath('//*[@id="smoothmenu1"]/ul[4]/li/a').click()
@@ -99,8 +105,8 @@ time.sleep(2)
 
 #scrapping page's data
 case=CaseDoc()
-#loacting target table for scrapping
 
+#loacting target table for scrapping
 table=driver.find_element_by_xpath('/html/body/form/table[2]')
 t_body=table.find_element_by_tag_name('tbody')
 
@@ -166,6 +172,7 @@ for row in rows:
                 
                 #print('Judgement Date  :',temp_str[:10])
                 date=datefinder.find_dates(temp_str[:10])
+                #print(date)
                 for i in date:
                     date=i 
                 case.date=date
@@ -191,8 +198,14 @@ for row in rows:
                     #print('Pdf link        :',a_tag.get_attribute('href'))                        
                     pdf_link=a_tag.get_attribute('href')
                     case.url=pdf_link
-                    judgement_txt=extract_txt(pdf_link, 'Bombay_High_Court_Extract.pdf')
+                    judgement_txt=extract_txt(pdf_link, 'Court_Extract.pdf')
                     case.judgement_text=judgement_txt
+
+            #cross-checking-- if case already present then skip
+            #              -- if not then process the extracted data
+            
+            if case_exists_by_case_id(case.case_id):
+                continue
 
         #spacing between cases        
         #print()
@@ -200,7 +213,7 @@ for row in rows:
         #processing all the extracted data
         case.process_text()
         case.print_case_attributes()
-        store_case_document(case)
+        #store_case_document(case)
 
 
 #closing window/instance

@@ -28,6 +28,7 @@ original_years_handle = ''
 original_months_handle = ''
 original_table_handle = ''
 original_case_handle = ''
+missed_cases_list = []
 #TODO Only discard first pre tag
 def process_IndKanoon_case_url(url):
     case = CaseDoc()
