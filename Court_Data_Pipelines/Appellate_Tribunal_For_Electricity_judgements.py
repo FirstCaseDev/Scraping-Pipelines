@@ -33,7 +33,7 @@ driver= webdriver.Chrome(PATH)
 #Headless
 #driver = webdriver.Chrome(PATH,chrome_options=options) 
 
-#opening an instance @ncalt.nic.in --> Judgements
+#opening an instance @www.aptel.gov.in
 driver.get('https://www.aptel.gov.in/old-judgement-data')
 time.sleep(1)
 
