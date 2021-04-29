@@ -104,7 +104,7 @@ try:
                     temp=[]
                     temp.append(td.text)
                     print('Case id              :', temp[0][2:])
-                    #case.case_id=temp[0]
+                    #case.case_id=temp[0][2:]
 
 
                 #petitioner & respondent
@@ -160,6 +160,6 @@ except:
     #print('exception occurred :')
     driver.close()
 
-#switching back to home page
+#switching back to home page and closing it
 driver.switch_to_window(home_pg)
 driver.close()
