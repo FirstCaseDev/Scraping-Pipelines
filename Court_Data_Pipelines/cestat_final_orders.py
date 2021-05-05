@@ -81,7 +81,7 @@ try:
     
     row_counter=0
     
-    #coumting total no. of rows
+    #counting total no. of rows
     total_rows=0
     for x in rows:
         total_rows+=1
