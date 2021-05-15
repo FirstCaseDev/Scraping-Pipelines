@@ -155,7 +155,7 @@ for bench in range(2,3):
                     b_name= temp[0][:slice_1]
 
                     #print('Bench name              :', b_name)
-                    #case.source = b_name
+                    
 
 
                 #diary number  
@@ -165,7 +165,7 @@ for bench in range(2,3):
                     d_no=temp[0]
 
                     #print('Diary number            :', d_no)
-                    #case.case_id = temp[0]
+                    
 
                 
                 #case number  
@@ -176,7 +176,7 @@ for bench in range(2,3):
                     case_no=temp[0][slice_1+4:]
 
                     #print('Case number             :', case_no)
-                    #case.case_id = case_no
+                    
 
 
                 #petitioner & respondent
@@ -191,8 +191,7 @@ for bench in range(2,3):
                     #print('Petitioner              :', pet)
                     #print('Respondent              :', res)
                     
-                    #case.petitioner = temp_str[0:slice_1]
-                    #case.respondent = temp_str[slice_1+3:]
+                    
 
 
                 #date of judgement
@@ -206,8 +205,7 @@ for bench in range(2,3):
                     date=datefinder.find_dates(temp[0])
                     for i in date:
                         date=i 
-                    #case.date=date
-                    #case.year = date.strftime("%Y")
+                    
 
                 #checking if status is disposed or not    
                 if (td_counter==7) and (td.text=='PENDING'):
@@ -223,6 +221,15 @@ for bench in range(2,3):
                     #print('Respondent              :', res)
                     #print('Date of Judgement       :', doj)
                     #print('Case status             :', td.text)
+
+                    #case.source = b_name
+                    #case.case_id = d_no
+                    #case.case_id = case_no
+                    #case.petitioner = pet
+                    #case.respondent = res
+                    #case.date=date
+                    #case.year = date.strftime("%Y")
+
                     
                     #entering another pg to get judgement pdf
                     a_tag=td.find_element_by_tag_name('a')
@@ -276,7 +283,7 @@ for bench in range(2,3):
     driver.execute_script('window.history.go({pg})'.format(pg = -(total_pg)))   
 
 
-#closing chrome istance/window
-#driver.quit() 
+#closing chrome instance/window
+driver.quit() 
 
 
