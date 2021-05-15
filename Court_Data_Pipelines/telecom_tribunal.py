@@ -39,9 +39,9 @@ driver= webdriver.Chrome(PATH)
 driver.get('https://tdsat.gov.in/Delhi/services/judgment.php')
 time.sleep(1)
 
-#setting start/end date- (past 3 months)
+#setting start/end date- (past 5 months)
 current_day=datetime.date.today()
-week_control=current_day-datetime.timedelta(days=90)
+week_control=current_day-datetime.timedelta(days=150)
 from_date=week_control.strftime('%d/%m/%Y')
 
 #curretnt date
@@ -67,6 +67,7 @@ time.sleep(1)
 case=CaseDoc()
 
 try:
+
     #loacting target table for scrapping
     table=driver.find_element_by_xpath('/html/body/form[3]/fieldset/div/table')
     t_body=table.find_element_by_tag_name('tbody')
@@ -104,6 +105,7 @@ try:
                 temp=[]
                 temp.append(td.text)
                 print('Case id                     :', temp[0])
+
                 #case.case_id = temp[0]
 
 
@@ -112,8 +114,9 @@ try:
                 temp=[]
                 temp.append(td.text)
                 print('Bench                       :', temp[0])
-                case.bench = temp[0]
-                case.source = 'Telecom Disputes Settlement and Appellate Tribunal'
+
+                #case.bench = temp[0]
+                #case.source = 'Telecom Disputes Settlement and Appellate Tribunal'
 
 
             #petitioner & respondent(Party Detail)
@@ -121,12 +124,14 @@ try:
                 temp=[]
                 temp.append(td.text)
                 temp_str=temp[0]
-                slice_1=temp_str.find('VS')
-                #print(temp)
-                print('Petitioner                  :', temp_str[0:slice_1-1])
-                print('Respondent                  :', temp_str[slice_1+3:])
-                #case.petitioner = temp_str[0:slice_1-1]
-                #case.respondent = temp_str[slice_1+3:]
+                
+                l=temp_str.split('VS')
+                #print(l)
+
+                print('Petitioner                  :', l[0][:-1])
+                print('Respondent                  :', l[-1][1:])
+                #case.petitioner = l[0][:-1]
+                #case.respondent = l[-1][1:]
 
 
             #date of judgement
@@ -139,6 +144,7 @@ try:
                 date=datefinder.find_dates(temp[0])
                 for i in date:
                     date=i 
+
                 #case.date=date
                 #case.year = date.strftime("%Y")
                 
@@ -170,4 +176,3 @@ except:
 
 #closing chrome instance/window
 driver.close()
-
