@@ -35,41 +35,38 @@ driver= webdriver.Chrome(PATH)
 #driver = webdriver.Chrome(PATH,chrome_options=options) 
 
 
-#opening an instance @tdsat.gov.in/Delhi/services/judgment.php
-driver.get('https://tdsat.gov.in/Delhi/services/judgment.php')
+#opening an instance @compatarchives.nclat.nic.in/Judgements.aspx
+driver.get('http://compatarchives.nclat.nic.in/Judgements.aspx')
 time.sleep(1)
 
-#setting start/end date- (past 5 months)
-current_day=datetime.date.today()
-week_control=current_day-datetime.timedelta(days=150)
-from_date=week_control.strftime('%d/%m/%Y')
-
-#curretnt date
-to_date=datetime.date.today().strftime('%d/%m/%Y')
-
-#filling the dates
-from_day_box = driver.find_element_by_xpath('//*[@id="mydate"]')
-driver.execute_script('document.getElementsByName("from_date1")[0].removeAttribute("readonly")')
-#from_day_box.click()
-from_day_box.send_keys(from_date)
-
-to_day_box = driver.find_element_by_xpath('//*[@id="mydate1"]')
-driver.execute_script('document.getElementsByName("to_date1")[0].removeAttribute("readonly")')
-#to_day_box.click()
-to_day_box.send_keys(to_date)
-
-#go button
-driver.find_element_by_xpath('//*[@id="submit1"]').click()
+#choosing 100 enteries view at a time from drop down menu
+driver.find_element_by_xpath('//*[@id="ctl00_ContentPlaceHolder1_gvJudgement_length"]/label/select').click()
+time.sleep(0.5)
+driver.find_element_by_xpath('//*[@id="ctl00_ContentPlaceHolder1_gvJudgement_length"]/label/select/option[4]').click()
 time.sleep(1)
 
 
 #scrapping page's data
 case=CaseDoc()
 
-try:
+
+#calculating counter for loop
+#(-2) for excluding 'previous' and 'next' page li tags
+counter=-2
+ul=driver.find_element_by_xpath('//*[@id="ctl00_ContentPlaceHolder1_gvJudgement_paginate"]/ul')
+
+#finding li tags under the ul tag
+lis=ul.find_elements(By.TAG_NAME, 'li')
+
+for li in lis:
+    counter+=1
+#print(counter)
+
+
+for x in range(counter):
 
     #loacting target table for scrapping
-    table=driver.find_element_by_xpath('/html/body/form[3]/fieldset/div/table')
+    table=driver.find_element_by_xpath('//*[@id="ctl00_ContentPlaceHolder1_gvJudgement"]')
     t_body=table.find_element_by_tag_name('tbody')
 
     rows=t_body.find_elements(By.TAG_NAME,'tr')
@@ -86,12 +83,14 @@ try:
         
         row_counter+=1
 
+        #counter for td tags
         td_counter=0
 
+        #accessing td tags of each row(tr tag)
         tds=row.find_elements(By.TAG_NAME,'td')
         
         '''
-        #caculating total no. of td(s) tags inside each tr 
+        #caculating total no. of td(s) tags inside each tr tag
         total_td=0
         for z in tds:
             total_td+=1
@@ -100,7 +99,7 @@ try:
         for td in tds:
             td_counter+=1
 
-            #case number --> Company appeal/ AT No. 
+            #case number --> Appeal No. (with IA No.<optional>) 
             if td_counter==2:
                 temp=[]
                 temp.append(td.text)
@@ -108,30 +107,23 @@ try:
 
                 #case.case_id = temp[0]
 
-
-            #Member/judge
+            
+            #Petitioner (Appellants)
             if td_counter==3:
                 temp=[]
                 temp.append(td.text)
-                print('Bench                       :', temp[0])
+                print('Petitioner                  :', temp[0])
+                
+                #case.petitioner = temp[0]
 
-                #case.bench = temp[0]
-                #case.source = 'Telecom Disputes Settlement and Appellate Tribunal'
 
-
-            #petitioner & respondent(Party Detail)
+            #Respondents
             if td_counter==4:
                 temp=[]
                 temp.append(td.text)
-                temp_str=temp[0]
-                
-                l=temp_str.split('VS')
-                #print(l)
+                print('Respondent                  :', temp[0])
 
-                print('Petitioner                  :', l[0][:-1])
-                print('Respondent                  :', l[-1][1:])
-                #case.petitioner = l[0][:-1]
-                #case.respondent = l[-1][1:]
+                #case.respondent = temp[0]
 
 
             #date of judgement
@@ -144,23 +136,33 @@ try:
                 date=datefinder.find_dates(temp[0])
                 for i in date:
                     date=i 
-
+                #print(date)
+                
                 #case.date=date
                 #case.year = date.strftime("%Y")
                 
 
+            #Member/judge
+            if td_counter==6:
+                temp=[]
+                temp.append(td.text)
+                print('Bench                       :', temp[0])
+
+                #case.bench = temp[0]
+                #case.source = 'Telecom Disputes Settlement and Appellate Tribunal'
+
+
 
             #pdf link
-            if td_counter==6:
+            if td_counter==7:
                 a_tags = td.find_elements(By.TAG_NAME,"a")
                 for a_tag in a_tags:
                     print('Pdf link                    :', a_tag.get_attribute('href'))
                     pdf_link=a_tag.get_attribute('href')
                     #case.url=pdf_link
-                    #judgement_txt=extract_txt(pdf_link, 'Court_Extract.pdf')
+                    #judgement_text=extract_txt(pdf_link, 'Court_Extract.pdf')
                     #case.judgement_text=judgement_txt
-
-            
+   
                             
         #spacing b/w judgemnets
         print()
@@ -170,9 +172,16 @@ try:
         #case.print_case_attributes()
         #store_case_document(case)
 
-except:
-    print('No data found')
-    driver.close()
+
+    #searching next button if present then continue loop otherwise exit the loop
+    try:
+        driver.find_element_by_xpath('//*[@id="ctl00_ContentPlaceHolder1_gvJudgement_next"]/a').click()
+        time.sleep(1)
+
+    except:
+        print('Exception Occured!!!')
+        break
+    
 
 #closing chrome instance/window
 driver.close()
