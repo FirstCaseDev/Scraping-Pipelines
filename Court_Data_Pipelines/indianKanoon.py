@@ -12,6 +12,7 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from Common_Files.Case_handler import CaseDoc
 from Common_Files.Case_storage import store_case_document, case_exists_by_url
 from datetime import date, timedelta , datetime
+from Common_Files.Elasticsearch_functions import es_case_exist_by_url
 case = CaseDoc()
 
 missed_cases_count = 0
