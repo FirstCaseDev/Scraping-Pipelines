@@ -157,8 +157,12 @@ for x in range(counter):
             if td_counter==7:
                 a_tags = td.find_elements(By.TAG_NAME,"a")
                 for a_tag in a_tags:
-                    print('Pdf link                    :', a_tag.get_attribute('href'))
-                    pdf_link=a_tag.get_attribute('href')
+                    #print('Pdf link                    :', a_tag.get_attribute('href'))
+                    #pdf_link=a_tag.get_attribute('href')
+                    
+                    pdf = a_tag.click()
+                    print(pdf)
+
                     #case.url=pdf_link
                     #judgement_text=extract_txt(pdf_link, 'Court_Extract.pdf')
                     #case.judgement_text=judgement_txt
