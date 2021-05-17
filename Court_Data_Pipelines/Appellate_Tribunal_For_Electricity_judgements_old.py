@@ -144,7 +144,7 @@ while next_pg_exists :
 
     else:
         next_pg_exists = False
-
+        #loop ends and scrapping stops
 
 
 #closing chrome istance/window
