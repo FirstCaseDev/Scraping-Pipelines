@@ -30,47 +30,41 @@ options.add_argument('--no-sandbox')
 PATH='C://Program Files (x86)//chromedriver.exe'
 driver= webdriver.Chrome(PATH)
 
-
 #Headless
 #driver = webdriver.Chrome(PATH,chrome_options=options) 
-
-
-#opening an instance @www.cci.gov.in/orders-commission/99#
-driver.get('https://www.cci.gov.in/orders-commission/99#')
-time.sleep(1)
-
-#setting start/end date- (past year(s))
-current_day=datetime.date.today()
-week_control=current_day-datetime.timedelta(days=365*2)
-from_date=week_control.strftime('%m/%d/%Y')
-
-#curretnt date mm/dd/yyyy
-to_date=datetime.date.today().strftime('%m/%d/%Y')
-
-#filling the dates
-from_day_box = driver.find_element_by_xpath('//*[@id="edit-field-date-of-order-value-min-datepicker-popup-0"]')
-#driver.execute_script('document.getElementsByName("from_date1")[0].removeAttribute("readonly")')
-#from_day_box.click()
-from_day_box.send_keys(from_date)
-
-to_day_box = driver.find_element_by_xpath('//*[@id="edit-field-date-of-order-value-max-datepicker-popup-0"]')
-#driver.execute_script('document.getElementsByName("to_date1")[0].removeAttribute("readonly")')
-#to_day_box.click()
-to_day_box.send_keys(to_date)
-
-#search button
-driver.find_element_by_xpath('//*[@id="edit-submit"]').click()
-time.sleep(1)
-
 
 #scrapping page's data
 case=CaseDoc()
 
 #function for scrapping
-def cci_scraper():
+def cci_scraper(x):
+
     #loacting target table for scrapping
-    table=driver.find_element_by_xpath('//*[@id="node-1779"]/div/div/div/div/div/div[2]/table')
-                
+    #section 26(1)
+    if x==0:
+        table=driver.find_element_by_xpath('//*[@id="node-1769"]/div/div/div/div/div/div[2]/table')
+
+    #section26(2)
+    if x==1:
+        table=driver.find_element_by_xpath('//*[@id="node-1779"]/div/div/div/div/div/div[2]/table')  
+
+    #section26(6)
+    if x==2:              
+        table=driver.find_element_by_xpath('//*[@id="node-1781"]/div/div/div/div/div/div[2]/table')  
+
+    #section26(7)
+    if x==3:              
+        table=driver.find_element_by_xpath('//*[@id="node-1783"]/div/div/div/div/div/div[2]/table')  
+
+    #section27
+    if x==4:              
+        table=driver.find_element_by_xpath('//*[@id="node-1785"]/div/div/div/div/div/div[2]/table')  
+
+    #other orders
+    if x==5:              
+        table=driver.find_element_by_xpath('//*[@id="node-1787"]/div/div/div/div/div/div[2]/table')  
+
+
     t_body=table.find_element_by_tag_name('tbody')
 
     rows=t_body.find_elements(By.TAG_NAME,'tr')
@@ -164,42 +158,97 @@ def cci_scraper():
         #case.print_case_attributes()
         #store_case_document(case)
 
-try:
-    constraint=True
-    k=0
-    while constraint:
-        
-        #calling scrapper function
-        cci_scraper()
+#loop for different sections (6)
+for x in range(6):
 
-        next_pg_pointer=0
+    #opening an instance @www.cci.gov.in/orders-commission/{pg_index}#
+    driver.get('https://www.cci.gov.in/orders-commission/{pg_index}#'.format(pg_index=98+x))
+    time.sleep(1)
 
-        #calculating no. of pages via ul tags
-        ul=driver.find_element_by_xpath('//*[@id="node-1779"]/div/div/div/div/div/div[3]/ul')
-        lis=ul.find_elements(By.TAG_NAME,'li')
-        li_counter=0
-        for li in lis:
-            li_counter+=1
-        #print(li_counter)
-        
-        next_pg_pointer=li_counter-1        
-        #print(next_pg_pointer)
+    #setting start/end date- (past year(s)/month(s))
+    current_day=datetime.date.today()
+    week_control=current_day-datetime.timedelta(days=365*2)
+    from_date=week_control.strftime('%m/%d/%Y')
 
-        #finding the next button
-        try:
-            found=driver.find_element_by_xpath('//*[@id="node-1779"]/div/div/div/div/div/div[3]/ul/li[{pointer}]/a'.format(pointer=next_pg_pointer))
-            if found and found.text == '›':
-                driver.find_element_by_xpath('//*[@id="node-1779"]/div/div/div/div/div/div[3]/ul/li[{pointer}]/a'.format(pointer=next_pg_pointer)).click()
-                time.sleep(1)
-            else:
-                break
-        except:
-            print('end')
-            constraint=False
+    #curretnt date mm/dd/yyyy
+    to_date=datetime.date.today().strftime('%m/%d/%Y')
+
+    #filling the dates
+    from_day_box = driver.find_element_by_xpath('//*[@id="edit-field-date-of-order-value-min-datepicker-popup-0"]')
+    #driver.execute_script('document.getElementsByName("from_date1")[0].removeAttribute("readonly")')
+    #from_day_box.click()
+    from_day_box.send_keys(from_date)
+
+    to_day_box = driver.find_element_by_xpath('//*[@id="edit-field-date-of-order-value-max-datepicker-popup-0"]')
+    #driver.execute_script('document.getElementsByName("to_date1")[0].removeAttribute("readonly")')
+    #to_day_box.click()
+    to_day_box.send_keys(to_date)
+
+    #search button
+    driver.find_element_by_xpath('//*[@id="edit-submit"]').click()
+    time.sleep(1)
 
 
-except:
-    print('No Result found')
+    try:
+        constraint=True
+        k=0
+        while constraint:
+            
+            #calling scrapper function
+            cci_scraper(x)
+
+            next_pg_pointer=0
+
+            #calculating no. of pages via ul tags
+            #section26(1)
+            if x==0:
+                ul=driver.find_element_by_xpath('//*[@id="node-1769"]/div/div/div/div/div/div[3]/ul')
+            
+            #section26(2)
+            if x==1:
+                ul=driver.find_element_by_xpath('//*[@id="node-1779"]/div/div/div/div/div/div[3]/ul')
+            
+            #section26(6)
+            if x==2:
+                ul=driver.find_element_by_xpath('//*[@id="node-1781"]/div/div/div/div/div/div[3]/ul')
+
+            #section26(7)
+            if x==3:
+                ul=driver.find_element_by_xpath('//*[@id="node-1783"]/div/div/div/div/div/div[3]/ul')
+
+            #section27
+            if x==4:
+                ul=driver.find_element_by_xpath('//*[@id="node-1785"]/div/div/div/div/div/div[3]/ul')
+
+            #other orders
+            if x==5:
+                ul=driver.find_element_by_xpath('//*[@id="node-1787"]/div/div/div/div/div/div[3]/ul')
+                                        
+
+            lis=ul.find_elements(By.TAG_NAME,'li')
+            li_counter=0
+            for li in lis:
+                li_counter+=1
+            #print(li_counter)
+            
+            next_pg_pointer=li_counter-1        
+            #print(next_pg_pointer)
+
+            #finding the next button
+            try:
+                found=driver.find_element_by_xpath('//*[@id="node-1779"]/div/div/div/div/div/div[3]/ul/li[{pointer}]/a'.format(pointer=next_pg_pointer))
+                if found and found.text == '›':
+                    driver.find_element_by_xpath('//*[@id="node-1779"]/div/div/div/div/div/div[3]/ul/li[{pointer}]/a'.format(pointer=next_pg_pointer)).click()
+                    time.sleep(1)
+                else:
+                    break
+            except:
+                print('end')
+                constraint=False
+
+
+    except:
+        print('No more records found')
 
 #closing chrome instance/window
 driver.close()
