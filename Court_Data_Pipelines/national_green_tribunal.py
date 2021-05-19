@@ -43,7 +43,7 @@ time.sleep(1)
 case=CaseDoc()
 
 #loop for selecting different benches(5)
-for bench in range(2,3):
+for bench in range(2,7):
     
     #selecting bench
     driver.find_element_by_xpath('//*[@id="search-party-name-form"]/div/div[1]/select').click()

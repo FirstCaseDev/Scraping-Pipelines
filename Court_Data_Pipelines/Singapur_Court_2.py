@@ -119,7 +119,7 @@ while True:
 
                 txt_counter+=1
                 print()
-                print("PAGE Counter :"+ str(pg_counter))
+                #print("PAGE Counter :"+ str(pg_counter))
         
             
             #accessing target a tag

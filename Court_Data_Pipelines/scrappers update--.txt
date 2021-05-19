@@ -1,0 +1,30 @@
+scrappers update--
+
+bn - bench name (court name) present
+j  - judges present
+
+
+
+srappers that need bn<->j changes:
+--
+bombay_hc (bn,j)
+calcutta_judgements (j)
+cestat_final_orders  (j)
+ipab  (bn,j)
+national_green_tribunal  (bn,j)
+nclat_judgements  (bn,j)
+nclt_judgements  (bn)
+nclt_orders  (j)
+Singapore_court_2  (bn)
+
+
+
+srappers that doesn't need bn<->j changes:
+--
+Appellate_tribunal_for_electricity_judgements_old
+Appellate_tribunal_for_electricity_judgements
+compat
+kerela_hc
+serc_2020
+serc_2021
+telecom_tribunal
