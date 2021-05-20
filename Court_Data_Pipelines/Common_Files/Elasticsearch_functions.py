@@ -56,6 +56,6 @@ def es_count_by_source(source):
     }
     result = es.search(index="indian_court_data.cases",body=query_body)
     return (result['hits']['total']['value'])
-print(es_case_exists_by_url("https://indiankanoon.org/docfragment/1920027/?formInput=doctypes%3A%20supremecourt%20fromdate%3A%201-3-2010%20todate%3A%2031-3-2010"))
-print(es_case_exists_by_title("Gulab Singh Bhati vs State Of U.P. And Others"))
-print(es_count_by_source("Supreme Court of India"))
+# print(es_case_exists_by_url("https://indiankanoon.org/docfragment/1920027/?formInput=doctypes%3A%20supremecourt%20fromdate%3A%201-3-2010%20todate%3A%2031-3-2010"))
+# print(es_case_exists_by_title("Gulab Singh Bhati vs State Of U.P. And Others"))
+# print(es_count_by_source("Supreme Court of India"))

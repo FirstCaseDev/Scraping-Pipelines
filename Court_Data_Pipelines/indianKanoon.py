@@ -12,7 +12,7 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from Common_Files.Case_handler import CaseDoc
 from Common_Files.Case_storage import store_case_document, case_exists_by_url
 from datetime import date, timedelta , datetime
-from Common_Files.Elasticsearch_functions import es_case_exist_by_url
+from Common_Files.Elasticsearch_functions import es_case_exists_by_url
 case = CaseDoc()
 
 missed_cases_count = 0
@@ -126,12 +126,12 @@ def process_IndKanoon_case_url(url):
         except:
             print("source not assigned")    
         case.process_text() 
-        store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
-        #case.print_case_attributes()
+        #store_case_document(case) #VERY DANGEROUS!!! DON'T UNCOMMENT UNLESS STORING TO DATABASE
+        case.print_case_attributes()
     except Exception as inst:
         print(inst)
-        open("indian_kanoon_missed_urls.txt", 'a+').write("from case url "+"%s" %(url) + "  "+ datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
-        print("Missed : %s" %(url) + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
+        open("indian_kanoon_missed_urls.txt", 'a+').write("from case url "+"%s" %(url) + "  "+ datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
+        print("Missed : %s" %(url) + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
     driver.close()
     driver.switch_to_window(original_case_handle) 
     return case
@@ -236,8 +236,8 @@ def process_IndKanoon_months_url(url):
             process_IndKanoon_paginated_table_url(paginated_table_url)
     except Exception as inst:
         print(inst)
-        open("indian_kanoon_missed_urls.txt", 'a+').write("From month url "+"%s" %(url) + "  "+ datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
-        print("Missed : %s" %(url) + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
+        open("indian_kanoon_missed_urls.txt", 'a+').write("From month url "+"%s" %(url) + "  "+ datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
+        print("Missed : %s" %(url) + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
     
     driver.close()
     driver.switch_to_window(original_months_handle)
@@ -256,8 +256,8 @@ def process_IndKanoon_court_years_url(url):
             process_IndKanoon_months_url(month_url)
     except Exception as inst:
         print(inst)
-        open("indian_kanoon_missed_urls.txt", 'a+').write("From years url "+"%s" %(url) + "  "+ datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
-        print("Missed : %s" %(url) + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
+        open("indian_kanoon_missed_urls.txt", 'a+').write("From years url "+"%s" %(url) + "  "+ datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
+        print("Missed : %s" %(url) + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
     driver.close()
     driver.switch_to_window(original_years_handle)
 
@@ -270,7 +270,7 @@ def process_IndKanoon_court_years_url(url):
 
 #year_url = "https://indiankanoon.org/browse/supremecourt/2021/"
 #process_IndKanoon_months_url(year_url)
-court_url = "https://indiankanoon.org/browse/amravati/"
+court_url = "https://indiankanoon.org/browse/delhi/"
 process_IndKanoon_court_years_url(court_url)
 
 # driver.get("https://www.google.com/") #any dummy url

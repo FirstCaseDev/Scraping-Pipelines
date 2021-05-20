@@ -1,10 +1,7 @@
 from selenium import webdriver
 import time
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
+from selenium.common.exceptions import NoSuchElementException
 from Common_Files.Case_pdf_handling import extract_txt
 from Common_Files.Case_handler import CaseDoc
 from Common_Files.Case_storage import store_case_document
@@ -14,8 +11,9 @@ from datetime import date, timedelta , datetime
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
-
+options.add_argument('--no-sandbox')
 PATH='C://Program Files (x86)//chromedriver.exe'
+#PATH='/root/chromedriver'
 driver= webdriver.Chrome(PATH)
 #driver = webdriver.Chrome(PATH,chrome_options=options) #Uncomment only this line for Headless
 
@@ -32,9 +30,12 @@ def case_scraper():
         case = CaseDoc()
         pg_counter+=1
         
-        #accessing target(ul) 
+        #accessing target(ul)
+        time.sleep(0.5) 
         target_ul=driver.find_element_by_xpath('/html/body/form/div[4]/section[2]/div/div[2]/div[3]/ul[1]')
+        time.sleep(0.5)
         lis=target_ul.find_elements(By.TAG_NAME,'li')
+        
 
         #counter for elements to be scrapped from a single page
         txt_counter=1
@@ -46,6 +47,18 @@ def case_scraper():
                 
                 #accessing target div tag
                 txt=li.find_element_by_xpath(str('//*[@id="ContentPlaceHolderContent_C008_DivCode"]/ul[1]/li['+str(txt_counter)+']/div/div[1]'))
+                
+                
+                ##### for entering query terms 
+                query= li.find_element_by_xpath(str('//*[@id="ContentPlaceHolderContent_C008_DivCode"]/ul[1]/li['+str(txt_counter)+']/div/div[1]/small')).text.strip()
+                query_terms = query.split("[")
+                search_terms=[]
+                for i in range(1,len(query_terms)):
+                    k=query_terms[i].split("]")[0]
+                    search_terms.append(k)
+                case.query_terms = search_terms    
+                
+                
                 
                 #accessing target a tag
                 try:
@@ -67,7 +80,7 @@ def case_scraper():
                 
                 #Petioner-name and respondent-name
                 indice_2=all_data_str.find(' v ')
-                indice_0=all_data_str.find('[')    
+                indice_0=all_data_str.find(f'[{year}]')    
                 #print('Petitioner Name :', all_data_str[:indice_2])
                 case.petitioner = all_data_str[:indice_2]
                 #print('Respondent Name :', all_data_str[indice_2+3:indice_0-1])
@@ -75,7 +88,7 @@ def case_scraper():
                 #excluding pet. and resp. names
                 slice_1=all_data_str[all_data_str.find('\n')+1:]
                 #Case Title
-                case.title=case.petitioner + "  V  " +case.respondent
+                case.title=all_data_str[:indice_0-1]
 
                 #filing date and bench
                 indice_3=slice_1.find('[')
@@ -93,7 +106,7 @@ def case_scraper():
                 indice_6=slice_2.find(':')
                 #print('Decision Date   :', slice_2[indice_6+2:indice_6+13])
                 date = datetime.strptime(slice_2[indice_6+2:indice_6+13],'%d %b %Y')
-                case.date = date.strftime('%d-%m-%Y')
+                case.date = date
                 case.day = date.strftime('%d')
                 case.month = date.strftime('%B')
                 case.year = date.strftime("%Y")
@@ -127,7 +140,7 @@ def case_scraper():
             time.sleep(2)
         else:
             
-            print("Scrapping Completed")
+            print(f"Scrapping Completed for year:{year}")
             break 
         
       
@@ -136,8 +149,11 @@ for i in range(2000,2022):
     print(year)
     #opening an instance @Singapore Court
     driver.get(f'https://www.supremecourt.gov.sg/news/supreme-court-judgments/year/{year}')
-    case_scraper()
-
+    try:
+        case_scraper()
+    except NoSuchElementException:
+        print("Error Came or year completed.")   
+print("Scraping Completed for all years.")
 
 
 
