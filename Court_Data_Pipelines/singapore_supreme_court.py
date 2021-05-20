@@ -132,7 +132,7 @@ def case_scraper():
 
                     case.process_text()
                     case.print_case_attributes()
-                    #store_case_document(case)
+                    store_case_document(case)
                 else:
                     print("Case exist in documents")
                 txt_counter+=1
