@@ -5,6 +5,7 @@ from selenium.common.exceptions import NoSuchElementException
 from Common_Files.Case_pdf_handling import extract_txt
 from Common_Files.Case_handler import CaseDoc
 from Common_Files.Case_storage import store_case_document
+from Common_Files.Elasticsearch_functions import es_case_exists_by_url
 from selenium.webdriver.chrome.options import Options
 from datetime import date, timedelta , datetime
 #setting up the driver
@@ -65,70 +66,75 @@ def case_scraper():
                     a_tag=li.find_element_by_xpath(str('/html/body/form/div[4]/section[2]/div/div[2]/div[3]/ul[1]/li['+str(txt_counter)+']/div/div[2]/a[2]'))
                 except:
                     a_tag=li.find_element_by_xpath(str('/html/body/form/div[4]/section[2]/div/div[2]/div[3]/ul[1]/li['+str(txt_counter)+']/div/div[2]/a'))
-                    
+                
+                #pdf link    
                 pdf_link=a_tag.get_attribute('href')
-
-                temp_list=[]
-                temp_list.append(txt.text)
-                temp_str=temp_list[0]
-                indice_1=temp_str.find('\n')
-                
-                all_data_str=temp_str[indice_1+1:]
-
-                
-                #slicing string according to the entry fields
-                
-                #Petioner-name and respondent-name
-                indice_2=all_data_str.find(' v ')
-                indice_0=all_data_str.find(f'[{year}]')    
-                #print('Petitioner Name :', all_data_str[:indice_2])
-                case.petitioner = all_data_str[:indice_2]
-                #print('Respondent Name :', all_data_str[indice_2+3:indice_0-1])
-                case.respondent = all_data_str[indice_2+3:indice_0-1]
-                #excluding pet. and resp. names
-                slice_1=all_data_str[all_data_str.find('\n')+1:]
-                #Case Title
-                case.title=all_data_str[:indice_0-1]
-
-                #filing date and bench
-                indice_3=slice_1.find('[')
-                indice_4=slice_1.find(']')
-                indice_5=slice_1.find('DECISION')
-                
-                #print('Filing Date     :', slice_1[indice_3+1:indice_4])
-                
-                #print('Bench           :', slice_1[indice_4+2:indice_5])
-                case.bench = slice_1[indice_4+2:indice_5]
-                #excluding f-date & bench
-                slice_2=slice_1[indice_5:]
-
-                #decision date
-                indice_6=slice_2.find(':')
-                #print('Decision Date   :', slice_2[indice_6+2:indice_6+13])
-                date = datetime.strptime(slice_2[indice_6+2:indice_6+13],'%d %b %Y')
-                case.date = date
-                case.day = date.strftime('%d')
-                case.month = date.strftime('%B')
-                case.year = date.strftime("%Y")
-                
-                #print('Case number     :',slice_2[indice_6+14:])
-                case.case_id = slice_2[indice_6+14:]
-                #pdf link
-                #print('Pdf link        :',pdf_link)
                 case.url = pdf_link
+                if es_case_exists_by_url(pdf_link)==0:
+                    temp_list=[]
+                    temp_list.append(txt.text)
+                    temp_str=temp_list[0]
+                    indice_1=temp_str.find('\n')
+                    
+                    all_data_str=temp_str[indice_1+1:]
+
+                    
+                    #slicing string according to the entry fields
+                    
+                    #Petioner-name and respondent-name
+                    indice_2=all_data_str.find(' v ')
+                    indice_0=all_data_str.find(f'[{year}]')    
+                    #print('Petitioner Name :', all_data_str[:indice_2])
+                    case.petitioner = all_data_str[:indice_2]
+                    #print('Respondent Name :', all_data_str[indice_2+3:indice_0-1])
+                    case.respondent = all_data_str[indice_2+3:indice_0-1]
+                    #excluding pet. and resp. names
+                    slice_1=all_data_str[all_data_str.find('\n')+1:]
+                    #Case Title
+                    case.title=all_data_str[:indice_0-1]
+
+                    #filing date and bench
+                    indice_3=slice_1.find('[')
+                    indice_4=slice_1.find(']')
+                    indice_5=slice_1.find('DECISION')
+                    
+                    #print('Filing Date     :', slice_1[indice_3+1:indice_4])
+                    
+                    #print('Bench           :', slice_1[indice_4+2:indice_5])
+                    case.bench = slice_1[indice_4+2:indice_5]
+                    #excluding f-date & bench
+                    slice_2=slice_1[indice_5:]
+
+                    #decision date
+                    indice_6=slice_2.find(':')
+                    #print('Decision Date   :', slice_2[indice_6+2:indice_6+13])
+                    date = datetime.strptime(slice_2[indice_6+2:indice_6+13],'%d %b %Y')
+                    case.date = date
+                    case.day = date.strftime('%d')
+                    case.month = date.strftime('%B')
+                    case.year = date.strftime("%Y")
+                    
+                    #print('Case number     :',slice_2[indice_6+14:])
+                    case.case_id = slice_2[indice_6+14:]
+                    
+                    
+                    try:
+                        judgement_text = extract_txt(pdf_link, "SingaporeSupreme.pdf")
+                        print(len(judgement_text))
+                        case.judgement_text = judgement_text
+                    except Exception as inst:
+                        print(inst)
+                        open("Singapore_supreme_missed_urls.txt", 'a+').write("from case url "+"%s" %(pdf_link) + "  "+ datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + str(inst) + "\n")
+                        print("Missed : %s" %(pdf_link) + datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + "\n" )
+
+                    case.source = "Supreme Court Singapore"
 
 
-
-                judgement_text = extract_txt(pdf_link, "SingaporeSupreme.pdf")
-                print(len(judgement_text))
-                case.judgement_text = judgement_text
-                case.source = "Supreme Court Singapore"
-
-
-                case.process_text()
-                case.print_case_attributes()
-                #store_case_document(case)
-
+                    case.process_text()
+                    case.print_case_attributes()
+                    #store_case_document(case)
+                else:
+                    print("Case exist in documents")
                 txt_counter+=1
                 print()
                 print("PAGE Counter :"+ str(pg_counter))
@@ -152,7 +158,9 @@ for i in range(2000,2022):
     try:
         case_scraper()
     except NoSuchElementException:
-        print("Error Came or year completed.")   
+        print("Error Came or year completed.")
+    
+
 print("Scraping Completed for all years.")
 
 
