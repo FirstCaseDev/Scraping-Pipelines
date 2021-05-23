@@ -168,4 +168,4 @@ for row in rows:
 
 
 #closing chrome instance/window
-#driver.close()
+driver.close()
