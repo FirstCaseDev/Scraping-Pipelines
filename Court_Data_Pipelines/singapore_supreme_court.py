@@ -150,7 +150,7 @@ def case_scraper():
             break 
         
       
-for i in range(2000,2022):
+for i in range(2021,2022):
     year = i
     print(year)
     #opening an instance @Singapore Court
@@ -159,10 +159,11 @@ for i in range(2000,2022):
         case_scraper()
     except NoSuchElementException:
         print("Error Came or year completed.")
+        
     
 
 print("Scraping Completed for all years.")
-
+driver.quit()
 
 
 
