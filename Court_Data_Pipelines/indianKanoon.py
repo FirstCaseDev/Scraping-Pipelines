@@ -10,9 +10,10 @@ from selenium.webdriver.support.expected_conditions import presence_of_all_eleme
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from Common_Files.Case_handler import CaseDoc
-from Common_Files.Case_storage import store_case_document, case_exists_by_url
-from datetime import date, timedelta , datetime
+from Common_Files.Case_storage import store_case_document
 from Common_Files.Elasticsearch_functions import es_case_exists_by_url
+from datetime import date,datetime,timedelta
+import time
 case = CaseDoc()
 
 missed_cases_count = 0
