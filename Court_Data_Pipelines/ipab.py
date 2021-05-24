@@ -106,8 +106,16 @@ for bench in cities:
                             date=i 
                         #case.date=date
                         #case.year = date.strftime("%Y")
+                            
                                         
-                    #td_counter==3 --> coram
+                    #coram
+                    if td_counter==3:
+                        temp=[]
+                        temp.append(td.text)
+                        print('Judge(s)             :', temp[0])
+
+                        #case.bench=temp[0]
+
 
                     #petitioner 
                     if td_counter==4:

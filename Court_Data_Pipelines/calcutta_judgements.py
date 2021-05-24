@@ -120,7 +120,15 @@ for row in rows:
                 #case.judgement_text=judgement_txt
 
 
-        #skipping judges    td_counter==3
+        #judges    
+        if td_counter==3:
+            temp=[]
+            temp.append(td.text)
+            print('Judge(s)         :', temp[0])
+            
+            #case.bench=temp[0]
+ 
+
         #skipping order     td_counter==4
 
 

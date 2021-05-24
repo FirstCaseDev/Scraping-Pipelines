@@ -144,12 +144,13 @@ for row in rows:
 
 
             #printing field specific data
-            #coram field                
+            #coram field /bench               
             if td_counter==2:
                 temp=[]
                 temp.append(c.text)
                 temp_str=temp[0]
-                #print('Judge(s)        :',temp_str)
+                #print('Bench           :',temp_str)
+                case.bench=temp_str
 
 
             #parties distinguished
@@ -164,7 +165,7 @@ for row in rows:
                 case.respondent=temp_str[indice_1+4:]
 
 
-            #judgement date and bench seperation
+            #judgement date 
             if td_counter==4:
                 temp=[]
                 temp.append(c.text)
@@ -177,8 +178,7 @@ for row in rows:
                     date=i 
                 case.date=date
                 case.year = date.strftime("%Y")
-                #print('Bench           :',temp_str[11:])
-                case.bench=temp_str[11:]
+                
                 case.source='High Court of Bombay'
 
             #case no. and pdf seperation

@@ -1,14 +1,18 @@
 from selenium import webdriver
 import time
+import datetime
+import datefinder
+import pymongo
+from Common_Files.Case_pdf_handling import extract_txt
+from Common_Files.Case_storage import store_case_document, case_exists_by_case_id
+from Common_Files.Case_handler import CaseDoc 
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
-from Common_Files.Case_pdf_handling import extract_txt
-from Common_Files.Case_handler import CaseDoc
-from Common_Files.Case_storage import store_case_document
-from selenium.webdriver.chrome.options import Options
+
 
 #setting up the driver
 options = Options()
@@ -86,14 +90,14 @@ while True:
                 #print('Filing Date     :', slice_1[indice_3+1:indice_4])
                 
                 #print('Bench           :', slice_1[indice_4+2:indice_5])
-                case.bench = slice_1[indice_4+2:indice_5]
+                
                 #excluding f-date & bench
                 slice_2=slice_1[indice_5:]
 
                 #decision date
                 indice_6=slice_2.find(':')
                 #print('Decision Date   :', slice_2[indice_6+2:indice_6+13])
-                date = datetime.strptime(slice_2[indice_6+2:indice_6+13],'%d %b %Y')
+                date = datetime.strftime(slice_2[indice_6+2:indice_6+13],'%d %b %Y')
                 case.date = date.strftime('%d-%m-%Y')
                 case.day = date.strftime('%d')
                 case.month = date.strftime('%B')

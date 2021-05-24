@@ -52,7 +52,7 @@ driver.switch_to_window(final_orders_pg)
 #chosen filter --> date wise
 #setting start/end date- (past 1 week)
 current_day=datetime.date.today()
-week_control=current_day-datetime.timedelta(days=28)
+week_control=current_day-datetime.timedelta(days=7)
 from_date=week_control.strftime('%Y-%m-%d')
 
 
@@ -118,6 +118,15 @@ try:
                     print('Respondent           :', temp_str[slice_1+10:])
                     #case.petitioner = temp_str[0:slice_1-1]
                     #case.respondent = temp_str[slice_1+10:]   
+
+
+                #judges
+                if td_counter==4:
+                    temp=[]
+                    temp.append(td.text)
+                    print('Judge(s)              :', temp[0])
+
+                    #case.case_id=temp[0]
 
 
                 #order date (dd/mm/yyyy)

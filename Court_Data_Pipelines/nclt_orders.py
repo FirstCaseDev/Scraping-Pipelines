@@ -116,6 +116,9 @@ for benches in range(1,13):
                             temp=[]
                             temp.append(td.text)
                             print('Case id               :', temp[0])
+                            
+                            #case.case_id=temp[0]
+
 
                         #date of order
                         if td_counter==2:
@@ -126,8 +129,8 @@ for benches in range(1,13):
                             date=datefinder.find_dates(temp[0])
                             for i in date:
                                 date=i 
-                            case.date=date
-                            case.year = date.strftime("%Y")
+                            #case.date=date
+                            #case.year = date.strftime("%Y")
                             
                         
                         #Description and pdf link
@@ -136,16 +139,30 @@ for benches in range(1,13):
                             a_tags = td.find_elements(By.TAG_NAME,"a")
                             for a_tag in a_tags:
                                 print('Pdf link              :', a_tag.get_attribute('href'))
+                                pdf_link=a_tag.get_attribute('href')
+                                #case.url=pdf_link
+                                #judgement_txt=extract_txt(pdf_link, 'Court_Extract.pdf')
+                                #case.judgement_text=judgement_txt
+
 
                         #skipping sections for td_counter=4
+
                         #Judges
                         if td_counter==5:
-                            
                             #names=temp[0].split(',')
-                            print("Order Passed By       :", td.text)
+                            print("Judge(s)              :", td.text)
+
+                            #case.bench=td.text
+
+
                 #spacing b/w orders
                 print()
-            
+
+                #processing all the extracted data
+                case.process_text()
+                case.print_case_attributes()
+                #store_case_document(case)
+                
             #going back to section/yr page
             driver.back()
 

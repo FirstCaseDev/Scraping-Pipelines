@@ -41,7 +41,7 @@ def nclt_jud_scrapper(bench_name):
 
             #bench name and source
             #print('Bench                   :', bench_name)
-            case.bench = bench_name
+            
             case.source = 'National Company Law Tribunal'
 
 
@@ -99,8 +99,8 @@ def nclt_jud_scrapper(bench_name):
             print()            
 
             #processing all the extracted data
-            case.process_text()
-            case.print_case_attributes()
+            #case.process_text()
+            #case.print_case_attributes()
             #store_case_document(case)
                 
       
@@ -200,8 +200,8 @@ for benches in range(2,23):
                 '''
 
                 #bench name and source
-                #('Bench                   :', bench_name)
-                case.bench = bench_name
+                #print('Bench                   :', bench_name)
+                
                 case.source = 'National Company Law Tribunal'
 
 

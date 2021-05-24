@@ -109,14 +109,14 @@ for benches in range(2,8):
                     temp=[]
                     temp.append(td.text)
                     if td.text != 'No Record Found':
-                        #print('Case id                     :', temp[0])
+                        print('Case id                     :', temp[0])
                         case.case_id = temp[0]
                                     
                 #date of judgement
                 if td_counter==2:
                     temp=[]
                     temp.append(td.text)
-                    #print('Date of Judgement           :', temp[0])
+                    print('Date of Judgement           :', temp[0])
                     
                     
                     date=datefinder.find_dates(temp[0])
@@ -133,10 +133,11 @@ for benches in range(2,8):
                     temp_str=temp[0]
                     slice_1=temp_str.find(' VS ')
                     #print(temp)
-                    #print('Petitioner                  :', temp_str[0:slice_1])
-                    #print('Respondent                  :', temp_str[slice_1+4:])
-                    case.petitioner = temp_str[0:slice_1]
-                    case.respondent = temp_str[slice_1+4:]
+                    print('Petitioner                  :', temp_str[0:slice_1])
+                    print('Respondent                  :', temp_str[slice_1+4:])
+
+                    #case.petitioner = temp_str[0:slice_1]
+                    #case.respondent = temp_str[slice_1+4:]
 
                 #skipping section (td_counter==4)
 
@@ -144,30 +145,38 @@ for benches in range(2,8):
                 if td_counter==5:
                     temp=[]
                     temp.append(td.text)
-                    #print('Bench                       :', temp[0])
-                    case.bench = temp[0]
-                    case.source = 'NATIONAL COMPANY LAW APPELLATE TRIBUNAL'                    
-                                        
-                #skipping judges (td_counter==6)
+                    print('Bench                       :', temp[0])
+
+                    #case.source = 'NATIONAL COMPANY LAW APPELLATE TRIBUNAL'                    
+
+
+                #judges 
+                if td_counter==6:
+                    temp=[]
+                    temp.append(td.text)
+                    judges=temp[0]
+                    print('Judge(s)                     :', judges)
+
+                    #case.bench=judges
 
                 #pdf link
                 if td_counter==7:
                     a_tags = td.find_elements(By.TAG_NAME,"a")
                     for a_tag in a_tags:
-                        #print('Pdf link                    :', a_tag.get_attribute('href'))
+                        print('Pdf link                    :', a_tag.get_attribute('href'))
                         pdf_link=a_tag.get_attribute('href')
-                        case.url=pdf_link
-                        judgement_txt=extract_txt(pdf_link, 'Court_Extract.pdf')
-                        case.judgement_text=judgement_txt
+                        #case.url=pdf_link
+                        #judgement_txt=extract_txt(pdf_link, 'Court_Extract.pdf')
+                        #case.judgement_text=judgement_txt
 
                 #skipping remark (td_counter==8)
                                 
             #spacing b/w judgemnets
-            #print()
+            print()
 
             #processing all the extracted data
-            case.process_text()
-            case.print_case_attributes()
+            #case.process_text()
+            #case.print_case_attributes()
             #store_case_document(case)
 
     except:

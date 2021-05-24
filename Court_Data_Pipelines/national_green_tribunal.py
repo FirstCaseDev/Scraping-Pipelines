@@ -53,7 +53,7 @@ for bench in range(2,7):
 
     #setting start/end date- (past 1 week)
     current_day=datetime.date.today()
-    week_control=current_day-datetime.timedelta(days=28)
+    week_control=current_day-datetime.timedelta(days=7)
     from_date=week_control.strftime('%d/%m/%Y')
 
     #curretnt date
@@ -243,6 +243,15 @@ for bench in range(2,7):
                     table=driver.find_element_by_xpath('//*[@id="collapseThree"]/div/div/table')
                     t_body=table.find_element_by_tag_name('tbody')
                     rows=t_body.find_elements(By.TAG_NAME,'tr')
+
+
+                    #coram/judges
+                    coram=driver.find_element_by_xpath('//*[@id="collapseThree"]/div/div/table/tbody/tr[1]/td[4]')
+                    judges=coram.text
+                    print('Judge(s)                :', judges)
+
+                    case.bench=judges
+                    
 
                     #selecting all the a tags of table
                     for row in rows:
