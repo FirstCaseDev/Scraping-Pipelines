@@ -24,6 +24,21 @@ Similarly occurring extraction - The Constitution + Constitution of India - TODO
 Abbreviated Laws - IPC (Indian Penal Code, 1860), CrPC (Criminal Procedural Code, 1973), CPC (Code of Civil Procedure, 1908), IBC (Insolvency & Bankruptcy Code, 2018) - DONE
 """
 
+"""
+case_id TODO: 
+1. Extract phrase of case id for given case
+2. Extract phrase of cited case ids 
+3. For adding citations use ES for title and _doc mapping. For no matches, store found case_id string in cited_cases
+4. Add regexes for situations like 122/133/2021 
+"""
+
+"""
+date TODO:
+1. Extract all dates
+2. Find context defining phrases for cases's date
+    ideas:  Date of judgement
+            Latest date in list of dates in headnote
+"""
 
 #****************************CASE CLASS DEFINITION****************************
 class CaseDoc:
@@ -98,7 +113,7 @@ def case_get_case_id(case_text, doc_nlp):
     for sent in doc_nlp.sents:
         # txt_lower = sent.text.lower()
         start = 0
-        for m in re.finditer(case_id_regexp, sent.text, re.IGNORECASE):
+        for m in re.findall(case_id_regexp, sent.text, re.IGNORECASE):
             print(("match : " + sent.text).strip())
             # if m:
             #     print("in for if ")
