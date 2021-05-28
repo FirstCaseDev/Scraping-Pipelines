@@ -14,7 +14,7 @@ list_stop_regex = '('+'|'.join(list_stop)+')'
 first_cap_regex = '([A-Z]\S*\s*('+list_stop_regex+'*\s*'+'([A-Z]|\d)\S*\s*)+)'
 law_regex_no_words = first_cap_regex+'(((,|of)\s+)?(\d)*\s*)*'
 act_name_patterns = 'act|law|constitution|rule|notification|circular|paragraph|article|statute|reference|section|interpretation|regulation|regulations'
-
+case_id_re_indicators = ['(.*)(\s?)(.*?)(\s?)(.*)(\s?)(of)(\s?)(\d{4})']
 """
 Constitutional Bench is not a law - DONE
 'Section' is never mentioned under the Constitution - DONE
@@ -52,11 +52,12 @@ class CaseDoc:
         print("********processing text********") 
         text = self.judgement_text.replace('>>>>','')
         doc_nlp = nlp(text)
-        self.cases_cited = case_get_cases_list(text, doc_nlp)
-        self.provisions_referred = case_get_acts_list(text, doc_nlp)
-        self.petitioner_counsel = case_get_petitioner_counsel(text, doc_nlp)
-        self.respondent_counsel = case_get_respondent_counsel(text, doc_nlp)
-        self.judgement = case_get_judgement(self.judgement_text.split(' >>>> ')[-5:]) # increase -3 if judgement is not extracted
+        self.case_id = case_get_case_id(text, doc_nlp)
+        # self.cases_cited = case_get_cases_list(text, doc_nlp)
+        # self.provisions_referred = case_get_acts_list(text, doc_nlp)
+        # self.petitioner_counsel = case_get_petitioner_counsel(text, doc_nlp)
+        # self.respondent_counsel = case_get_respondent_counsel(text, doc_nlp)
+        # self.judgement = case_get_judgement(self.judgement_text.split(' >>>> ')[-5:]) # increase -3 if judgement is not extracted
         print("********processed text********") 
 
     def print_case_attributes(self):
@@ -87,6 +88,38 @@ class CaseDoc:
 #TODO corrections required in case_get_acts_list and case_get_judgement             
 #TODO Bench function (Looks to be source specific)
 #TODO Doc_author function (Check for source specific nature)
+
+def case_get_case_id(case_text, doc_nlp):
+    case_id_regexp = '('+'|'.join(case_id_re_indicators)+')'
+    print(case_id_regexp)
+    case_id = set()
+
+    # try:
+    for sent in doc_nlp.sents:
+        # txt_lower = sent.text.lower()
+        start = 0
+        for m in re.finditer(case_id_regexp, sent.text, re.IGNORECASE):
+            print(("match : " + sent.text).strip())
+            # if m:
+            #     print("in for if ")
+            #     print(sent.text)
+                # case_id |= find_case_id(sent.text, start, m.start())
+                # start = m.end()    
+    # except:
+    #     print("case_id not found")
+    print(case_id)
+    return list(case_id)
+
+
+def find_case_id(sent_text, start, end):
+    caseIDs = set()
+    sent_text_split = re.split(',\s?', sent_text[start:end])
+    # print(sent_text_split)
+    return caseIDs
+
+
+
+
 def case_get_petitioner_counsel(case_text, doc_nlp):
     sal_regexp = get_salutation_regexp(sal_re_indicators)
     counsel_petitioner_regexp = get_counsel_regexp(counsel_petitioner_re_indicators)
