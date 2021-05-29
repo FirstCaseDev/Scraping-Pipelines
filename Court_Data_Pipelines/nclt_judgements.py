@@ -12,7 +12,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
-
+from selenium.common.exceptions import NoSuchElementException
 #accessing Case_storage database
 client = pymongo.MongoClient('mongodb://db_user:firstCaseDevTeam@107.20.44.181:27017,3.229.151.98:27017,54.175.129.116:27017/?authSource=admin&replicaSet=aName&readPreference=primaryPreferred&ssl=false')
 db = client["indian_court_data"]
@@ -308,7 +308,7 @@ for benches in range(2,23):
         print('going back to bench selection pg')
         driver.back()
 
-    except:
+    except NoSuchElementException:
         #back to bench selection page
         print('going back to bench selection pg--')
         driver.back()

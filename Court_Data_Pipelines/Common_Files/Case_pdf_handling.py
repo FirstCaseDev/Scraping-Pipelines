@@ -31,7 +31,7 @@ def case_get_text_paragraphs(case_text):
 
 def download_Pdf(a):
     url = a
-    r = requests.get(url)
+    r = requests.get(url,verify=False)
     # download_location = r"C:\\Users\\Pushpak\\Documents\\First_case\\pdf\\" 
     filename =  r.url[url.rfind('/')+1:]
     # textFilename = Final_Dir + pdf + ".txt"  ###  For remmembering the method
@@ -57,7 +57,7 @@ import sys, getopt
 
 def extract_txt(url, fname, pages=None):
 
-    r = requests.get(url)
+    r = requests.get(url,verify=False)
     #filename = r.url[url.rfind('/')+1:]
     #print(filename)
     open(fname, 'wb').write(r.content)
