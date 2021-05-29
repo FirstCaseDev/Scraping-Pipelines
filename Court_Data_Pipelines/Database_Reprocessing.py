@@ -9,5 +9,5 @@ Aggrieved by the judgment and order of the learned Additional Sessions Judge, Cr
 
 """
 
-case.process_text()
-print(case.case_id)
+
+
