@@ -266,7 +266,7 @@ def process_IndKanoon_court_years_url(url):
 #     print(court_tag.text)
 #     court_url = court_tag.find_element_by_tag_name("a").get_attribute("href")
 #     process_IndKanoon_court_years_url(court_url)
-court_url = "https://indiankanoon.org/browse/himachal_pradesh/"
+court_url = "https://indiankanoon.org/browse/jammu/"
 process_IndKanoon_court_years_url(court_url)
 
 # driver.get("https://www.google.com/") #any dummy url
