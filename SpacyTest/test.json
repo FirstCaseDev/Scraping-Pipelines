@@ -1,0 +1,153 @@
+{
+    "abc": {
+      "content": {
+        "bench": [
+          "D.Y. Chandrachud"
+        ],
+        "countries": [
+          "India"
+        ],
+        "courts": [
+          "Bombay High Court"
+        ],
+        "judgements": [
+          "dismissed"
+        ],
+        "legal_phrase": "Negligence",
+        "petitioner": [
+          "Adani"
+        ],
+        "queryText": "What are the most recent dismissed cases after Jun 2020 related to medical negligence filed against Ambani by Adani in Bombay High Court, India before D.Y. Chandrachud?",
+        "respondent": [
+          "Ambani"
+        ],
+        "sortBy": 0,
+        "spacy_entities": [
+          "Jun 2020",
+          "Ambani",
+          "Adani",
+          "India",
+          "D.Y. Chandrachud"
+        ]
+      },
+      "response": {
+        "_shards": {
+          "failed": 0,
+          "skipped": 0,
+          "successful": 5,
+          "total": 5
+        },
+        "hits": {
+          "hits": [
+            {
+              "_id": "605967e368dd710024446f75",
+              "_index": "indian_court_data.cases",
+              "_score": 24.965805,
+              "_source": {
+                "title": "Philips India Ltd. vs Kunju Punnu And Anr."
+              },
+              "_type": "_doc"
+            },
+            {
+              "_id": "606c5735c3556c2c6194b1e8",
+              "_index": "indian_court_data.cases",
+              "_score": 18.996025,
+              "_source": {
+                "title": "Maharashtra State Road Transport ... vs Ashok Laxman Wadkar"
+              },
+              "_type": "_doc"
+            },
+            {
+              "_id": "606d9b49c3556c2c61950f8e",
+              "_index": "indian_court_data.cases",
+              "_score": 18.812134,
+              "_source": {
+                "title": "Dr. Saroja Dharmapal Patil vs The State Of Maharashtra"
+              },
+              "_type": "_doc"
+            },
+            {
+              "_id": "605a7f4668dd71002444c2bd",
+              "_index": "indian_court_data.cases",
+              "_score": 18.731075,
+              "_source": {
+                "title": "Mirza Marufuddin vs Galaxy Knives Pvt. Ltd. And ..."
+              },
+              "_type": "_doc"
+            },
+            {
+              "_id": "606d4401c3556c2c6194f904",
+              "_index": "indian_court_data.cases",
+              "_score": 18.44528,
+              "_source": {
+                "title": "3 Madhav vs 2 Amar"
+              },
+              "_type": "_doc"
+            },
+            {
+              "_id": "605a720368dd71002444be8b",
+              "_index": "indian_court_data.cases",
+              "_score": 18.04523,
+              "_source": {
+                "title": "Babanrao Budhajirao Nanekar vs Adinath Sahakari Bank Ltd. And ..."
+              },
+              "_type": "_doc"
+            },
+            {
+              "_id": "606cc173c3556c2c6194d3f4",
+              "_index": "indian_court_data.cases",
+              "_score": 17.945053,
+              "_source": {
+                "title": "Anjanaben Hasmukhchandra Shah ... vs Bholanath Pannalal Jain Since ..."
+              },
+              "_type": "_doc"
+            },
+            {
+              "_id": "605a7b0868dd71002444c15d",
+              "_index": "indian_court_data.cases",
+              "_score": 17.868404,
+              "_source": {
+                "title": "B.E.S.T. Workers' Union vs Bombay Electric Supply And ..."
+              },
+              "_type": "_doc"
+            },
+            {
+              "_id": "60587fb468dd7100244421b7",
+              "_index": "indian_court_data.cases",
+              "_score": 17.759598,
+              "_source": {
+                "title": "Abdulla Shariff vs Mahomed Aba"
+              },
+              "_type": "_doc"
+            },
+            {
+              "_id": "606d6adbc3556c2c61950288",
+              "_index": "indian_court_data.cases",
+              "_score": 17.7192,
+              "_source": {
+                "title": "In The High Court Of Judicature At ... vs Unknown"
+              },
+              "_type": "_doc"
+            }
+          ],
+          "max_score": 24.965805,
+          "total": {
+            "relation": "eq",
+            "value": 3156
+          }
+        },
+        "timed_out": false,
+        "took": 51
+      }
+    },
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            "response generated"
+          ]
+        }
+      }
+    ],
+    "fulfillmentText": "response generated"
+  }
