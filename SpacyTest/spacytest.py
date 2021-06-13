@@ -1,18 +1,37 @@
-import sys
-import spacy
-import json
-import re
+import json, os, re, spacy
 
-# Functions
-def getCourtsPhrases(total_text):
-    for elem in total_text:
+nlp = spacy.load("en_core_web_md")
+
+file = open('last_request.json')
+body = json.load(file)
+# os.remove('./last_request.json')
+
+queryText = body['queryResult']['queryText']
+parameters = body['queryResult']['outputContexts'][0]['parameters']
+
+input_array = queryText.split(" ")
+for i in range(len(input_array)):
+    input_array[i] = input_array[i].replace("?","").replace(",","")
+
+relations = []; bench = []; petitioner = []; respondent = []; petitionerCounsel = []; respondentCounsel = []
+spacy_entities = []; courts = []
+
+def appendElem(array, elem):
+    if not ((elem in bench) or (elem in petitioner) or (elem in respondent) or (elem in petitionerCounsel) or (elem in respondentCounsel) or (elem in courts) or (elem in countries)):
+        array.append(elem)
+
+def readAllEntities(doc):
+    for entity in doc.ents:
+        spacy_entities.append(entity.text)
+
+def identifyCourts(spacy_entities):
+    for elem in spacy_entities:
         for i in re.finditer('(((.*)(court))|((.*)(tribunal)(((\sfor(.*))?)))|((.*)(Commission))|((.*)(board)))', elem, re.IGNORECASE):
             courts.append(i.group())
 
-def getPersons(entities):
-    for elem in entities:
+def identifyParties(spacy_entities):
+    for elem in spacy_entities:
         bench_score = 0; pet_score = 0; resp_score = 0; petCounsel_score = 0; respCounsel_score = 0
-        # print(input_array)
         pos = input_array.index(elem.split(" ")[0].strip())
         temp_string = ''
         temp_string = temp_string + input_array[pos-1] + ' '
@@ -28,7 +47,7 @@ def getPersons(entities):
             respCounsel_score = respCounsel_score-1
 
         # Petitioners
-        for i in re.finditer('(by)|(filed)|(petitioner)', elem, re.IGNORECASE):
+        for i in re.finditer('(by)|(filed)|(petitioner)', temp_string, re.IGNORECASE):
             # print("found " + i.group() + " petitioner for " + elem)
             bench_score = bench_score-1
             pet_score = pet_score+2
@@ -45,105 +64,103 @@ def getPersons(entities):
             petCounsel_score = petCounsel_score-1
             respCounsel_score = respCounsel_score-1
 
-        # Petitioners_Counsels
-        for i in re.finditer('(justice)|(under)|(before)|(judge)', elem, re.IGNORECASE):
-            # print("found " + i.group() + " petitioner counsel for " + elem)
-            bench_score = bench_score-1
-            pet_score = pet_score-1 
-            resp_score = resp_score-1
-            petCounsel_score = petCounsel_score+2
-            respCounsel_score = respCounsel_score-1
+        # # Petitioners_Counsels
+        # for i in re.finditer('(justice)|(under)|(before)|(judge)', temp_string, re.IGNORECASE):
+        #     # print("found " + i.group() + " petitioner counsel for " + elem)
+        #     bench_score = bench_score-1
+        #     pet_score = pet_score-1 
+        #     resp_score = resp_score-1
+        #     petCounsel_score = petCounsel_score+2
+        #     respCounsel_score = respCounsel_score-1
 
-        # Respondent_Counsels
-        for i in re.finditer('(justice)|(under)|(before)|(judge)', elem, re.IGNORECASE):
-            # print("found " + i.group() + " respondent counsel for " + elem)
-            bench_score = bench_score-1
-            pet_score = pet_score-1 
-            resp_score = resp_score-1
-            petCounsel_score = petCounsel_score-1
-            respCounsel_score = respCounsel_score+2     
+        # # Respondent_Counsels
+        # for i in re.finditer('(justice)|(under)|(before)|(judge)', temp_string, re.IGNORECASE):
+        #     # print("found " + i.group() + " respondent counsel for " + elem)
+        #     bench_score = bench_score-1
+        #     pet_score = pet_score-1 
+        #     resp_score = resp_score-1
+        #     petCounsel_score = petCounsel_score-1
+        #     respCounsel_score = respCounsel_score+2  
+
+        # print({
+        #     'elem': elem,
+        #     'pet_score': pet_score,
+        #     'resp_score': resp_score,
+        #     'bench_score': bench_score,
+        #     'petCounsel_score': petCounsel_score,
+        #     'respCounsel_score': respCounsel_score,
+        # })   
 
         if bench_score > 1:
-            bench.append(elem)
+            appendElem(bench, elem)
 
-        if pet_score >= resp_score:
-            petitioner.append(elem)
+        if (pet_score >= resp_score) and (pet_score > 0):
+            appendElem(petitioner, elem)
             
-        if pet_score < resp_score:
-            respondent.append(elem)
+        if (pet_score < resp_score) and (resp_score>0):
+            appendElem(respondent, elem)
 
-        if petCounsel_score >= respCounsel_score:
-            petitioner_counsel.append(elem)
+        if (petCounsel_score >= respCounsel_score) and (petCounsel_score >0):
+            appendElem(petitionerCounsel, elem)
 
-        if petCounsel_score < respCounsel_score:
-            respondent_counsel.append(elem)
+        if (petCounsel_score < respCounsel_score) and (respCounsel_score >0):
+            appendElem(respondentCounsel, elem)
 
-def getCountry(entities):
-    for elem in entities:
-        if (elem['label'] == "GPE"):
-            country.append(elem['name'])
 
-nouns = []; verbs = []; persons = []; entities = []
-total_text = []
-courts = []
-bench = []
-judgments = []
-country = []
-states = []
-petitioner_counsel = []
-respondent_counsel = []
-petitioner = []
-respondent = []
-dates = []
-text_to_process = []
+def getRelations(doc):
+    for chunk in doc.noun_chunks:
+        adj = []
+        verb = []
+        noun = ""
+        for tok in chunk:
+            if (tok.pos_ == "NOUN"):
+                noun = tok.text
+            if tok.pos_ == "ADJ":
+                adj.append(tok.text)
+            if tok.pos_ == "VERB":
+                verb.append(tok.text)
+        if noun:
+            relations.append({'noun': noun, 'adj': adj, 'verb': verb})
 
-entities_text = []
+doc = nlp(queryText)
+getRelations(doc)
+# print('\n\n')
 
-nlp = spacy.load("en_core_web_sm")
-input_array = sys.argv
-input_array.pop(0)
+countries = ['India']                                                      # India by default
+if (parameters['geo-country'] != ""):
+    countries = [elem for elem in parameters['geo-country']]
 
-# Complete Text
-# What is the law on divorce cases in India since 2018 under supreme court?
-text = ''
-for elem in input_array:
-    text = text + " " + elem.replace("?","")
+sortBy = 0                                                                 # 0: Most Recent (default), 1: Least Recent
+if (parameters['CE-recency'] == "least recent"): sortBy = 1
 
-input_array = text.split(" ")
+legal_phrase = parameters['CE-legal-phrase']
+persons = [person['name'] for person in parameters['person']]
+readAllEntities(doc)
+identifyCourts(spacy_entities)
+identifyParties(spacy_entities)
 
-# input_array contains all the words sequentially
-# check on each word if its noun, verb, or entity
-
-doc = nlp(text)
-for chunk in doc.noun_chunks:
-    nouns.append(chunk.text)
-    total_text.append(chunk.text)
-
-for token in doc:
-    if token.pos_ == "VERB":
-        verbs.append(token.lemma_)
-        total_text.append(token.lemma_)
-
-for entity in doc.ents:
-    entities.append({'name': entity.text, 'label': entity.label_, 'description': spacy.explain(entity.label_)})
-    entities_text.append(entity.text)
-    total_text.append(entity.text)
-
-total_text = list(set(total_text))
-getCourtsPhrases(total_text)
-getPersons(entities_text)
-getCountry(entities)
+# print("queryText:", queryText, '\n')
+# print('countries:', countries, '\n')
+# print('sortBy:', sortBy, '\n')
+# print('legal_phrase:', legal_phrase, '\n')
+# print('spacy_entities:', spacy_entities, '\n\n')
+# print('bench:', bench, '\n')
+# print('petitioner:', petitioner, '\n')
+# print('respondent:', respondent, '\n')
+# print('courts:', courts, '\n')
 
 result = {
-    'nouns': nouns,
-    # 'verbs': verbs,
-    # 'persons': persons,
-    'text': total_text,
-    'entities': entities,
-    'courts': courts,
-    'bench': bench,
-    'respondent': respondent,
-    'country': country,
+"queryText": queryText,
+"countries": countries,
+"sortBy": sortBy,
+"legal_phrase": legal_phrase,
+"spacy_entities": spacy_entities,
+"bench": bench,
+"petitioner": petitioner,
+"respondent": respondent,
+"courts": courts,
 }
 
-spacy.displacy.serve(doc, style="ent")
+print(str(json.dumps(result)))
+
+
