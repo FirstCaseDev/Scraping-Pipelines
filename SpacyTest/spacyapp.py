@@ -137,8 +137,7 @@ def spacytest():
     doc = nlp(queryText)
     # getRelations(doc, relations)
 
-    countries = [elem for elem in parameters['geo-country']
-                 if (parameters['geo-country'] != "")] or ['India']
+    countries = [elem for elem in parameters['geo-country'] if (parameters['geo-country'] != "")] or ['India']
     sortBy = 1 if (parameters['CE-recency'] == "least recent") else 0
     legal_phrase = parameters['CE-legal-phrase']
     print(legal_phrase)
@@ -198,6 +197,9 @@ def spacytest():
     text = ''
     for elem in abc['response']['hits']['hits']:
         text = text + '\n\n' + elem['_source']['title']
+
+    if text =='':
+        text = "Sorry, but I didn't find anything related to this :("
 
     response = {
         "fulfillmentText": str(text),
